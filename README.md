@@ -104,7 +104,3 @@ The ESP32 firmware running on the sub-controller, handling:
 ## License
 
 This project is licensed under GPL-3.0. See the LICENSE file for details.
-
-## Documentation
-
-For detailed technical documentation and API references, visit the [WaveShare Wiki](https://www.waveshare.com/wiki/WAVEGO_Pro).
