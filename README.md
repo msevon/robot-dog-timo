@@ -23,15 +23,15 @@ This section documents the custom modifications and additions implemented for Ti
 - [ ] Placeholder for experimental additions
 - [ ] Placeholder for integration improvements
 
-## Hardware information
+## Product documentation
 
 For detailed technical documentation and API references, visit the [WaveShare Wiki](https://www.waveshare.com/wiki/WAVEGO_Pro). 
 
 For installation instructions, tutorials, and detailed usage guides, please refer to the official [WaveShare WAVEGO_Pro repository](https://github.com/waveshareteam/WAVEGO_Pro).
 
-### Technical specifications
+## Technical specifications
 
-#### Hardware
+### Hardware
 - **Degrees of freedom**: 12 DOF with multi-link leg design and inverse kinematics algorithm
 - **Servos**: 2.3 kg·cm serial bus servos with real-time feedback on position, speed, and input voltage
 - **Sensors**: ICM20948 9-axis motion tracker for self-balancing capabilities
@@ -40,7 +40,7 @@ For installation instructions, tutorials, and detailed usage guides, please refe
 - **Power**: Dual 18650 lithium-ion batteries (5200 mAh) with onboard battery management
 - **Construction**: 5052 aluminum alloy and PA12 nylon parts with 40 bearing joints
 
-#### Control architecture
+### Control architecture
 - **Host controller**: Raspberry Pi 5 handles AI vision processing and high-level decision-making
 - **Sub-controller**: ESP32 manages real-time motion control and sensor data processing
 - **Communication**: JSON commands via GPIO UART between controllers
