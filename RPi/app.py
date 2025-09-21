@@ -23,16 +23,15 @@ else:
 threading.Thread(target=lambda: base.breath_light(15), daemon=True).start()
 
 # Config file
-curpath = os.path.realpath(__file__)
-thisPath = os.path.dirname(curpath)
-with open(thisPath + '/config.yaml', 'r') as yaml_file:
-    f = yaml.safe_load(yaml_file)
+curpath = os.path.realpath(__file__) # Find the path of the current file
+thisPath = os.path.dirname(curpath) # Find the path of the current directory
+with open(thisPath + '/config.yaml', 'r') as yaml_file: # Open the config file
+    f = yaml.safe_load(yaml_file) # Load the config file
 
-base.base_oled(0, f["base_config"]["robot_name"])
-base.base_oled(1, f"sbc_version: {f['base_config']['sbc_version']}")
-base.base_oled(2, f"{f['base_config']['main_type']}{f['base_config']['module_type']}")
-base.base_oled(3, "Starting...")
-
+base.base_oled(0, f["base_config"]["robot_name"]) # Set the robot name
+base.base_oled(1, f"sbc_version: {f['base_config']['sbc_version']}") # Set the sbc version
+base.base_oled(2, f"{f['base_config']['main_type']}{f['base_config']['module_type']}") # Set the main type and module type
+base.base_oled(3, "Starting...") # Set the starting message
 
 # Import necessary modules
 from flask import Flask, render_template, Response, request, jsonify, redirect, url_for, send_from_directory, send_file
