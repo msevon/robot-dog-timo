@@ -22,7 +22,7 @@ else:
 # Start the breath light thread
 threading.Thread(target=lambda: base.breath_light(15), daemon=True).start()
 
-# config file.
+# Config file
 curpath = os.path.realpath(__file__)
 thisPath = os.path.dirname(curpath)
 with open(thisPath + '/config.yaml', 'r') as yaml_file:
