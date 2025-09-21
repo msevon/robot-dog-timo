@@ -1,9 +1,9 @@
-# import base_ctrl library
+# Import base_ctrl library
 from base_ctrl import BaseController
 import threading
 import yaml, os
 
-# raspberry pi version check.
+# Raspberry Pi version check.
 def is_raspberry_pi5():
     with open('/proc/cpuinfo', 'r') as file:
         for line in file:
@@ -13,11 +13,13 @@ def is_raspberry_pi5():
                 else:
                     return False
 
+# Determine the GPIO Serial Device Name Based on the Raspberry Pi Model as the BaseController instance
 if is_raspberry_pi5():
     base = BaseController('/dev/ttyAMA0', 115200)
 else:
     base = BaseController('/dev/serial0', 115200)
 
+# Start the breath light thread
 threading.Thread(target=lambda: base.breath_light(15), daemon=True).start()
 
 # config file.

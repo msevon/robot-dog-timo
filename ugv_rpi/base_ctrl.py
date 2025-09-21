@@ -13,6 +13,7 @@ thisPath = os.path.dirname(curpath)
 with open(thisPath + '/config.yaml', 'r') as yaml_file:
     f = yaml.safe_load(yaml_file)
 
+# Class for auxiliary function ReadLine: helps read data from the serial port
 class ReadLine:
 	def __init__(self, s):
 		self.buf = bytearray()
@@ -127,55 +128,64 @@ class ReadLine:
 			print(f"[base_ctrl.lidar_data_recv] error: {e}")
 			self.lidar_ser = serial.Serial(glob.glob('/dev/ttyACM*')[0], 230400, timeout=1)
 
-
+# Class for the base controller of the WAVEGO Pro Pi5
 class BaseController:
+
+	# uart_dev_set: the serial port of the base controller
+	# buad_set: the baud rate of the serial port
 
 	def __init__(self, uart_dev_set, buad_set):
 		self.ser = serial.Serial(uart_dev_set, buad_set, timeout=1)
 		self.rl = ReadLine(self.ser)
+
+		# Define the command queue and thread (and start the thread)
 		self.command_queue = queue.Queue()
 		self.command_thread = threading.Thread(target=self.process_commands, daemon=True)
 		self.command_thread.start()
 
+		# Define the base light status and head light status
 		self.base_light_status = 0
 		self.head_light_status = 0
 
-		self.data_buffer = None
-		self.base_data = None
+		self.data_buffer = None # Temporary buffer where ESP32 sub-controller sends data to be parsed by the base controller
+		self.base_data = None # Last received JSON-data packet from the ESP32 sub-controller
 
-		self.use_lidar = f['base_config']['use_lidar']
-		self.extra_sensor = f['base_config']['extra_sensor']
+		self.use_lidar = f['base_config']['use_lidar'] # Whether to use the lidar sensor
+		self.extra_sensor = f['base_config']['extra_sensor'] # Whether to use the extra sensor
 		
-
+	# Function to read feedback data from the ESP32 sub-controller
 	def feedback_data(self):
 		try:
-			while self.rl.s.in_waiting > 0:
-				self.data_buffer = json.loads(self.rl.readline().decode('utf-8'))
+			while self.rl.s.in_waiting > 0: # in_waiting: the number of bytes in the input buffer of ReadLine class
+				self.data_buffer = json.loads(self.rl.readline().decode('utf-8')) # Define data buffer as the JSON-data packet created from the ESP32 sub-controller data red by readline function of ReadLine class
 				if 'T' in self.data_buffer:
 					# print(self.data_buffer)
-					self.base_data = self.data_buffer
-					self.data_buffer = None
-					if self.base_data["T"] == 1003:
+					self.base_data = self.data_buffer # Define base data as the data buffer
+					self.data_buffer = None # Empty the data buffer
+					
+					if self.base_data["T"] == 1003: # Debugging mode possibly?
 						print(self.base_data)
 						return self.base_data
-			self.rl.clear_buffer()
-			self.data_buffer = json.loads(self.rl.readline().decode('utf-8'))
-			self.base_data = self.data_buffer
+			
+			# If the data buffer is empty, read the data from the serial port again
+			self.rl.clear_buffer() # Clear the input buffer of ReadLine class
+			self.data_buffer = json.loads(self.rl.readline().decode('utf-8')) # Try to read the data from the serial port again
+			self.base_data = self.data_buffer # Define base data as the data buffer
+			
 			return self.base_data
-		except Exception as e:
-			self.rl.clear_buffer()
-			print(f"[base_ctrl.feedback_data] error: {e}")
 
+		except Exception as e:
+			self.rl.clear_buffer() # Clear the input buffer of ReadLine class
+			print(f"[base_ctrl.feedback_data] error: {e}")
 
 	def on_data_received(self):
 		self.ser.reset_input_buffer()
-		data_read = json.loads(self.rl.readline().decode('utf-8'))
-		return data_read
+		data_read = json.loads(self.rl.readline().decode('utf-8')) # Read data from the serial port
 
+		return data_read
 
 	def send_command(self, data):
 		self.command_queue.put(data)
-
 
 	def process_commands(self):
 		while True:
@@ -183,66 +193,54 @@ class BaseController:
 			self.ser.write((json.dumps(data) + '\n').encode("utf-8"))
 			# print(data)
 
-
 	def base_json_ctrl(self, input_json):
 		self.send_command(input_json)
-
 
 	def gimbal_emergency_stop(self):
 		data = {"T":0}
 		self.send_command(data)
 
-
 	def base_speed_ctrl(self, input_left, input_right):
 		data = {"T":1,"L":input_left,"R":input_right}
 		self.send_command(data)
-
 
 	def gimbal_ctrl(self, input_x, input_y, input_speed, input_acceleration):
 		data = {"T":133,"X":input_x,"Y":input_y,"SPD":input_speed,"ACC":input_acceleration}
 		self.send_command(data)
 
-
 	def gimbal_base_ctrl(self, input_x, input_y, input_speed):
 		data = {"T":141,"X":input_x,"Y":input_y,"SPD":input_speed}
 		self.send_command(data)
-
 
 	def base_oled(self, input_line, input_text):
 		# data = {"T":3,"lineNum":input_line,"Text":input_text}
 		data = {"T":202,"line":input_line + 1,"text":input_text,"update":1}
 		self.send_command(data)
 
-
 	def base_default_oled(self):
 		data = {"T":-3}
 		self.send_command(data)
-
 
 	def bus_servo_id_set(self, old_id, new_id):
 		# data = {"T":54,"old":old_id,"new":new_id}
 		data = {"T":f['cmd_config']['cmd_set_servo_id'],"raw":old_id,"new":new_id}
 		self.send_command(data)
 
-
 	def bus_servo_torque_lock(self, input_id, input_status):
 		# data = {"T":55,"id":input_id,"status":input_status}
 		data = {"T":f['cmd_config']['cmd_servo_torque'],"id":input_id,"cmd":input_status}
 		self.send_command(data)
-
 
 	def bus_servo_mid_set(self, input_id):
 		# data = {"T":58,"id":input_id}
 		data = {"T":f['cmd_config']['cmd_set_servo_mid'],"id":input_id}
 		self.send_command(data)
 
-
 	def lights_ctrl(self, pwmA, pwmB):
 		data = {"T":132,"IO4":pwmA,"IO5":pwmB}
 		self.send_command(data)
 		self.base_light_status = pwmA
 		self.head_light_status = pwmB
-
 
 	def base_lights_ctrl(self):
 		if self.base_light_status != 0:
@@ -278,10 +276,10 @@ class BaseController:
 
 if __name__ == '__main__':
 	# RPi5
-	# base = BaseController('/dev/ttyAMA0', 921600)
+	base = BaseController('/dev/ttyAMA0', 921600)
 
 	# RPi4B
-	base = BaseController('/dev/serial0', 921600)
+	# base = BaseController('/dev/serial0', 921600)
 
 	# base.send_command({"T":201,"set":[0,9,0,0]})
 	# time.sleep(1)

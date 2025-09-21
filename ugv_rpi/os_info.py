@@ -4,7 +4,7 @@ import threading
 
 curpath = os.path.realpath(__file__)
 thisPath = os.path.dirname(curpath)
-
+# Doesnt work currently...
 class SystemInfo(threading.Thread):
     """docstring for SystemInfo"""
     def __init__(self):
