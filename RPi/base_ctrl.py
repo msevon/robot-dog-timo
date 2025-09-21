@@ -153,39 +153,56 @@ class BaseController:
 		self.head_light_status = 0
 
 		self.data_buffer = None # Temporary buffer where ESP32 sub-controller sends data to be parsed by the base controller
-		self.base_data = None # Last received JSON-data packet from the ESP32 sub-controller
-
+		
 		self.use_lidar = f['base_config']['use_lidar'] # Whether to use the lidar sensor
 		self.extra_sensor = f['base_config']['extra_sensor'] # Whether to use the extra sensor
+		
+		# Initialize base_data with default values
+		self.base_data = {"T": 1001, "L": 0, "R": 0, "r": 0, "p": 0, "v": 0, "pan": 0, "tilt": 0}
 		
 	# Function to read feedback data from the ESP32 sub-controller
 	def feedback_data(self):
 		try:
-			while self.rl.s.in_waiting > 0: # in_waiting: the number of bytes in the input buffer of ReadLine class
-				self.data_buffer = json.loads(self.rl.readline().decode('utf-8')) # Define data buffer as the JSON-data packet created from the ESP32 sub-controller data red by readline function of ReadLine class
-				if 'T' in self.data_buffer:
-					# print(self.data_buffer)
-					self.base_data = self.data_buffer # Define base data as the data buffer
-					self.data_buffer = None # Empty the data buffer
-					
-					if self.base_data["T"] == 1003: # Debugging mode possibly?
-						print(self.base_data)
-						return self.base_data
+			# Check if there's data available
+			if self.rl.s.in_waiting > 0:
+				# Read all available data
+				raw_data = self.rl.s.read(self.rl.s.in_waiting)
+				# Decode and split by newlines
+				lines = raw_data.decode('utf-8', errors='ignore').strip().split('\n')
+				
+				for line in lines:
+					line = line.strip()
+					if line and line.startswith('{') and line.endswith('}'):
+						try:
+							self.data_buffer = json.loads(line)
+							if 'T' in self.data_buffer:
+								self.base_data = self.data_buffer
+								if self.base_data["T"] == 1003: # Debugging mode
+									print(self.base_data)
+								return self.base_data
+						except json.JSONDecodeError as je:
+							print(f"[base_ctrl.feedback_data] JSON decode error: {je} for line: {line}")
+							continue
 			
-			# If the data buffer is empty, read the data from the serial port again
-			self.rl.clear_buffer() # Clear the input buffer of ReadLine class
-			self.data_buffer = json.loads(self.rl.readline().decode('utf-8')) # Try to read the data from the serial port again
-			self.base_data = self.data_buffer # Define base data as the data buffer
-			
-			return self.base_data
+			# If no valid data found, return last known data or default
+			if hasattr(self, 'base_data') and self.base_data:
+				return self.base_data
+			else:
+				# Return default data structure
+				return {"T": 1001, "L": 0, "R": 0, "r": 0, "p": 0, "v": 0, "pan": 0, "tilt": 0}
 
 		except Exception as e:
-			self.rl.clear_buffer() # Clear the input buffer of ReadLine class
 			print(f"[base_ctrl.feedback_data] error: {e}")
+			# Return default data structure on error
+			return {"T": 1001, "L": 0, "R": 0, "r": 0, "p": 0, "v": 0, "pan": 0, "tilt": 0}
 
 	def on_data_received(self):
 		self.ser.reset_input_buffer()
-		data_read = json.loads(self.rl.readline().decode('utf-8')) # Read data from the serial port
+		try:
+			data_read = json.loads(self.rl.readline().decode('utf-8')) # Read data from the serial port
+		except Exception as e:
+			print(f"[base_ctrl.on_data_received] error: {e}")
+			data_read = {"T": 1001, "L": 0, "R": 0, "r": 0, "p": 0, "v": 0, "pan": 0, "tilt": 0}
 
 		return data_read
 

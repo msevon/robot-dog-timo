@@ -914,9 +914,6 @@ function updateMoveButton(key, value) {
     move_buttons[key] = value;
 }
 
-
-
-
 var keyMap = {
     67: "c",
     82: 'r',

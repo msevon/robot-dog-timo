@@ -502,20 +502,35 @@ def handle_socket_json(json):
 def update_data_websocket_single():
     # {'T':1001,'L':0,'R':0,'r':0,'p':0,'v': 11,'pan':0,'tilt':0}
     try:
+        # Ensure base_data exists and has required keys
+        if not hasattr(base, 'base_data') or not base.base_data:
+            base.base_data = {"T": 1001, "L": 0, "R": 0, "r": 0, "p": 0, "v": 0, "pan": 0, "tilt": 0}
+        
+        # Get system info with error handling
+        try:
+            cpu_load = si.cpu_load if hasattr(si, 'cpu_load') else 0
+            cpu_temp = si.cpu_temp if hasattr(si, 'cpu_temp') else 0
+            ram_usage = si.ram if hasattr(si, 'ram') else 0
+            wifi_rssi = si.wifi_rssi if hasattr(si, 'wifi_rssi') else 0
+            pictures_size = si.pictures_size if hasattr(si, 'pictures_size') else 0
+            videos_size = si.videos_size if hasattr(si, 'videos_size') else 0
+        except:
+            cpu_load = cpu_temp = ram_usage = wifi_rssi = pictures_size = videos_size = 0
+        
         socket_data = {
-            f['fb']['picture_size']:     si.pictures_size,
-            f['fb']['video_size']:       si.videos_size,
-            f['fb']['cpu_load']:         si.cpu_load,
-            f['fb']['cpu_temp']:         si.cpu_temp,
-            f['fb']['ram_usage']:        si.ram,
-            f['fb']['wifi_rssi']:        si.wifi_rssi,
+            f['fb']['picture_size']:     pictures_size,
+            f['fb']['video_size']:       videos_size,
+            f['fb']['cpu_load']:         cpu_load,
+            f['fb']['cpu_temp']:         cpu_temp,
+            f['fb']['ram_usage']:        ram_usage,
+            f['fb']['wifi_rssi']:        wifi_rssi,
 
             f['fb']['led_mode']:         cvf.cv_light_mode,
             f['fb']['detect_type']:      cvf.cv_mode,
             f['fb']['detect_react']:     cvf.detection_reaction_mode,
             f['fb']['pan_angle']:        cvf.pan_angle,
             f['fb']['tilt_angle']:       cvf.tilt_angle,
-            f['fb']['base_voltage']:     base.base_data['v'],
+            f['fb']['base_voltage']:     base.base_data.get('v', 0),
             f['fb']['video_fps']:        cvf.video_fps,
             f['fb']['cv_movtion_mode']:  cvf.cv_movtion_lock,
             f['fb']['base_light']:       base.base_light_status
@@ -560,18 +575,36 @@ def update_data_loop():
 def base_data_loop():
     sensor_interval = 1 # Update sensor data every 1 second
     sensor_read_time = time.time()
+    debug_counter = 0
     while True:
-        cvf.update_base_data(base.feedback_data()) # Update base data from the ESP32
+        try:
+            feedback_data = base.feedback_data() # Update base data from the ESP32
+            cvf.update_base_data(feedback_data)
+            
+            # Debug: Print feedback data every 100 iterations (2.5 seconds)
+            debug_counter += 1
+            if debug_counter >= 100:
+                print(f"[DEBUG] Base data: {feedback_data}")
+                debug_counter = 0
+                
+        except Exception as e:
+            print(f"[base_data_loop] error: {e}")
 
         # Get sensor data from the ESP32
         if base.extra_sensor:
             if time.time() - sensor_read_time > sensor_interval:
-                base.rl.read_sensor_data() # Read sensor data from the ESP32
-                sensor_read_time = time.time()
+                try:
+                    base.rl.read_sensor_data() # Read sensor data from the ESP32
+                    sensor_read_time = time.time()
+                except Exception as e:
+                    print(f"[base_data_loop] sensor error: {e}")
         
         # Get lidar data
         if base.use_lidar:
-            base.rl.lidar_data_recv()
+            try:
+                base.rl.lidar_data_recv()
+            except Exception as e:
+                print(f"[base_data_loop] lidar error: {e}")
         
         time.sleep(0.025) # Update every 0.025 seconds
 
