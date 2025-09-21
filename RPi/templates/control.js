@@ -825,8 +825,6 @@ function heartbeat_send(){
 }
 setInterval(heartbeat_send, 2000);
 
-
-
 var isInputFocused = false;
 
 var moveKeyMap = {
