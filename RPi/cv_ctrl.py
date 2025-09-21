@@ -913,7 +913,7 @@ class OpencvFuncs():
 
 
 
-    def info_update(self, megs, color, size):
+    def info_update(self, megs, color, size): # Update the info
         if megs == -1:
             self.info_update_time = time.time()
             self.show_info_flag = True

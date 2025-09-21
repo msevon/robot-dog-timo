@@ -439,22 +439,25 @@ def offer_route():
 def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+# Send command from the web interface
 @app.route('/send_command', methods=['POST'])
 def handle_command():
     command = request.form['command']
     print("Received command:", command)
-    cvf.info_update("CMD:" + command, (0,255,255), 0.36)
+    cvf.info_update("CMD:" + command, (0,255,255), 0.36) # Update the info with the command
     try:
-        cmdline_ctrl(command)
+        cmdline_ctrl(command) # Execute the command with the cmdline_ctrl function
     except Exception as e:
         print(f"[app.handle_command] error: {e}")
     return jsonify({"status": "success", "message": "Command received"})
 
+# Get audio files
 @app.route('/getAudioFiles', methods=['GET'])
 def get_audio_files():
     files = [f for f in os.listdir(UPLOAD_FOLDER) if os.path.isfile(os.path.join(UPLOAD_FOLDER, f)) and (f.endswith('.mp3') or f.endswith('.wav'))]
     return jsonify(files)
 
+# Upload audio file
 @app.route('/uploadAudio', methods=['POST'])
 def upload_audio():
     if 'file' not in request.files:
@@ -467,6 +470,7 @@ def upload_audio():
         file.save(os.path.join(UPLOAD_FOLDER, filename))
         return jsonify({'success': 'File uploaded successfully'})
 
+# Play audio file
 @app.route('/playAudio', methods=['POST'])
 def play_audio():
     audio_file = request.form['audio_file']
@@ -474,59 +478,65 @@ def play_audio():
     # audio_ctrl.play_audio_thread(thisPath + '/sounds/others/' + audio_file)
     return jsonify({'success': 'Audio is playing'})
 
+# Stop audio
 @app.route('/stop_audio', methods=['POST'])
 def audio_stop():
     # audio_ctrl.stop()
     return jsonify({'success': 'Audio stop'})
 
+# Serve static settings
 @app.route('/settings/<path:filename>')
 def serve_static_settings(filename):
     return send_from_directory('templates', filename)
 
-# Web socket
+# Handle socket JSON command
 @socketio.on('json', namespace='/json')
 def handle_socket_json(json):
     try:
-        base.base_json_ctrl(json)
+        base.base_json_ctrl(json) # Send JSON command to the ESP32
     except Exception as e:
         print("Error handling JSON data:", e)
         return
 
-# info update single
+# Update data websocket single
 def update_data_websocket_single():
     # {'T':1001,'L':0,'R':0,'r':0,'p':0,'v': 11,'pan':0,'tilt':0}
     try:
         socket_data = {
-            f['fb']['picture_size']:si.pictures_size,
-            f['fb']['video_size']:  si.videos_size,
-            f['fb']['cpu_load']:    si.cpu_load,
-            f['fb']['cpu_temp']:    si.cpu_temp,
-            f['fb']['ram_usage']:   si.ram,
-            f['fb']['wifi_rssi']:   si.wifi_rssi,
+            f['fb']['picture_size']:     si.pictures_size,
+            f['fb']['video_size']:       si.videos_size,
+            f['fb']['cpu_load']:         si.cpu_load,
+            f['fb']['cpu_temp']:         si.cpu_temp,
+            f['fb']['ram_usage']:        si.ram,
+            f['fb']['wifi_rssi']:        si.wifi_rssi,
 
-            f['fb']['led_mode']:    cvf.cv_light_mode,
-            f['fb']['detect_type']: cvf.cv_mode,
-            f['fb']['detect_react']:cvf.detection_reaction_mode,
-            f['fb']['pan_angle']:   cvf.pan_angle,
-            f['fb']['tilt_angle']:  cvf.tilt_angle,
-            f['fb']['base_voltage']:base.base_data['v'],
-            f['fb']['video_fps']:   cvf.video_fps,
-            f['fb']['cv_movtion_mode']: cvf.cv_movtion_lock,
-            f['fb']['base_light']:  base.base_light_status
+            f['fb']['led_mode']:         cvf.cv_light_mode,
+            f['fb']['detect_type']:      cvf.cv_mode,
+            f['fb']['detect_react']:     cvf.detection_reaction_mode,
+            f['fb']['pan_angle']:        cvf.pan_angle,
+            f['fb']['tilt_angle']:       cvf.tilt_angle,
+            f['fb']['base_voltage']:     base.base_data['v'],
+            f['fb']['video_fps']:        cvf.video_fps,
+            f['fb']['cv_movtion_mode']:  cvf.cv_movtion_lock,
+            f['fb']['base_light']:       base.base_light_status
         }
         socketio.emit('update', socket_data, namespace='/ctrl')
     except Exception as e:
         print("An [app.update_data_websocket_single] error occurred:", e)
 
-# info feedback
+# Info feedback
 def update_data_loop():
     base.base_oled(2, "F/J:5000/8888")
     start_time = time.time()
     time.sleep(1)
     while 1:
         update_data_websocket_single()
+
+        # Get Ethernet IP and WiFi IP
         eth0 = si.eth0_ip
         wlan = si.wlan_ip
+
+        # Show Ethernet IP and WiFi IP on the OLED screen
         if eth0:
             base.base_oled(0, f"E:{eth0}")
         else:
@@ -535,92 +545,100 @@ def update_data_loop():
             base.base_oled(1, f"W:{wlan}")
         else:
             base.base_oled(1, f"W: NO {si.net_interface}")
+
+        # Calculate elapsed time
         elapsed_time = time.time() - start_time
         hours = int(elapsed_time // 3600)
         minutes = int((elapsed_time % 3600) // 60)
         seconds = int(elapsed_time % 60)
-        base.base_oled(3, f"{si.wifi_mode} {hours:02d}:{minutes:02d}:{seconds:02d} {si.wifi_rssi}dBm")
-        time.sleep(5)
 
+        # Show WiFi mode, elapsed time, and WiFi signal strength on the OLED screen
+        base.base_oled(3, f"{si.wifi_mode} {hours:02d}:{minutes:02d}:{seconds:02d} {si.wifi_rssi}dBm")
+        time.sleep(5) # Update every 5 seconds
+
+# Get base data
 def base_data_loop():
-    sensor_interval = 1
+    sensor_interval = 1 # Update sensor data every 1 second
     sensor_read_time = time.time()
     while True:
-        cvf.update_base_data(base.feedback_data())
+        cvf.update_base_data(base.feedback_data()) # Update base data from the ESP32
 
-        # get sensor data
+        # Get sensor data from the ESP32
         if base.extra_sensor:
             if time.time() - sensor_read_time > sensor_interval:
-                base.rl.read_sensor_data()
+                base.rl.read_sensor_data() # Read sensor data from the ESP32
                 sensor_read_time = time.time()
         
-        # get lidar data
+        # Get lidar data
         if base.use_lidar:
             base.rl.lidar_data_recv()
         
-        time.sleep(0.025)
+        time.sleep(0.025) # Update every 0.025 seconds
 
+# Handle socket command
 @socketio.on('message', namespace='/ctrl')
 def handle_socket_cmd(message):
     try:
-        json_data = json.loads(message)
+        json_data = json.loads(message) # Load the JSON data
     except json.JSONDecodeError:
         print("Error decoding JSON.[app.handle_socket_cmd]")
         return
-    cmd_a = float(json_data.get("A", 0))
+    cmd_a = float(json_data.get("A", 0)) # Get the command
     if cmd_a in cmd_actions:
-        cmd_actions[cmd_a]()
+        cmd_actions[cmd_a]() # Execute the command with the cmd_actions function
     else:
         pass
-    if cmd_a in cmd_feedback_actions:
-        threading.Thread(target=update_data_websocket_single, daemon=True).start()
+    if cmd_a in cmd_feedback_actions: 
+        threading.Thread(target=update_data_websocket_single, daemon=True).start() # Execute the command with the update_data_websocket_single function
 
-# commandline on boot
+# Commans run on boot
 def cmd_on_boot():
     cmd_list = [
-        'base -c {"T":142,"cmd":50}',   # set feedback interval
-        'base -c {"T":131,"cmd":1}',    # serial feedback flow on
-        'base -c {"T":143,"cmd":0}',    # serial echo off
-        'base -c {{"T":4,"cmd":{}}}'.format(f['base_config']['module_type']),      # select the module - 0:None 1:RoArm-M2-S 2:Gimbal
-        'base -c {"T":300,"mode":0,"mac":"EF:EF:EF:EF:EF:EF"}',  # the base won't be ctrl by esp-now broadcast cmd, but it can still recv broadcast megs.
-        'send -a -b'    # add broadcast mac addr to peer
+        'base -c {"T":142,"cmd":50}',   # Set feedback interval as (50 ms)
+        'base -c {"T":131,"cmd":1}',    # Serial feedback flow on
+        'base -c {"T":143,"cmd":0}',    # Serial echo off
+        'base -c {{"T":4,"cmd":{}}}'.format(f['base_config']['module_type']), # Select the module - 0:None 1:RoArm-M2-S 2:Gimbal
+        'base -c {"T":300,"mode":0,"mac":"EF:EF:EF:EF:EF:EF"}', # The base won't be ctrl by esp-now broadcast cmd, but it can still recv broadcast megs
+        'send -a -b' # Add broadcast mac addr to peer
     ]
     print('base -c {{"T":4,"cmd":{}}}'.format(f['base_config']['module_type']))
+    
+    # Execute the commands
     for i in range(0, len(cmd_list)):
         cmdline_ctrl(cmd_list[i])
-        cvf.info_update(cmd_list[i], (0,255,255), 0.36)
+        cvf.info_update(cmd_list[i], (0,255,255), 0.36) # Update the info with the command
     set_version(f['base_config']['main_type'], f['base_config']['module_type'])
 
 # Run the Flask app
 if __name__ == "__main__":
-    # lights off
+    # Lights off
     base.lights_ctrl(255, 255)
     
-    # play a audio file in /sounds/robot_started/
+    # Play a audio file in /sounds/robot_started/
     # audio_ctrl.play_random_audio("robot_started", False)
 
-    # update the size of videos and pictures
+    # Update the size of videos and pictures
     si.update_folder(thisPath)
 
-    # pt/arm looks forward
+    # Pt/arm looks forward
     if f['base_config']['module_type'] == 1:
         base.base_json_ctrl({"T":f['cmd_config']['cmd_arm_ctrl_ui'],"E":f['args_config']['arm_default_e'],"Z":f['args_config']['arm_default_z'],"R":f['args_config']['arm_default_r']})
     else:
         base.gimbal_ctrl(0, 0, 200, 10)
 
-    # feedback loop starts
+    # Feedback loop starts
     si.start()
     si.resume()
     data_update_thread = threading.Thread(target=update_data_loop, daemon=True)
     data_update_thread.start()
 
-    # base data update
+    # Base data update
     base_update_thread = threading.Thread(target=base_data_loop, daemon=True)
     base_update_thread.start()
 
-    # lights off
+    # Lights off
     base.lights_ctrl(0, 0)
     cmd_on_boot()
 
-    # run the main web app
+    # Run the main web app
     socketio.run(app, host='0.0.0.0', port=5000, allow_unsafe_werkzeug=True)
