@@ -498,6 +498,29 @@ def handle_socket_json(json):
         print("Error handling JSON data:", e)
         return
 
+# Print system info to console
+def print_system_info():
+    try:
+        print("\n" + "="*50)
+        print("SYSTEM STATUS REPORT")
+        print("="*50)
+        print(f"CPU Temperature: {si.cpu_temp:.1f}°C")
+        print(f"CPU Load: {si.cpu_load:.1f}%")
+        print(f"RAM Usage: {si.ram:.1f}%")
+        print(f"WiFi Signal: {si.wifi_rssi} dBm")
+        print(f"WiFi Mode: {si.wifi_mode}")
+        print(f"Ethernet IP: {si.eth0_ip if si.eth0_ip else 'Not connected'}")
+        print(f"WiFi IP: {si.wlan_ip if si.wlan_ip else 'Not connected'}")
+        print(f"Pictures Size: {si.pictures_size} MB")
+        print(f"Videos Size: {si.videos_size} MB")
+        print(f"Base Voltage: {base.base_data.get('v', 'N/A')} V")
+        print(f"Video FPS: {cvf.video_fps}")
+        print(f"CV Mode: {cvf.cv_mode}")
+        print(f"LED Mode: {cvf.cv_light_mode}")
+        print("="*50)
+    except Exception as e:
+        print(f"Error printing system info: {e}")
+
 # Update data websocket single
 def update_data_websocket_single():
     # {'T':1001,'L':0,'R':0,'r':0,'p':0,'v': 11,'pan':0,'tilt':0}
@@ -523,6 +546,12 @@ def update_data_websocket_single():
         socketio.emit('update', socket_data, namespace='/ctrl')
     except Exception as e:
         print("An [app.update_data_websocket_single] error occurred:", e)
+
+# System info printing loop
+def system_info_print_loop():
+    while True:
+        print_system_info()
+        time.sleep(10)  # Print every 10 seconds
 
 # Info feedback
 def update_data_loop():
@@ -635,6 +664,10 @@ if __name__ == "__main__":
     # Base data update
     base_update_thread = threading.Thread(target=base_data_loop, daemon=True)
     base_update_thread.start()
+
+    # System info printing
+    system_info_thread = threading.Thread(target=system_info_print_loop, daemon=True)
+    system_info_thread.start()
 
     # Lights off
     base.lights_ctrl(0, 0)
