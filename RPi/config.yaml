@@ -17,7 +17,7 @@ base_config:
   extra_sensor: false
   main_type: 2
   module_type: 0
-  robot_name: WAVEGO
+  robot_name: TIMO
   sbc_version: 0.93
   use_lidar: false
 cmd_config:
@@ -103,5 +103,5 @@ sbc_config:
   feedback_interval: 0.001
 video:
   default_quality: 20
-  default_res_h: 480
-  default_res_w: 640
+  default_res_h: 1080
+  default_res_w: 1920

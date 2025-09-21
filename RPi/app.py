@@ -28,6 +28,7 @@ thisPath = os.path.dirname(curpath) # Find the path of the current directory
 with open(thisPath + '/config.yaml', 'r') as yaml_file: # Open the config file
     f = yaml.safe_load(yaml_file) # Load the config file
 
+# Show information on the OLED screen
 base.base_oled(0, f["base_config"]["robot_name"]) # Set the robot name
 base.base_oled(1, f"sbc_version: {f['base_config']['sbc_version']}") # Set the sbc version
 base.base_oled(2, f"{f['base_config']['main_type']}{f['base_config']['module_type']}") # Set the main type and module type
@@ -48,8 +49,9 @@ import cv_ctrl
 # import audio_ctrl
 import os_info
 
-# Get system info
+# Set the upload folder for the sounds
 UPLOAD_FOLDER = thisPath + '/sounds/others'
+# Create a SystemInfo instance
 si = os_info.SystemInfo()
 
 # Create a Flask app instance
@@ -62,7 +64,7 @@ socketio = SocketIO(app)
 active_pcs = {}
 
 # Maximum number of active connections allowed
-MAX_CONNECTIONS = 1
+MAX_CONNECTIONS = 2
 
 # Set to keep track of RTCPeerConnection instances
 pcs = set()
@@ -70,15 +72,19 @@ pcs = set()
 # Camera funcs
 cvf = cv_ctrl.OpencvFuncs(thisPath, base)
 
+# Command actions
 cmd_actions = {
+    # Zoom
     f['code']['zoom_x1']: lambda: cvf.scale_ctrl(1),
     f['code']['zoom_x2']: lambda: cvf.scale_ctrl(2),
     f['code']['zoom_x4']: lambda: cvf.scale_ctrl(4),
 
+    # Picture capture & video record
     f['code']['pic_cap']: cvf.picture_capture,
     f['code']['vid_sta']: lambda: cvf.video_record(True),
     f['code']['vid_end']: lambda: cvf.video_record(False),
 
+    # Computer vision mode
     f['code']['cv_none']: lambda: cvf.set_cv_mode(f['code']['cv_none']),
     f['code']['cv_moti']: lambda: cvf.set_cv_mode(f['code']['cv_moti']),
     f['code']['cv_face']: lambda: cvf.set_cv_mode(f['code']['cv_face']),
@@ -89,28 +95,35 @@ cmd_actions = {
     f['code']['mp_face']: lambda: cvf.set_cv_mode(f['code']['mp_face']),
     f['code']['mp_pose']: lambda: cvf.set_cv_mode(f['code']['mp_pose']),
 
+    # Detection reaction
     f['code']['re_none']: lambda: cvf.set_detection_reaction(f['code']['re_none']),
     f['code']['re_capt']: lambda: cvf.set_detection_reaction(f['code']['re_capt']),
     f['code']['re_reco']: lambda: cvf.set_detection_reaction(f['code']['re_reco']),
 
+    # Movement lock
     f['code']['mc_lock']: lambda: cvf.set_movtion_lock(True),
     f['code']['mc_unlo']: lambda: cvf.set_movtion_lock(False),
 
+    # Head light
     f['code']['led_off']: lambda: cvf.head_light_ctrl(0),
     f['code']['led_aut']: lambda: cvf.head_light_ctrl(1),
     f['code']['led_ton']: lambda: cvf.head_light_ctrl(2),
 
+    # Servo torque lock
     f['code']['release']: lambda: base.bus_servo_torque_lock(255, 0),
+    # Servo ID set
     f['code']['s_panid']: lambda: base.bus_servo_id_set(255, 2),
     f['code']['s_tilid']: lambda: base.bus_servo_id_set(255, 1),
     f['code']['set_mid']: lambda: base.bus_servo_mid_set(255),
 
+    # Base light
     f['code']['base_of']: lambda: base.lights_ctrl(0, base.head_light_status),
     f['code']['base_on']: lambda: base.lights_ctrl(255, base.head_light_status),
     f['code']['head_ct']: lambda: cvf.head_light_ctrl(3),
     f['code']['base_ct']: base.base_lights_ctrl
 }
 
+# Command feedback actions
 cmd_feedback_actions = [f['code']['cv_none'], f['code']['cv_moti'],
                         f['code']['cv_face'], f['code']['cv_objs'],
                         f['code']['cv_clor'], f['code']['mp_hand'],
@@ -124,7 +137,7 @@ cmd_feedback_actions = [f['code']['cv_none'], f['code']['cv_moti'],
                         f['code']['base_ct']
                         ]
 
-# cv info process
+# CV info process
 def process_cv_info(cmd):
     if cmd[f['fb']['detect_type']] != f['code']['cv_none']:
         print(cmd[f['fb']['detect_type']])
@@ -141,33 +154,31 @@ def generate_frames():
         except Exception as e:
             print("An [generate_frames] error occurred:", e)
 
-
-
-
-
-
 # Route to render the HTML template
 @app.route('/')
 def index():
     # audio_ctrl.play_random_audio("connected", False)
     return render_template('index.html')
 
+# Route for getting the config file
 @app.route('/config')
 def get_config():
     with open(thisPath + '/config.yaml', 'r') as file:
         yaml_content = file.read()
     return yaml_content
 
-# get pictures and videos.
+# Get pictures and videos
 @app.route('/<path:filename>')
 def serve_static(filename):
     return send_from_directory('templates', filename)
 
+# Get photo names
 @app.route('/get_photo_names')
 def get_photo_names():
     photo_files = sorted(os.listdir(thisPath + '/templates/pictures'), key=lambda x: os.path.getmtime(os.path.join(thisPath + '/templates/pictures', x)), reverse=True)
     return jsonify(photo_files)
 
+# Delete photo
 @app.route('/delete_photo', methods=['POST'])
 def delete_photo():
     filename = request.form.get('filename')
@@ -178,10 +189,12 @@ def delete_photo():
         print(e)
         return jsonify(success=False)
 
+# Get videos
 @app.route('/videos/<path:filename>')
 def videos(filename):
     return send_from_directory(thisPath + '/templates/videos', filename)
 
+# Get video names
 @app.route('/get_video_names')
 def get_video_names():
     video_files = sorted(
@@ -191,6 +204,7 @@ def get_video_names():
     )
     return jsonify(video_files)
 
+# Delete video
 @app.route('/delete_video', methods=['POST'])
 def delete_video():
     filename = request.form.get('filename')
@@ -201,37 +215,32 @@ def delete_video():
         print(e)
         return jsonify(success=False)
 
-
-
-
-# Video WebRTC
-# Function to manage connections
+# Manage Video WebRTC connections
 def manage_connections(pc_id):
     if len(active_pcs) >= MAX_CONNECTIONS:
         # If maximum connections reached, terminate the oldest connection
-        oldest_pc_id = next(iter(active_pcs))
-        old_pc = active_pcs.pop(oldest_pc_id)
-        old_pc.close()
+        oldest_pc_id = next(iter(active_pcs)) # Get the oldest connection
+        old_pc = active_pcs.pop(oldest_pc_id) # Pop the oldest connection
+        old_pc.close() # Close the oldest connection
 
     # Add new connection to active connections
-    active_pcs[pc_id] = pc
+    active_pcs[pc_id] = pc # Add the new connection to the active connections
 
 # Asynchronous function to handle offer exchange
 async def offer_async():
-    params = await request.json
-    offer = RTCSessionDescription(sdp=params["sdp"], type=params["type"])
+    params = await request.json # Get the parameters
+    offer = RTCSessionDescription(sdp=params["sdp"], type=params["type"]) # Create an RTCSessionDescription instance
 
-    # Create an RTCPeerConnection instance
-    pc = RTCPeerConnection()
+    pc = RTCPeerConnection() # Create an RTCPeerConnection instance
 
-    # Generate a unique ID for the RTCPeerConnection
+    # Generate a unique ID for the RTCPeerConnection, limit to 8 characters
     pc_id = "PeerConnection(%s)" % uuid.uuid4()
     pc_id = pc_id[:8]
 
-    # Manage connections
+    # Manage connections, add the new connection to the active connections
     manage_connections(pc_id)
 
-    # Create and set the local description
+    # Create offer and set the local description
     await pc.createOffer(offer)
     await pc.setLocalDescription(offer)
 
@@ -242,35 +251,35 @@ async def offer_async():
 
 # Wrapper function for running the asynchronous offer function
 def offer():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
+    loop = asyncio.new_event_loop() # Create an event loop
+    asyncio.set_event_loop(loop) # Set the event loop
     
-    future = asyncio.run_coroutine_threadsafe(offer_async(), loop)
+    future = asyncio.run_coroutine_threadsafe(offer_async(), loop) # Run the asynchronous offer function
     return future.result()
 
-# set product version
-def set_version(input_main, input_module):
-    base.base_json_ctrl({"T":900,"main":input_main,"module":input_module})
+# Set product version
+def set_version(input_main, input_module): 
+    base.base_json_ctrl({"T":900,"main":input_main,"module":input_module}) # Send JSON command to the ESP32 to set the main and module version
     if input_main == 1:
-        cvf.info_update("RaspRover", (0,255,255), 0.36)
+        cvf.info_update("RaspRover", (0,255,255), 0.36) # Update the info with the robot name
     elif input_main == 2:
-        cvf.info_update("UGV Rover", (0,255,255), 0.36)
+        cvf.info_update("UGV Rover", (0,255,255), 0.36) # Update the info with the robot name
     elif input_main == 3:
-        cvf.info_update("UGV Beast", (0,255,255), 0.36)
+        cvf.info_update("UGV Beast", (0,255,255), 0.36) # Update the info with the robot name
     if input_module == 0:
-        cvf.info_update("No Module", (0,255,255), 0.36)
+        cvf.info_update("No Module", (0,255,255), 0.36) # Update the info with the module name
     elif input_module == 1:
-        cvf.info_update("ARM", (0,255,255), 0.36)
+        cvf.info_update("ARM", (0,255,255), 0.36) # Update the info with the module name
     elif input_module == 2:
-        cvf.info_update("PT", (0,255,255), 0.36)
+        cvf.info_update("PT", (0,255,255), 0.36) # Update the info with the module name
 
-# main cmdline for robot ctrl
+# Commandline control interpreter
 def cmdline_ctrl(args_string):
-    if not args_string:
+    if not args_string: # If the arguments string is empty, return
         return
-    args = args_string.split()
+    args = args_string.split() # Split the arguments string into a list
     # base -c {"T":1,"L":0.5,"R":0.5}
-    if args[0] == 'base':
+    if args[0] == 'base': # Base: send JSON command to the ESP32
         if args[1] == '-c' or args[1] == '--cmd':
             base.base_json_ctrl(json.loads(args[2]))
         elif args[1] == '-r' or args[1] == '--recv':
@@ -279,7 +288,7 @@ def cmdline_ctrl(args_string):
             else:
                 cvf.show_recv_info(False)
 
-    elif args[0] == 'audio':
+    elif args[0] == 'audio': # Audio: play speech, set volume, play file
         if args[1] == '-s' or args[1] == '--say':
             # audio_ctrl.play_speech_thread(' '.join(args[2:]))
             pass
@@ -290,7 +299,7 @@ def cmdline_ctrl(args_string):
             # audio_ctrl.play_file(args[2])
             pass
 
-    elif args[0] == 'send':
+    elif args[0] == 'send': # Send command: add, remove, broadcast, group
         if args[1] == '-a' or args[1] == '--add':
             if args[2] == '-b' or args[2] == '--broadcast':
                 base.base_json_ctrl({"T":303,"mac":"FF:FF:FF:FF:FF:FF"})
@@ -308,7 +317,7 @@ def cmdline_ctrl(args_string):
         else:
             base.base_json_ctrl({"T":306,"mac":args[1],"dev":0,"b":0,"s":0,"e":0,"h":0,"cmd":3,"megs":' '.join(args[2:])})
 
-    elif args[0] == 'cv':
+    elif args[0] == 'cv': # Computer vision: set target color range, select color, set gimbal tracking parameters
         if args[1] == '-r' or args[1] == '--range':
             try:
                 lower_trimmed = args[2].strip("[]")
@@ -332,7 +341,7 @@ def cmdline_ctrl(args_string):
         elif args[1] == '-s' or args[1] == '--select':
             cvf.selet_target_color(args[2])
 
-    elif args[0] == 'video' or args[0] == 'v':
+    elif args[0] == 'video' or args[0] == 'v': # Video: set video quality
         if args[1] == '-q' or args[1] == '--quality':
             try:
                 int(args[2])
@@ -340,7 +349,7 @@ def cmdline_ctrl(args_string):
                 return
             cvf.set_video_quality(int(args[2]))
 
-    elif args[0] == 'line':
+    elif args[0] == 'line': # Line: set line color range, set line track parameters
         if args[1] == '-r' or args[1] == '--range':
             try:
                 lower_trimmed = args[2].strip("[]")
@@ -372,10 +381,10 @@ def cmdline_ctrl(args_string):
             # line -s 0.7 0.8 1.6 0.0006 0.6 0.4 0.2
             cvf.set_line_track_args(float(args[2]), float(args[3]), float(args[4]), float(args[5]), float(args[6]), float(args[7]), float(args[8]))
 
-    elif args[0] == 'track':
+    elif args[0] == 'track': # Point tracking: set point tracking parameters
         cvf.set_pt_track_args(args[1], args[2])
 
-    elif args[0] == 'timelapse':
+    elif args[0] == 'timelapse': # Timelapse: set timelapse parameters
         if args[1] == '-s' or args[1] == '--start':
             if len(args) != 6:
                 return
@@ -390,13 +399,13 @@ def cmdline_ctrl(args_string):
         elif args[1] == '-e' or args[1] == '--end' or args[1] == '--stop':
             cvf.mission_stop()
 
-    elif args[0] == 'p':
+    elif args[0] == 'p': # Set product version
         main_type = int(args[1][0])
         module_type = int(args[1][1])
         set_version(main_type, module_type)
 
     # s 20
-    elif args[0] == 's':
+    elif args[0] == 's': # Set product version
         main_type = int(args[1][0])
         module_type = int(args[1][1])
         if main_type == 1:
@@ -417,9 +426,8 @@ def cmdline_ctrl(args_string):
             yaml.dump(f, yaml_file)
         set_version(main_type, module_type)
 
-    elif args[0] == 'test':
+    elif args[0] == 'test': # Test: update base data
         cvf.update_base_data({"T":1003,"mac":1111,"megs":"helllo aaaaaaaa"})
-
 
 # Route to handle the offer request
 @app.route('/offer', methods=['POST'])
@@ -474,8 +482,6 @@ def audio_stop():
 @app.route('/settings/<path:filename>')
 def serve_static_settings(filename):
     return send_from_directory('templates', filename)
-
-
 
 # Web socket
 @socketio.on('json', namespace='/json')
@@ -569,8 +575,6 @@ def handle_socket_cmd(message):
     if cmd_a in cmd_feedback_actions:
         threading.Thread(target=update_data_websocket_single, daemon=True).start()
 
-
-
 # commandline on boot
 def cmd_on_boot():
     cmd_list = [
@@ -586,8 +590,6 @@ def cmd_on_boot():
         cmdline_ctrl(cmd_list[i])
         cvf.info_update(cmd_list[i], (0,255,255), 0.36)
     set_version(f['base_config']['main_type'], f['base_config']['module_type'])
-
-
 
 # Run the Flask app
 if __name__ == "__main__":
