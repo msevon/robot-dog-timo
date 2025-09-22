@@ -97,6 +97,6 @@ sbc_config:
   disabled_http_log: true
   feedback_interval: 0.001
 video:
-  default_quality: 80
+  default_quality: 40
   default_res_h: 1080
   default_res_w: 1920
