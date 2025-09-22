@@ -771,31 +771,31 @@ socket.on('update', function(data) {
         
         // Update the display elements
         if (data[cpuLoadKey] !== undefined) {
-            document.getElementById("CPU").innerHTML = data[cpuLoadKey] + "%";
+            document.getElementById("CPU").innerHTML = Math.round(data[cpuLoadKey]) + "%";
             console.log("Updated CPU to:", data[cpuLoadKey]);
         } else {
             console.log("CPU data not found with key:", cpuLoadKey);
         }
         if (data[cpuTempKey] !== undefined) {
-            document.getElementById("tem").innerHTML = data[cpuTempKey].toFixed(1) + " ℃";
+            document.getElementById("tem").innerHTML = Math.round(data[cpuTempKey]) + " ℃";
             console.log("Updated TEMP to:", data[cpuTempKey]);
         } else {
             console.log("TEMP data not found with key:", cpuTempKey);
         }
         if (data[ramUsageKey] !== undefined) {
-            document.getElementById("RAM").innerHTML = data[ramUsageKey] + "%";
+            document.getElementById("RAM").innerHTML = Math.round(data[ramUsageKey]) + "%";
             console.log("Updated RAM to:", data[ramUsageKey]);
         } else {
             console.log("RAM data not found with key:", ramUsageKey);
         }
         if (data[wifiRssiKey] !== undefined) {
-            document.getElementById("rssi").innerHTML = data[wifiRssiKey] + " dBm";
+            document.getElementById("rssi").innerHTML = Math.round(data[wifiRssiKey]) + " dBm";
             console.log("Updated RSSI to:", data[wifiRssiKey]);
         } else {
             console.log("RSSI data not found with key:", wifiRssiKey);
         }
         if (data[videoFpsKey] !== undefined) {
-            document.getElementById("fps").innerHTML = data[videoFpsKey].toFixed(1);
+            document.getElementById("fps").innerHTML = Math.round(data[videoFpsKey]);
             console.log("Updated FPS to:", data[videoFpsKey]);
         } else {
             console.log("FPS data not found with key:", videoFpsKey);
@@ -809,13 +809,31 @@ socket.on('update', function(data) {
         var baseVoltageKey = (typeof base_voltage !== 'undefined') ? base_voltage : 112;
         
         if (data[pictureSizeKey] !== undefined) {
-            document.getElementById("photos-size").innerHTML = data[pictureSizeKey] + " MB";
+            document.getElementById("photos-size").innerHTML = Math.round(data[pictureSizeKey]) + " MB";
         }
         if (data[videoSizeKey] !== undefined) {
-            document.getElementById("videos-size").innerHTML = data[videoSizeKey] + " MB";
+            document.getElementById("videos-size").innerHTML = Math.round(data[videoSizeKey]) + " MB";
         }
         if (data[baseVoltageKey] !== undefined) {
-            document.getElementById("v_in").innerHTML = data[baseVoltageKey].toFixed(1);
+            document.getElementById("v_in").innerHTML = Math.round(data[baseVoltageKey]);
+            
+            // Calculate and display battery percentage
+            var voltage = data[baseVoltageKey];
+            var batteryPercent = 0;
+            
+            // Battery percentage calculation based on voltage
+            // Assuming 6V = 0% and 8.4V = 100% (typical for 2S Li-ion)
+            if (voltage >= 8.4) {
+                batteryPercent = 100;
+            } else if (voltage >= 6.0) {
+                batteryPercent = Math.round(((voltage - 6.0) / (8.4 - 6.0)) * 100);
+            } else {
+                batteryPercent = 0;
+            }
+            
+            // Ensure percentage is between 0 and 100
+            batteryPercent = Math.max(0, Math.min(100, batteryPercent));
+            document.getElementById("battery_percent").innerHTML = batteryPercent;
         }
         
         // Update battery state
