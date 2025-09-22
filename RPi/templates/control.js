@@ -593,9 +593,12 @@ socket.emit('request_data');
 var light_mode = 0;
 var cv_heartbeat_stop_flag = false;
 socket.on('update', function(data) {
-    if (data[base_voltage] != 0) {
-        // console.log(data[detect_react]);
-    } else {
+    // Debug: Log the received data
+    console.log("Received update data:", data);
+    
+    // Only skip if data is completely empty or invalid
+    if (!data || Object.keys(data).length === 0) {
+        console.log("Empty data received, skipping update");
         return;
     }
     try {
@@ -679,6 +682,15 @@ socket.on('update', function(data) {
         }
 
 
+        // Debug: Log the values being processed
+        console.log("Processing values:", {
+            cpu_load: data[cpu_load],
+            cpu_temp: data[cpu_temp], 
+            ram_usage: data[ram_usage],
+            wifi_rssi: data[wifi_rssi],
+            video_fps: data[video_fps]
+        });
+        
         document.getElementById("CPU").innerHTML = data[cpu_load] + "%";
         document.getElementById("tem").innerHTML = data[cpu_temp].toFixed(1) + " ℃";
         document.getElementById("RAM").innerHTML = data[ram_usage] + "%";

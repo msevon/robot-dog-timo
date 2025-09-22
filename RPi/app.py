@@ -538,11 +538,13 @@ def update_data_websocket_single():
             f['fb']['detect_react']:     cvf.detection_reaction_mode,
             f['fb']['pan_angle']:        cvf.pan_angle,
             f['fb']['tilt_angle']:       cvf.tilt_angle,
-            f['fb']['base_voltage']:     base.base_data['v'],
+            f['fb']['base_voltage']:     base.base_data.get('v', 0) if base.base_data else 0,
             f['fb']['video_fps']:        cvf.video_fps,
             f['fb']['cv_movtion_mode']:  cvf.cv_movtion_lock,
             f['fb']['base_light']:       base.base_light_status
         }
+        # Debug: Print the data being sent to web app
+        print(f"Web app data: CPU={socket_data[f['fb']['cpu_load']]}, TEMP={socket_data[f['fb']['cpu_temp']]}, RAM={socket_data[f['fb']['ram_usage']]}, RSSI={socket_data[f['fb']['wifi_rssi']]}")
         socketio.emit('update', socket_data, namespace='/ctrl')
     except Exception as e:
         print("An [app.update_data_websocket_single] error occurred:", e)
