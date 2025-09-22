@@ -701,6 +701,16 @@ socket.on('update', function(data) {
             video_fps: data[video_fps]
         });
         
+        // Debug: Check if the data contains the expected keys
+        console.log("Data contains keys:", Object.keys(data));
+        console.log("Looking for keys 106, 107, 108, 111, 113:", {
+            "106": data[106],
+            "107": data[107], 
+            "108": data[108],
+            "111": data[111],
+            "113": data[113]
+        });
+        
         // Check if feedback codes are defined, if not use fallback values
         var cpuLoadKey = (typeof cpu_load !== 'undefined') ? cpu_load : 106;
         var cpuTempKey = (typeof cpu_temp !== 'undefined') ? cpu_temp : 107;
@@ -720,23 +730,41 @@ socket.on('update', function(data) {
         if (data[cpuLoadKey] !== undefined) {
             document.getElementById("CPU").innerHTML = data[cpuLoadKey] + "%";
             console.log("Updated CPU to:", data[cpuLoadKey]);
+        } else {
+            console.log("CPU data not found with key:", cpuLoadKey);
         }
         if (data[cpuTempKey] !== undefined) {
             document.getElementById("tem").innerHTML = data[cpuTempKey].toFixed(1) + " ℃";
             console.log("Updated TEMP to:", data[cpuTempKey]);
+        } else {
+            console.log("TEMP data not found with key:", cpuTempKey);
         }
         if (data[ramUsageKey] !== undefined) {
             document.getElementById("RAM").innerHTML = data[ramUsageKey] + "%";
             console.log("Updated RAM to:", data[ramUsageKey]);
+        } else {
+            console.log("RAM data not found with key:", ramUsageKey);
         }
         if (data[wifiRssiKey] !== undefined) {
             document.getElementById("rssi").innerHTML = data[wifiRssiKey] + " dBm";
             console.log("Updated RSSI to:", data[wifiRssiKey]);
+        } else {
+            console.log("RSSI data not found with key:", wifiRssiKey);
         }
         if (data[videoFpsKey] !== undefined) {
             document.getElementById("fps").innerHTML = data[videoFpsKey].toFixed(1);
             console.log("Updated FPS to:", data[videoFpsKey]);
+        } else {
+            console.log("FPS data not found with key:", videoFpsKey);
         }
+        
+        // Force test update to see if display works
+        console.log("Testing display update with hardcoded values...");
+        document.getElementById("CPU").innerHTML = "TEST";
+        document.getElementById("tem").innerHTML = "TEST";
+        document.getElementById("RAM").innerHTML = "TEST";
+        document.getElementById("rssi").innerHTML = "TEST";
+        document.getElementById("fps").innerHTML = "TEST";
         
         // Handle other elements with fallback keys
         var pictureSizeKey = (typeof picture_size !== 'undefined') ? picture_size : 104;
