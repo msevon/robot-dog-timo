@@ -46,7 +46,6 @@ import time
 import logging
 import logging
 import cv_ctrl
-# import audio_ctrl
 import os_info
 
 # Set the upload folder for the sounds
@@ -157,7 +156,6 @@ def generate_frames():
 # Route to render the HTML template
 @app.route('/')
 def index():
-    # audio_ctrl.play_random_audio("connected", False)
     return render_template('index.html')
 
 # Route for getting the config file
@@ -287,17 +285,6 @@ def cmdline_ctrl(args_string):
                 cvf.show_recv_info(True)
             else:
                 cvf.show_recv_info(False)
-
-    elif args[0] == 'audio': # Audio: play speech, set volume, play file
-        if args[1] == '-s' or args[1] == '--say':
-            # audio_ctrl.play_speech_thread(' '.join(args[2:]))
-            pass
-        elif args[1] == '-v' or args[1] == '--volume':
-            # audio_ctrl.set_audio_volume(args[2])
-            pass
-        elif args[1] == '-p' or args[1] == '--play_file':
-            # audio_ctrl.play_file(args[2])
-            pass
 
     elif args[0] == 'send': # Send command: add, remove, broadcast, group
         if args[1] == '-a' or args[1] == '--add':
@@ -450,39 +437,6 @@ def handle_command():
     except Exception as e:
         print(f"[app.handle_command] error: {e}")
     return jsonify({"status": "success", "message": "Command received"})
-
-# Get audio files
-@app.route('/getAudioFiles', methods=['GET'])
-def get_audio_files():
-    files = [f for f in os.listdir(UPLOAD_FOLDER) if os.path.isfile(os.path.join(UPLOAD_FOLDER, f)) and (f.endswith('.mp3') or f.endswith('.wav'))]
-    return jsonify(files)
-
-# Upload audio file
-@app.route('/uploadAudio', methods=['POST'])
-def upload_audio():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'})
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'})
-    if file:
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_FOLDER, filename))
-        return jsonify({'success': 'File uploaded successfully'})
-
-# Play audio file
-@app.route('/playAudio', methods=['POST'])
-def play_audio():
-    audio_file = request.form['audio_file']
-    print(thisPath + '/sounds/others/' + audio_file)
-    # audio_ctrl.play_audio_thread(thisPath + '/sounds/others/' + audio_file)
-    return jsonify({'success': 'Audio is playing'})
-
-# Stop audio
-@app.route('/stop_audio', methods=['POST'])
-def audio_stop():
-    # audio_ctrl.stop()
-    return jsonify({'success': 'Audio stop'})
 
 # Serve static settings
 @app.route('/settings/<path:filename>')

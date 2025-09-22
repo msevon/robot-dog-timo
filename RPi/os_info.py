@@ -4,7 +4,8 @@ import threading
 
 curpath = os.path.realpath(__file__)
 thisPath = os.path.dirname(curpath)
-# Doesnt work currently...
+
+# Send system info to the web app
 class SystemInfo(threading.Thread):
     """docstring for SystemInfo"""
     def __init__(self):
@@ -28,6 +29,7 @@ class SystemInfo(threading.Thread):
         self.__flag = threading.Event()
         self.__flag.clear()
 
+    # Get the size of the folder specified in the path variable
     def get_folder_size(self, folder_path):
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(folder_path):
@@ -38,14 +40,17 @@ class SystemInfo(threading.Thread):
         size_in_mb = total_size / (1024 * 1024)
         return round(size_in_mb,2)
 
+    # Update the size of the folder
     def update_folder_size(self):
         self.pictures_size = self.get_folder_size(self.this_path + '/templates/pictures')
         self.videos_size = self.get_folder_size(self.this_path + '/templates/videos')
 
+    # Update the size of the folder specified in the path variable
     def update_folder(self, input_path):
         self.this_path = input_path
         threading.Thread(target=self.update_folder_size, daemon=True).start()
 
+    # Return the temperature of the CPU
     def get_cpu_temperature(self):
         try:
             temperature_str = os.popen('vcgencmd measure_temp').readline()
@@ -55,10 +60,10 @@ class SystemInfo(threading.Thread):
             print("Error reading CPU temperature:", str(e))
             return None
 
+    # Return the IP address of the specified interface
     def get_ip_address(self, interface):
         try:
             interface_info = netifaces.ifaddresses(interface)
-
             ipv4_info = interface_info.get(netifaces.AF_INET, [{}])
             return ipv4_info[0].get('addr')
         except ValueError:
@@ -68,6 +73,7 @@ class SystemInfo(threading.Thread):
             print(f"No IPv4 address assigned to {interface}.")
             return None
 
+    # Return the WiFi mode
     def get_wifi_mode(self):
         try:
             result = subprocess.check_output(['/sbin/iwconfig', 'wlan0'], encoding='utf-8')
@@ -80,6 +86,7 @@ class SystemInfo(threading.Thread):
             return None
         return None
 
+    # Return the signal strength of the specified interface
     def get_signal_strength(self, interface):
         try:
             output = subprocess.check_output(["/sbin/iwconfig", interface]).decode("utf-8")
@@ -97,15 +104,19 @@ class SystemInfo(threading.Thread):
             print(f"An error occurred: {e}")
             return -1
 
+    # Change the network interface
     def change_net_interface(self, new_interface):
         self.net_interface = new_interface
 
+    # Pause the thread
     def pause(self):
         self.__flag.clear()
 
+    # Resume the thread
     def resume(self):
         self.__flag.set()
 
+    # Run the thread
     def run(self):
         self.eth0_ip = self.get_ip_address('eth0')
         self.wlan_ip = self.get_ip_address(self.net_interface)
@@ -130,7 +141,7 @@ class SystemInfo(threading.Thread):
             self.cpu_load = psutil.cpu_percent(interval = self.update_interval)
             self.__flag.wait()
 
-
+# Main function
 if __name__ == "__main__":
     si = SystemInfo()
     si.update_folder(thisPath)
