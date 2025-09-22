@@ -2,7 +2,6 @@
 from base_ctrl import BaseController
 import threading
 import yaml, os
-import audio_ctrl
 
 # Raspberry Pi version check.
 def is_raspberry_pi5():
@@ -615,9 +614,6 @@ def cmd_on_boot():
 if __name__ == "__main__":
     # Lights off
     base.lights_ctrl(255, 255)
-    print("Lights on")
-    # Play a audio file in /sounds/robot_started/
-    audio_ctrl.play_random_audio("robot_started", False)
 
     # Update the size of videos and pictures
     si.update_folder(thisPath)
