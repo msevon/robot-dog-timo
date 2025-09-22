@@ -594,7 +594,17 @@ var light_mode = 0;
 var cv_heartbeat_stop_flag = false;
 socket.on('update', function(data) {
     // Debug: Log the received data
-    console.log("Received update data:", data);
+    console.log("=== RECEIVED UPDATE DATA ===");
+    console.log("Full data object:", data);
+    console.log("Data keys:", Object.keys(data));
+    console.log("Feedback codes:", {
+        cpu_load: cpu_load,
+        cpu_temp: cpu_temp,
+        ram_usage: ram_usage,
+        wifi_rssi: wifi_rssi,
+        video_fps: video_fps
+    });
+    console.log("=============================");
     
     // Only skip if data is completely empty or invalid
     if (!data || Object.keys(data).length === 0) {
@@ -691,27 +701,72 @@ socket.on('update', function(data) {
             video_fps: data[video_fps]
         });
         
-        document.getElementById("CPU").innerHTML = data[cpu_load] + "%";
-        document.getElementById("tem").innerHTML = data[cpu_temp].toFixed(1) + " ℃";
-        document.getElementById("RAM").innerHTML = data[ram_usage] + "%";
-        document.getElementById("rssi").innerHTML = data[wifi_rssi] + " dBm";
-        document.getElementById("fps").innerHTML = data[video_fps].toFixed(1);
+        // Check if feedback codes are defined, if not use fallback values
+        var cpuLoadKey = (typeof cpu_load !== 'undefined') ? cpu_load : 106;
+        var cpuTempKey = (typeof cpu_temp !== 'undefined') ? cpu_temp : 107;
+        var ramUsageKey = (typeof ram_usage !== 'undefined') ? ram_usage : 108;
+        var wifiRssiKey = (typeof wifi_rssi !== 'undefined') ? wifi_rssi : 111;
+        var videoFpsKey = (typeof video_fps !== 'undefined') ? video_fps : 113;
         
-        document.getElementById("photos-size").innerHTML = data[picture_size] + " MB";
-        document.getElementById("videos-size").innerHTML = data[video_size] + " MB";
-
-        document.getElementById("v_in").innerHTML = (data[base_voltage]).toFixed(1);
+        console.log("Using keys:", {
+            cpuLoadKey: cpuLoadKey,
+            cpuTempKey: cpuTempKey,
+            ramUsageKey: ramUsageKey,
+            wifiRssiKey: wifiRssiKey,
+            videoFpsKey: videoFpsKey
+        });
         
+        // Update the display elements
+        if (data[cpuLoadKey] !== undefined) {
+            document.getElementById("CPU").innerHTML = data[cpuLoadKey] + "%";
+            console.log("Updated CPU to:", data[cpuLoadKey]);
+        }
+        if (data[cpuTempKey] !== undefined) {
+            document.getElementById("tem").innerHTML = data[cpuTempKey].toFixed(1) + " ℃";
+            console.log("Updated TEMP to:", data[cpuTempKey]);
+        }
+        if (data[ramUsageKey] !== undefined) {
+            document.getElementById("RAM").innerHTML = data[ramUsageKey] + "%";
+            console.log("Updated RAM to:", data[ramUsageKey]);
+        }
+        if (data[wifiRssiKey] !== undefined) {
+            document.getElementById("rssi").innerHTML = data[wifiRssiKey] + " dBm";
+            console.log("Updated RSSI to:", data[wifiRssiKey]);
+        }
+        if (data[videoFpsKey] !== undefined) {
+            document.getElementById("fps").innerHTML = data[videoFpsKey].toFixed(1);
+            console.log("Updated FPS to:", data[videoFpsKey]);
+        }
+        
+        // Handle other elements with fallback keys
+        var pictureSizeKey = (typeof picture_size !== 'undefined') ? picture_size : 104;
+        var videoSizeKey = (typeof video_size !== 'undefined') ? video_size : 105;
+        var baseVoltageKey = (typeof base_voltage !== 'undefined') ? base_voltage : 112;
+        
+        if (data[pictureSizeKey] !== undefined) {
+            document.getElementById("photos-size").innerHTML = data[pictureSizeKey] + " MB";
+        }
+        if (data[videoSizeKey] !== undefined) {
+            document.getElementById("videos-size").innerHTML = data[videoSizeKey] + " MB";
+        }
+        if (data[baseVoltageKey] !== undefined) {
+            document.getElementById("v_in").innerHTML = data[baseVoltageKey].toFixed(1);
+        }
+        
+        // Update battery state
         var element = document.getElementById("b_state");
         element.classList.remove("baterry_state", "baterry_state1", "baterry_state2", "baterry_state3");
-        if ((data[base_voltage]) >= 8) {
-            element.classList.add("baterry_state");
-        } else if ((data[base_voltage]) >= 7) {
-            element.classList.add("baterry_state","baterry_state3");
-        } else if ((data[base_voltage]) >= 6.5) {
-            element.classList.add("baterry_state","baterry_state2");
-        } else if ((data[base_voltage]) < 6.5) {
-            element.classList.add("baterry_state","baterry_state1");
+        if (data[baseVoltageKey] !== undefined) {
+            var voltage = data[baseVoltageKey];
+            if (voltage >= 8) {
+                element.classList.add("baterry_state");
+            } else if (voltage >= 7) {
+                element.classList.add("baterry_state","baterry_state3");
+            } else if (voltage >= 6.5) {
+                element.classList.add("baterry_state","baterry_state2");
+            } else if (voltage < 6.5) {
+                element.classList.add("baterry_state","baterry_state1");
+            }
         }
     } catch(e) {
         console.log(e);
