@@ -2,6 +2,7 @@
 from base_ctrl import BaseController
 import threading
 import yaml, os
+import audio_ctrl
 
 # Raspberry Pi version check.
 def is_raspberry_pi5():
