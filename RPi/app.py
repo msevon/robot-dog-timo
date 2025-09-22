@@ -616,7 +616,7 @@ if __name__ == "__main__":
     base.lights_ctrl(255, 255)
     print("Lights on")
     # Play a audio file in /sounds/robot_started/
-    # audio_ctrl.play_random_audio("robot_started", False)
+    audio_ctrl.play_random_audio("robot_started", False)
 
     # Update the size of videos and pictures
     si.update_folder(thisPath)
