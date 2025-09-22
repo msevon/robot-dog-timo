@@ -7,11 +7,6 @@ args_config:
   mid_rate: 0.66
   min_rate: 0.3
   slow_speed: 0.2
-audio_config:
-  audio_output: true
-  default_volume: 1.0
-  min_time_bewteen_play: 1
-  speed_rate: 180
 base_config:
   add_osd: false
   extra_sensor: false

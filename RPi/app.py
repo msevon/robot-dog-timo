@@ -48,8 +48,6 @@ import logging
 import cv_ctrl
 import os_info
 
-# Set the upload folder for the sounds
-UPLOAD_FOLDER = thisPath + '/sounds/others'
 # Create a SystemInfo instance
 si = os_info.SystemInfo()
 
