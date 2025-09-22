@@ -613,52 +613,83 @@ socket.on('update', function(data) {
     }
     try {
         var baseBtn = document.getElementById("base_led_ctrl_btn");
-        var BButtons = baseBtn.getElementsByTagName("button");
-        removeButtonsClass(BButtons);
-        if (data[base_light] == 0) {
-            BButtons[0].classList.add("ctl_btn_active");
-        } else if (data[base_light] != 0){
-            BButtons[1].classList.add("ctl_btn_active");
+        if (baseBtn) {
+            var BButtons = baseBtn.getElementsByTagName("button");
+            removeButtonsClass(BButtons);
+            if (data[base_light] == 0) {
+                BButtons[0].classList.add("ctl_btn_active");
+            } else if (data[base_light] != 0){
+                BButtons[1].classList.add("ctl_btn_active");
+            }
         }
 
         var advCBtn = document.getElementById("adv_cv_ctrl_btn");
-        var CButtons = advCBtn.getElementsByTagName("button");
-        removeButtonsClass(CButtons);
+        if (advCBtn) {
+            var CButtons = advCBtn.getElementsByTagName("button");
+            removeButtonsClass(CButtons);
+        }
 
         var advFBtn = document.getElementById("adv_cv_funcs_btn");
-        var FButtons = advFBtn.getElementsByTagName("button");
-        removeButtonsClass(FButtons);
+        if (advFBtn) {
+            var FButtons = advFBtn.getElementsByTagName("button");
+            removeButtonsClass(FButtons);
+        }
 
         var mpBtn = document.getElementById("mp_funcs_btn");
-        var MPButtons = mpBtn.getElementsByTagName("button");
-        removeButtonsClass(MPButtons);
+        if (mpBtn) {
+            var MPButtons = mpBtn.getElementsByTagName("button");
+            removeButtonsClass(MPButtons);
+        }
 
         var dtIco = document.getElementById("DT");
         var dTypeBtn = document.getElementById("d_type_btn");
-        var DTbuttons = dTypeBtn.getElementsByTagName("button");
-        removeAllIcoClass(dtIco);
-        removeButtonsClass(DTbuttons);
-        if (data[detect_type] == cv_none) {
-            dtIco.classList.add("feed_ico", "feed_ico_none");
-            DTbuttons[0].classList.add("ctl_btn_active");
-        } else if (data[detect_type] == cv_moti) {
-            dtIco.classList.add("feed_ico", "feed_ico_movtion");
-            DTbuttons[1].classList.add("ctl_btn_active");
-        } else if (data[detect_type] == cv_face) {
-            dtIco.classList.add("feed_ico", "feed_ico_face");
-            DTbuttons[2].classList.add("ctl_btn_active");
-        } else if (data[detect_type] == cv_auto) {
-            CButtons[2].classList.add("ctl_btn_active");
-        } else if (data[detect_type] == cv_objs) {
-            FButtons[0].classList.add("ctl_btn_active");
-        } else if (data[detect_type] == cv_clor) {
-            FButtons[1].classList.add("ctl_btn_active");
-        } else if (data[detect_type] == mp_hand) {
-            FButtons[2].classList.add("ctl_btn_active");
-        } else if (data[detect_type] == mp_face) {
-            MPButtons[0].classList.add("ctl_btn_active");
-        } else if (data[detect_type] == mp_pose) {
-            MPButtons[1].classList.add("ctl_btn_active");
+        if (dtIco) {
+            removeAllIcoClass(dtIco);
+        }
+        if (dTypeBtn) {
+            var DTbuttons = dTypeBtn.getElementsByTagName("button");
+            removeButtonsClass(DTbuttons);
+            
+            if (data[detect_type] == cv_none) {
+                if (dtIco) dtIco.classList.add("feed_ico", "feed_ico_none");
+                DTbuttons[0].classList.add("ctl_btn_active");
+            } else if (data[detect_type] == cv_moti) {
+                if (dtIco) dtIco.classList.add("feed_ico", "feed_ico_movtion");
+                DTbuttons[1].classList.add("ctl_btn_active");
+            } else if (data[detect_type] == cv_face) {
+                if (dtIco) dtIco.classList.add("feed_ico", "feed_ico_face");
+                DTbuttons[2].classList.add("ctl_btn_active");
+            } else if (data[detect_type] == cv_auto) {
+                if (advCBtn) {
+                    var CButtons = advCBtn.getElementsByTagName("button");
+                    CButtons[2].classList.add("ctl_btn_active");
+                }
+            } else if (data[detect_type] == cv_objs) {
+                if (advFBtn) {
+                    var FButtons = advFBtn.getElementsByTagName("button");
+                    FButtons[0].classList.add("ctl_btn_active");
+                }
+            } else if (data[detect_type] == cv_clor) {
+                if (advFBtn) {
+                    var FButtons = advFBtn.getElementsByTagName("button");
+                    FButtons[1].classList.add("ctl_btn_active");
+                }
+            } else if (data[detect_type] == mp_hand) {
+                if (advFBtn) {
+                    var FButtons = advFBtn.getElementsByTagName("button");
+                    FButtons[2].classList.add("ctl_btn_active");
+                }
+            } else if (data[detect_type] == mp_face) {
+                if (mpBtn) {
+                    var MPButtons = mpBtn.getElementsByTagName("button");
+                    MPButtons[0].classList.add("ctl_btn_active");
+                }
+            } else if (data[detect_type] == mp_pose) {
+                if (mpBtn) {
+                    var MPButtons = mpBtn.getElementsByTagName("button");
+                    MPButtons[1].classList.add("ctl_btn_active");
+                }
+            }
         }
 
         if (data[detect_type] == cv_auto && cv_heartbeat_stop_flag == false) {
@@ -667,28 +698,40 @@ socket.on('update', function(data) {
             cv_heartbeat_stop_flag = false;
         }
 
-        if (data[cv_movtion_mode] == true) {
-            CButtons[0].classList.add("ctl_btn_active");
-        } else if (data[cv_movtion_mode] == false) {
-            CButtons[1].classList.add("ctl_btn_active");
+        if (advCBtn) {
+            var CButtons = advCBtn.getElementsByTagName("button");
+            if (data[cv_movtion_mode] == true) {
+                CButtons[0].classList.add("ctl_btn_active");
+            } else if (data[cv_movtion_mode] == false) {
+                CButtons[1].classList.add("ctl_btn_active");
+            }
         }
 
         var drIco = document.getElementById("DR");
         var DReactionBtn = document.getElementById("d_reaction_btn");
-        var DRbuttons = DReactionBtn.getElementsByTagName("button");
-        removeButtonsClass(DRbuttons);
-        if (data[detect_react] == re_none) {
-            removeAllIcoClass(drIco);
-            drIco.classList.add("feed_ico", "feed_ico_none");
-            DRbuttons[0].classList.add("ctl_btn_active");
-        } else if (data[detect_react] == re_capt) {
-            removeAllIcoClass(drIco);
-            drIco.classList.add("feed_ico", "feed_ico_capture");
-            DRbuttons[1].classList.add("ctl_btn_active");
-        } else if (data[detect_react] == re_reco) {
-            removeAllIcoClass(drIco);
-            drIco.classList.add("feed_ico", "feed_ico_record");
-            DRbuttons[2].classList.add("ctl_btn_active");
+        if (DReactionBtn) {
+            var DRbuttons = DReactionBtn.getElementsByTagName("button");
+            removeButtonsClass(DRbuttons);
+            
+            if (data[detect_react] == re_none) {
+                if (drIco) {
+                    removeAllIcoClass(drIco);
+                    drIco.classList.add("feed_ico", "feed_ico_none");
+                }
+                DRbuttons[0].classList.add("ctl_btn_active");
+            } else if (data[detect_react] == re_capt) {
+                if (drIco) {
+                    removeAllIcoClass(drIco);
+                    drIco.classList.add("feed_ico", "feed_ico_capture");
+                }
+                DRbuttons[1].classList.add("ctl_btn_active");
+            } else if (data[detect_react] == re_reco) {
+                if (drIco) {
+                    removeAllIcoClass(drIco);
+                    drIco.classList.add("feed_ico", "feed_ico_record");
+                }
+                DRbuttons[2].classList.add("ctl_btn_active");
+            }
         }
 
 
@@ -758,7 +801,7 @@ socket.on('update', function(data) {
             console.log("FPS data not found with key:", videoFpsKey);
         }
         
-        // Force test update to see if display works
+        // Test display update (remove this after confirming it works)
         console.log("Testing display update with hardcoded values...");
         document.getElementById("CPU").innerHTML = "TEST";
         document.getElementById("tem").innerHTML = "TEST";
