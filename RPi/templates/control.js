@@ -21,7 +21,6 @@ fetch('/config')
   .then(yamlText => {
     try {
       const yamlObject = jsyaml.load(yamlText);
-      console.log(yamlObject);
       cmd_movition_ctrl = yamlObject.cmd_config.cmd_movition_ctrl;
       cmd_gimbal_steady = yamlObject.cmd_config.cmd_gimbal_steady;
       cmd_gimbal_ctrl = yamlObject.cmd_config.cmd_gimbal_ctrl;
@@ -480,7 +479,6 @@ document.addEventListener('mousewheel', (e) => {
 function joyStickCtrl(inputX, inputY) {
     if (module_type == 1) {
         var x_cmd = Math.max(-180, Math.min(inputX/7, 180));
-        console.log(inputY);
         // cmdSend(144, -inputX/7, -inputY/2);
         var armLimit = pointInCircle(510, armE, -inputY/2);
         armE = armLimit.x;
@@ -593,22 +591,8 @@ socket.emit('request_data');
 var light_mode = 0;
 var cv_heartbeat_stop_flag = false;
 socket.on('update', function(data) {
-    // Debug: Log the received data
-    console.log("=== RECEIVED UPDATE DATA ===");
-    console.log("Full data object:", data);
-    console.log("Data keys:", Object.keys(data));
-    console.log("Feedback codes:", {
-        cpu_load: cpu_load,
-        cpu_temp: cpu_temp,
-        ram_usage: ram_usage,
-        wifi_rssi: wifi_rssi,
-        video_fps: video_fps
-    });
-    console.log("=============================");
-    
     // Only skip if data is completely empty or invalid
     if (!data || Object.keys(data).length === 0) {
-        console.log("Empty data received, skipping update");
         return;
     }
     try {
@@ -734,26 +718,6 @@ socket.on('update', function(data) {
             }
         }
 
-
-        // Debug: Log the values being processed
-        console.log("Processing values:", {
-            cpu_load: data[cpu_load],
-            cpu_temp: data[cpu_temp], 
-            ram_usage: data[ram_usage],
-            wifi_rssi: data[wifi_rssi],
-            video_fps: data[video_fps]
-        });
-        
-        // Debug: Check if the data contains the expected keys
-        console.log("Data contains keys:", Object.keys(data));
-        console.log("Looking for keys 106, 107, 108, 111, 113:", {
-            "106": data[106],
-            "107": data[107], 
-            "108": data[108],
-            "111": data[111],
-            "113": data[113]
-        });
-        
         // Check if feedback codes are defined, if not use fallback values
         var cpuLoadKey = (typeof cpu_load !== 'undefined') ? cpu_load : 106;
         var cpuTempKey = (typeof cpu_temp !== 'undefined') ? cpu_temp : 107;
@@ -761,47 +725,23 @@ socket.on('update', function(data) {
         var wifiRssiKey = (typeof wifi_rssi !== 'undefined') ? wifi_rssi : 111;
         var videoFpsKey = (typeof video_fps !== 'undefined') ? video_fps : 113;
         
-        console.log("Using keys:", {
-            cpuLoadKey: cpuLoadKey,
-            cpuTempKey: cpuTempKey,
-            ramUsageKey: ramUsageKey,
-            wifiRssiKey: wifiRssiKey,
-            videoFpsKey: videoFpsKey
-        });
         
         // Update the display elements
         if (data[cpuLoadKey] !== undefined) {
             document.getElementById("CPU").innerHTML = Math.round(data[cpuLoadKey]) + "%";
-            console.log("Updated CPU to:", data[cpuLoadKey]);
-        } else {
-            console.log("CPU data not found with key:", cpuLoadKey);
         }
         if (data[cpuTempKey] !== undefined) {
             document.getElementById("tem").innerHTML = Math.round(data[cpuTempKey]) + " ℃";
-            console.log("Updated TEMP to:", data[cpuTempKey]);
-        } else {
-            console.log("TEMP data not found with key:", cpuTempKey);
         }
         if (data[ramUsageKey] !== undefined) {
             document.getElementById("RAM").innerHTML = Math.round(data[ramUsageKey]) + "%";
-            console.log("Updated RAM to:", data[ramUsageKey]);
-        } else {
-            console.log("RAM data not found with key:", ramUsageKey);
         }
         if (data[wifiRssiKey] !== undefined) {
             document.getElementById("rssi").innerHTML = Math.round(data[wifiRssiKey]) + " dBm";
-            console.log("Updated RSSI to:", data[wifiRssiKey]);
-        } else {
-            console.log("RSSI data not found with key:", wifiRssiKey);
         }
         if (data[videoFpsKey] !== undefined) {
             document.getElementById("fps").innerHTML = Math.round(data[videoFpsKey]);
-            console.log("Updated FPS to:", data[videoFpsKey]);
-        } else {
-            console.log("FPS data not found with key:", videoFpsKey);
         }
-        
-        // Display update confirmed working - now showing real data
         
         // Handle other elements with fallback keys
         var pictureSizeKey = (typeof picture_size !== 'undefined') ? picture_size : 104;
@@ -821,8 +761,8 @@ socket.on('update', function(data) {
             var voltage = data[baseVoltageKey];
             var batteryPercent = 0;
             
-            // Battery percentage calculation based on voltage
-            // Assuming 6V = 0% and 8.4V = 100% (typical for 2S Li-ion)
+            // Battery percentage calculation for 2S 18650 Li-ion batteries
+            // 2S = 2 cells in series: 6.0V (0%) to 8.4V (100%)
             if (voltage >= 8.4) {
                 batteryPercent = 100;
             } else if (voltage >= 6.0) {
@@ -871,7 +811,6 @@ function cmdSend(inputA, inputB, inputC){
             "B":inputB,
             "C":inputC
         };
-        console.log(jsonData);
         socket.send(JSON.stringify(jsonData));
         lastArgsCmdSend = inputA;
         lastTimeCmdSend = now;
@@ -879,7 +818,6 @@ function cmdSend(inputA, inputB, inputC){
 }
 
 function cmdJsonCmd(jsonData){
-    console.log(jsonData);
     if (jsonData.T == cmd_movition_ctrl) {
         heartbeat_left = jsonData.L;
         heartbeat_right = jsonData.R;
