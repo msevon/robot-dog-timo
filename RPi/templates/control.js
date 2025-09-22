@@ -801,13 +801,7 @@ socket.on('update', function(data) {
             console.log("FPS data not found with key:", videoFpsKey);
         }
         
-        // Test display update (remove this after confirming it works)
-        console.log("Testing display update with hardcoded values...");
-        document.getElementById("CPU").innerHTML = "TEST";
-        document.getElementById("tem").innerHTML = "TEST";
-        document.getElementById("RAM").innerHTML = "TEST";
-        document.getElementById("rssi").innerHTML = "TEST";
-        document.getElementById("fps").innerHTML = "TEST";
+        // Display update confirmed working - now showing real data
         
         // Handle other elements with fallback keys
         var pictureSizeKey = (typeof picture_size !== 'undefined') ? picture_size : 104;
