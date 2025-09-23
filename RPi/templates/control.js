@@ -1018,16 +1018,27 @@ function moveProcess() {
     var headPan = 0;
     var headTilt = 0;
     
+    // Use speed control for head movement (same as body movement)
+    var headSpeed = 1.0; // Base speed for head movement
+    
+    if (move_buttons.low == 1) {
+        headSpeed = 0.5; // Slow head movement
+    } else if (move_buttons.middle == 1) {
+        headSpeed = 1.0; // Medium head movement
+    } else if (move_buttons.fast == 1) {
+        headSpeed = 2.0; // Fast head movement
+    }
+    
     if (headLeftButton == 1) {
-        headPan = -2.5; // Pan left
+        headPan = -headSpeed; // Pan left
     } else if (headRightButton == 1) {
-        headPan = 2.5; // Pan right
+        headPan = headSpeed; // Pan right
     }
     
     if (headUpButton == 1) {
-        headTilt = 2.5; // Tilt up
+        headTilt = headSpeed; // Tilt up
     } else if (headDownButton == 1) {
-        headTilt = -2.5; // Tilt down
+        headTilt = -headSpeed; // Tilt down
     }
     
     // Send head movement command if any arrow key is pressed
