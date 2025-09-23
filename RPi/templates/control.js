@@ -619,6 +619,11 @@ socket.on('update', function(data) {
             removeButtonsClass(FButtons);
         }
 
+        var mpBtn = document.getElementById("mp_funcs_btn");
+        if (mpBtn) {
+            var MPButtons = mpBtn.getElementsByTagName("button");
+            removeButtonsClass(MPButtons);
+        }
 
         var dtIco = document.getElementById("DT");
         var dTypeBtn = document.getElementById("d_type_btn");
@@ -659,19 +664,19 @@ socket.on('update', function(data) {
                     FButtons[2].classList.add("ctl_btn_active");
                 }
             } else if (data[detect_type] == mp_face) {
-                if (advFBtn) {
-                    var FButtons = advFBtn.getElementsByTagName("button");
-                    FButtons[3].classList.add("ctl_btn_active");
+                if (mpBtn) {
+                    var MPButtons = mpBtn.getElementsByTagName("button");
+                    MPButtons[0].classList.add("ctl_btn_active");
                 }
             } else if (data[detect_type] == mp_pose) {
-                if (advFBtn) {
-                    var FButtons = advFBtn.getElementsByTagName("button");
-                    FButtons[4].classList.add("ctl_btn_active");
+                if (mpBtn) {
+                    var MPButtons = mpBtn.getElementsByTagName("button");
+                    MPButtons[1].classList.add("ctl_btn_active");
                 }
             } else if (data[detect_type] == cv_none) {
-                if (advFBtn) {
-                    var FButtons = advFBtn.getElementsByTagName("button");
-                    FButtons[5].classList.add("ctl_btn_active");
+                if (mpBtn) {
+                    var MPButtons = mpBtn.getElementsByTagName("button");
+                    MPButtons[2].classList.add("ctl_btn_active");
                 }
             }
         }
