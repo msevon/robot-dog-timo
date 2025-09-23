@@ -410,6 +410,14 @@ main {
     background-image: linear-gradient(to bottom right, rgba(202,213,255,0.15), rgba(202, 213, 255,0.05));
 }
 .ctl_btn_active:hover{border: 1px solid rgba(202,213,255,0.15);}
+.button-row{
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+}
+.button-row:last-child{
+    margin-bottom: 0;
+}
 .video_btn_record::before{background-image: url('./img/grey/record.svg');margin-right: 10px;}
 .video_btn_record:hover::before{background-image: url('./img/white/record.svg');margin-right: 10px;}
 .video_btn_stop::before{background-image: url('./img/grey/record_stop.svg');margin-right: 10px;}
