@@ -619,11 +619,6 @@ socket.on('update', function(data) {
             removeButtonsClass(FButtons);
         }
 
-        var mpBtn = document.getElementById("mp_funcs_btn");
-        if (mpBtn) {
-            var MPButtons = mpBtn.getElementsByTagName("button");
-            removeButtonsClass(MPButtons);
-        }
 
         var dtIco = document.getElementById("DT");
         var dTypeBtn = document.getElementById("d_type_btn");
