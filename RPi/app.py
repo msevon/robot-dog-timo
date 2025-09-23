@@ -34,6 +34,9 @@ base.base_oled(1, f"sbc_version: {f['base_config']['sbc_version']}") # Set the s
 base.base_oled(2, f"{f['base_config']['main_type']}{f['base_config']['module_type']}") # Set the main type and module type
 base.base_oled(3, "Starting...") # Set the starting message
 
+# Print robot name to console
+print(f"Robot Name: {f['base_config']['robot_name']}")
+
 # Import necessary modules
 from flask import Flask, render_template, Response, request, jsonify, redirect, url_for, send_from_directory, send_file
 from flask_socketio import SocketIO, emit
