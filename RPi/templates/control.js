@@ -929,6 +929,10 @@ var moveKeyMap = {
     87: 'forward', // W
     83: 'backward', // S
     68: 'right', // D
+    37: 'head_left', // Left Arrow
+    38: 'head_up', // Up Arrow
+    39: 'head_right', // Right Arrow
+    40: 'head_down', // Down Arrow
 }
 var move_buttons = {
     shift: 0,
@@ -939,6 +943,10 @@ var move_buttons = {
     backward: 0,
     left: 0,
     right: 0,
+    head_left: 0,
+    head_up: 0,
+    head_right: 0,
+    head_down: 0,
 }
 function moveProcess() {
     var forwardButton  = move_buttons.forward;
@@ -999,6 +1007,49 @@ function moveProcess() {
     }else if (forwardButton == 0 && backwardButton == 1 && leftButton == 0 && rightButton == 1){
         heartbeat_left  = -max_speed;
         heartbeat_right = -slow_speed;
+    }
+
+    // Head movement control with arrow keys
+    var headLeftButton = move_buttons.head_left;
+    var headRightButton = move_buttons.head_right;
+    var headUpButton = move_buttons.head_up;
+    var headDownButton = move_buttons.head_down;
+    
+    var headPan = 0;
+    var headTilt = 0;
+    
+    if (headLeftButton == 1) {
+        headPan = -2.5; // Pan left
+    } else if (headRightButton == 1) {
+        headPan = 2.5; // Pan right
+    }
+    
+    if (headUpButton == 1) {
+        headTilt = 2.5; // Tilt up
+    } else if (headDownButton == 1) {
+        headTilt = -2.5; // Tilt down
+    }
+    
+    // Send head movement command if any arrow key is pressed
+    if (headPan != 0 || headTilt != 0) {
+        cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":headPan,"Y":headTilt,"SPD":0,"ACC":32});
+        
+        // Update UI display
+        RotateAngle = document.getElementById("Pan").innerHTML = headPan.toFixed(2);
+        var panScale = document.getElementById("pan_scale");
+        panScale.style.transform = `rotate(${-RotateAngle}deg)`;
+
+        var tiltNum = document.getElementById("Tilt");
+        var tiltNumPanel = tiltNum.getBoundingClientRect();
+        var tiltNumMove = tiltNum.innerHTML = headTilt.toFixed(2);
+
+        var pointer = document.getElementById('tilt_scale_pointer');
+        var tiltScaleOut = document.getElementById('tilt_scale');
+        var tiltScaleBase = tiltScaleOut.getBoundingClientRect();
+        var tiltScalediv = document.getElementById('tilt_scalediv');
+        var tiltScaleDivBase = tiltScalediv.getBoundingClientRect();
+        var pointerMoveY = tiltScaleBase.height/135;
+        pointer.style.transform = `translate(${tiltScaleDivBase.width}px, ${pointerMoveY*(90 - tiltNumMove)-tiltNumPanel.height/2}px)`;
     }
 
     cmdJsonCmd({'T':cmd_movition_ctrl,'L':heartbeat_left,'R':heartbeat_right});
