@@ -673,6 +673,11 @@ socket.on('update', function(data) {
                     var MPButtons = mpBtn.getElementsByTagName("button");
                     MPButtons[1].classList.add("ctl_btn_active");
                 }
+            } else if (data[detect_type] == cv_none) {
+                if (mpBtn) {
+                    var MPButtons = mpBtn.getElementsByTagName("button");
+                    MPButtons[2].classList.add("ctl_btn_active");
+                }
             }
         }
 
