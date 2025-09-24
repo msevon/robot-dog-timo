@@ -1018,10 +1018,10 @@ function resetGimbalToCenter() {
 }
 
 function moveProcess() {
-    var forwardButton  = move_buttons.forward;
-    var backwardButton = move_buttons.backward;
-    var leftButton  = move_buttons.left;
-    var rightButton = move_buttons.right;
+    var forwardButton  = ctrl_buttons.forward;
+    var backwardButton = ctrl_buttons.backward;
+    var leftButton  = ctrl_buttons.left;
+    var rightButton = ctrl_buttons.right;
 
 
     // if(move_buttons.shift == 1) {
