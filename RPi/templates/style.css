@@ -1182,35 +1182,36 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
 /* Command Input Overlay */
 .command_input_overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    padding: 10px 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    animation: fadeInScale 0.3s ease-out;
 }
 
 .command_input_box {
-    background-color: #1a1a1a;
-    border: 2px solid #FFD700;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
-    min-width: 400px;
-    max-width: 600px;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    min-width: 300px;
+    max-width: 500px;
 }
 
 .command_input_field {
     width: 100%;
-    padding: 15px;
-    background: #0a0a0a;
-    color: #FFD700;
-    border: 1px solid #FFD700;
-    border-radius: 4px;
-    font-size: 18px;
+    padding: 10px;
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    border-radius: 0;
+    font-size: 12px;
     font-family: 'Courier New', monospace;
     font-weight: bold;
     outline: none;
@@ -1220,12 +1221,11 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
 
 .command_input_field::placeholder {
     color: #888;
-    font-size: 16px;
+    font-size: 12px;
 }
 
 .command_input_field:focus {
-    border-color: #FFA500;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    outline: none;
 }
 
 /* Status Indicators */
@@ -1238,7 +1238,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     background-color: rgba(0, 0, 0, 0.9);
     border: 2px solid;
     border-radius: 8px;
-    padding: 10px 15px;
+    padding: 8px 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
     animation: fadeInScale 0.3s ease-out;
 }
@@ -1260,12 +1260,12 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
 }
 
 .indicator_icon {
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .indicator_text {
     color: #ffffff;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
     font-family: 'Courier New', monospace;
 }

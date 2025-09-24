@@ -1129,97 +1129,35 @@ function updateMoveButton(key, value) {
 }
 
 var keyMap = {
-    32: 'jump', // Spacebar
-    45: 'cv_lock', // INSERT
-    46: 'cv_unlock', // DELETE
-    49: 'pt_off', // 1
-    50: 'pt_on', // 2
-    51: 'pt_ahead', // 3
-    52: 'det_none', // 4
-    53: 'det_motion', // 5
-    54: 'det_faces', // 6
-    55: 'react_none', // 7
-    56: 'react_capture', // 8
-    57: 'react_record', // 9
+    32: 'jump', // Spacebar - Jump
     65: 'left', // A - Move Left
     67: 'write_command', // C - Write Command
     68: 'right', // D - Move Right
     69: 'capture', // E - Camera Capture
-    70: 'cv_mp_face', // F
-    71: 'cv_mp_pose', // G
-    72: 'handshake', // H
-    73: 'mp_face', // I
-    74: 'mp_pose', // J
-    75: 'mp_off', // K
-    79: 'o',
-    80: 'p',
-    81: 'q',
+    72: 'handshake', // H - Handshake
     82: 'record_toggle', // R - Record Toggle
     83: 'backward', // S - Move Backward
-    84: 'stay', // T
-    85: 'u',
-    86: 'v',
+    84: 'stay', // T - Stay
     87: 'forward', // W - Move Forward
-    88: 'x',
-    89: 'y',
-    90: 'zoom', // Z - Camera Zoom
-    // Numpad keys
-    103: 'cv_objects', // Numpad 7
-    104: 'cv_color', // Numpad 8
-    105: 'cv_hand', // Numpad 9
-    100: 'cv_mp_face', // Numpad 4
-    101: 'cv_mp_pose', // Numpad 5
-    102: 'cv_off' // Numpad 6
+    90: 'zoom' // Z - Camera Zoom
 };
 
 var ctrl_buttons = {
-    c: 0,
-    r: 0,
-    e: 0,
-    f: 0,
-    g: 0,
-    h: 0,
-    handshake: 0,
-    i: 0,
-    jump: 0,
-    k: 0,
-    m: 0,
-    j: 0,
-    l: 0,
-    o: 0,
-    t: 0,
-    stay: 0,
-    u: 0,
-    write_command: 0,
-    capture: 0,
-    record_toggle: 0,
-    zoom: 0,
     // Movement controls
     forward: 0,
     backward: 0,
     left: 0,
     right: 0,
-    // New control buttons
-    pt_off: 0,
-    pt_on: 0,
-    pt_ahead: 0,
-    det_none: 0,
-    det_motion: 0,
-    det_faces: 0,
-    react_none: 0,
-    react_capture: 0,
-    react_record: 0,
-    cv_lock: 0,
-    cv_unlock: 0,
-    cv_objects: 0,
-    cv_color: 0,
-    cv_hand: 0,
-    cv_mp_face: 0,
-    cv_mp_pose: 0,
-    cv_off: 0,
-    mp_face: 0,
-    mp_pose: 0,
-    mp_off: 0
+    // Function controls
+    jump: 0,
+    handshake: 0,
+    stay: 0,
+    // Camera controls
+    capture: 0,
+    record_toggle: 0,
+    zoom: 0,
+    // Command control
+    write_command: 0
 };
 
 function updateButton(key, value) {
@@ -1227,63 +1165,6 @@ function updateButton(key, value) {
 }
 
 function cmdProcess() {
-    // Base Light Ctrl
-    if (ctrl_buttons.f == 1){
-        cmdSend(base_ct, 0, 0);
-    }
-
-    // Photo Capture
-    if (ctrl_buttons.e == 1){
-        cmdSend(pic_cap, 0, 0);
-    }
-
-    // Function Ctrl
-    if (ctrl_buttons.r == 1){
-        cmdSend(head_ct, 0, 0);
-    }
-
-    // Gimbal Ctrl
-    if (ctrl_buttons.i == 1){
-        stickSendY -= 10;
-        if (stickSendY < -225) {
-            stickSendY = -225;
-        }
-        joyStickCtrl(stickSendX, stickSendY);
-    } else if (ctrl_buttons.k == 1){
-        stickSendY += 10;
-        if (stickSendY > 115) {
-            stickSendY = 115;
-        }
-        joyStickCtrl(stickSendX, stickSendY);
-    } else if (ctrl_buttons.j == 1){
-        stickSendX -= 10;
-        if (stickSendX < -450) {
-            stickSendX = -450;
-        }
-        joyStickCtrl(stickSendX, stickSendY);
-    } else if (ctrl_buttons.l == 1){
-        stickSendX += 10;
-        if (stickSendX > 450) {
-            stickSendX = 450;
-        }
-        joyStickCtrl(stickSendX, stickSendY);
-    } else if (ctrl_buttons.h == 1){
-        joyStickCtrl(0, 0);
-    }
-
-    // Gimbal/Arm Steady Ctrl
-    if (ctrl_buttons.u == 1){
-        steadyCtrl(0, stickSendY);
-    } else if (ctrl_buttons.o == 1){
-        steadyCtrl(1, stickSendY);
-    } else if (ctrl_buttons.c == 1){
-        lookAhead();
-    } else if (ctrl_buttons.g == 1){
-        cmdJsonCmd({"T":106,"cmd":3.14,"spd":0,"acc":0});
-    } else if (ctrl_buttons.t == 1){
-        cmdJsonCmd({"T":106,"cmd":1.57,"spd":0,"acc":0});
-    }
-
     // Function Controls
     if (ctrl_buttons.jump == 1){
         funcsCtrl(3); // Jump
@@ -1293,78 +1174,6 @@ function cmdProcess() {
     }
     if (ctrl_buttons.stay == 1){
         funcsCtrl(1); // Stay
-    }
-
-    // PT Steady/Ahead Controls
-    if (ctrl_buttons.pt_off == 1){
-        funcsCtrl(5); // PT OFF
-    }
-    if (ctrl_buttons.pt_on == 1){
-        funcsCtrl(4); // PT ON
-    }
-    if (ctrl_buttons.pt_ahead == 1){
-        lookAhead(); // Ahead
-    }
-
-    // Simple Detection Type Controls
-    if (ctrl_buttons.det_none == 1){
-        cmdSend(cv_none,0,0); // None
-    }
-    if (ctrl_buttons.det_motion == 1){
-        cmdSend(cv_moti,1,0); // Motion
-    }
-    if (ctrl_buttons.det_faces == 1){
-        cmdSend(cv_face,2,0); // Faces
-    }
-
-    // Simple Detection Reaction Controls
-    if (ctrl_buttons.react_none == 1){
-        cmdSend(re_none,0,0); // None
-    }
-    if (ctrl_buttons.react_capture == 1){
-        cmdSend(re_capt,0,0); // Capture
-    }
-    if (ctrl_buttons.react_record == 1){
-        cmdSend(re_reco,0,0); // Record
-    }
-
-    // Advance CV Ctrl Controls
-    if (ctrl_buttons.cv_lock == 1){
-        cmdSend(mc_lock,0,0); // LOCK
-    }
-    if (ctrl_buttons.cv_unlock == 1){
-        cmdSend(mc_unlo,0,0); // UNLOCK
-    }
-
-    // Advance CV Funcs Controls
-    if (ctrl_buttons.cv_objects == 1){
-        cmdSend(cv_objs,0,0); // OBJECTS
-    }
-    if (ctrl_buttons.cv_color == 1){
-        cmdSend(cv_clor,0,0); // COLOR
-    }
-    if (ctrl_buttons.cv_hand == 1){
-        cmdSend(mp_hand,0,0); // HAND GS
-    }
-    if (ctrl_buttons.cv_mp_face == 1){
-        cmdSend(mp_face,0,0); // MP FACE
-    }
-    if (ctrl_buttons.cv_mp_pose == 1){
-        cmdSend(mp_pose,0,0); // MP POSE
-    }
-    if (ctrl_buttons.cv_off == 1){
-        cmdSend(cv_none,0,0); // OFF
-    }
-
-    // MediaPipe Funcs Controls
-    if (ctrl_buttons.mp_face == 1){
-        cmdSend(mp_face,0,0); // MP FACE
-    }
-    if (ctrl_buttons.mp_pose == 1){
-        cmdSend(mp_pose,0,0); // MP POSE
-    }
-    if (ctrl_buttons.mp_off == 1){
-        cmdSend(cv_none,0,0); // OFF
     }
     
     // Write Command
@@ -1387,7 +1196,6 @@ function cmdProcess() {
     if (ctrl_buttons.zoom == 1){
         toggleZoom();
     }
-
 }
 
 // Command input functionality
@@ -1497,7 +1305,25 @@ function processCommand(command) {
             break;
         default:
             console.log('Unknown command: ' + command);
+            showInvalidCommandMessage();
             break;
+    }
+}
+
+// Show invalid command message
+function showInvalidCommandMessage() {
+    var indicator = document.getElementById('capture_indicator');
+    if (indicator) {
+        var textElement = indicator.querySelector('.indicator_text');
+        if (textElement) {
+            textElement.textContent = "THAT'S NOT A COMMAND";
+        }
+        indicator.style.display = 'block';
+        
+        // Hide the message after 2 seconds
+        setTimeout(function() {
+            indicator.style.display = 'none';
+        }, 2000);
     }
 }
 
