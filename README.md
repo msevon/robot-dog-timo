@@ -6,22 +6,26 @@ This repository utilizes Waveshare's code as the base for their WAVEGO Pro Pi5, 
 
 This section documents the custom modifications and additions implemented for Timo the Robot Dog:
 
+### Current modifications
+- [x] Enhanced web interface with dark theme and yellow accents
+- [x] Added keyboard control reference panels on both sides
+- [x] Implemented spacebar (jump), H (handshake), and T (stay) keyboard controls
+- [x] Added gimbal reset functionality when robot moves (WASD keys)
+- [x] Improved head movement with arrow keys and continuous control
+- [x] Added battery percentage display to web interface
+- [x] Removed all audio functionality from the system
+- [x] Increased robot movement speeds in configuration
+- [x] Added system information printing to console every 10 seconds
+- [x] Implemented MediaPipe OFF button for disabling computer vision functions
+- [x] Enhanced camera screen size and centered layout
+- [x] Fixed layout overlapping issues with proper spacing
+
 ### Planned features
 - [ ] Custom behavior implementations
 - [ ] Enhanced AI capabilities
 - [ ] Additional sensor integrations
 - [ ] Custom web interface modifications
 - [ ] Performance optimizations
-
-### Current modifications
-- [ ] Placeholder for implemented changes
-- [ ] Placeholder for configuration updates
-- [ ] Placeholder for custom scripts
-
-### Future enhancements
-- [ ] Placeholder for planned features
-- [ ] Placeholder for experimental additions
-- [ ] Placeholder for integration improvements
 
 ## Product documentation
 
@@ -48,7 +52,7 @@ For installation instructions, tutorials, and detailed usage guides, please refe
 
 ## Project structure
 
-### ugv_rpi
+### RPi
 The main Python application running on the Raspberry Pi 5, providing:
 - Real-time video streaming based on WebRTC
 - Interactive tutorials based on JupyterLab
@@ -60,7 +64,7 @@ The main Python application running on the Raspberry Pi 5, providing:
 - Face and gesture recognition
 - Line tracking and autonomous navigation
 
-### wavego_pro_platformio
+### ESP32
 The ESP32 firmware running on the sub-controller, handling:
 - Real-time motion control
 - Servo management
