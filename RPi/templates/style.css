@@ -20,30 +20,31 @@ ul{
 }
 ul li{list-style-type: none;}
 body {
-    background-color: #1E1E20;
-    color: #d8d8d8;
+    background-color: #0A0A0A;
+    color: #FFD700;
     font-size: 14px;
     font-family: 'SourceCodePro-Regular', sans-serif;
     font-weight: normal;
 }
 main {
-    width: 1320px;
+    width: 1500px;
     margin: auto;
 }
 .box1{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
 }
 .box1 .section_video{
-    width: 1200px;
-    margin-right: 10px;
+    width: 1400px;
+    margin-bottom: 20px;
 }
 .box1 .section_feed_ctrl{
-    width: 538px;
-    margin-right: 10px;
+    width: 1400px;
+    margin-top: 20px;
 }
 .box1 .section_video > div{
-    width: 1000px;
+    width: 1200px;
     margin:40px auto;
 }
 .box1 .section_feed_ctrl > div{margin:40px auto;}
@@ -55,17 +56,17 @@ main {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 .video{
-    width: 1000px;
-    height: 750px;
+    width: 1200px;
+    height: 900px;
     overflow: hidden;
 }
 .video img{
-    width: 1000px;
-    height: 750px;
+    width: 1200px;
+    height: 900px;
     border-radius: 4px;
 }
 .feed{
-    color: #4FF5C0;
+    color: #FFD700;
 }
 .feed p{
     line-height: 1.4em;
@@ -74,14 +75,14 @@ main {
 .video_feed{position: relative;}
 .video_feed > div{
     position: absolute;
-    width: 960px;
-    height: 710px;
+    width: 1160px;
+    height: 860px;
     left: 20px;
     top: 20px;
 }
 .feed_section{position: absolute;}
 .feed_section > div{
-    width: 960px;
+    width: 1160px;
     display: flex;
     justify-content: space-between;
 }
@@ -404,10 +405,10 @@ main {
 .feed_ctrl_btn .btn_ico::before{margin-right: 6px;}
 .ctl_btn:hover{border: 1px solid rgba(202,213,255,0.3);}
 .ctl_btn_active{
-    color: #4FF5C0;
-    border: 1px solid rgba(202,213,255,0.15);
+    color: #FFD700;
+    border: 1px solid rgba(255,215,0,0.3);
     cursor: auto;
-    background-image: linear-gradient(to bottom right, rgba(202,213,255,0.15), rgba(202, 213, 255,0.05));
+    background-image: linear-gradient(to bottom right, rgba(255,215,0,0.15), rgba(255, 215, 0,0.05));
 }
 .ctl_btn_active:hover{border: 1px solid rgba(202,213,255,0.15);}
 .video_btn_record::before{background-image: url('./img/grey/record.svg');margin-right: 10px;}
@@ -442,7 +443,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     cursor: pointer;
 }
-.normal_btn:hover{color: #4FF5C0;}
+.normal_btn:hover{color: #FFD700;}
 .video_btn_stop:hover{color: #FF9393;}
 .normal_btn:active{
     background-color:rgba(203,213,255,0.04);
