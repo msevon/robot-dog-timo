@@ -1119,6 +1119,49 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     flex: 1;
 }
 
+/* Command styles */
+.command_section_title {
+    font-size: 11px;
+    font-weight: bold;
+    color: #FFD700;
+    margin: 8px 0 4px 0;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    text-align: center;
+}
+
+.command_section {
+    margin-bottom: 8px;
+}
+
+.command_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+    padding: 2px 0;
+}
+
+.command_item .command {
+    background-color: rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 9px;
+    min-width: 40px;
+    text-align: center;
+    color: #FFD700;
+}
+
+.command_item .description {
+    font-size: 9px;
+    color: #D8D8D8;
+    margin-left: 8px;
+    flex: 1;
+}
+
 /* Mobile responsive for control panels */
 @media (max-width: 768px) {
     .top_section {

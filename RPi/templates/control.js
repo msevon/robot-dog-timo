@@ -1142,7 +1142,7 @@ var keyMap = {
     56: 'react_capture', // 8
     57: 'react_record', // 9
     65: 'left', // A - Move Left
-    67: 'cv_objects', // C
+    67: 'write_command', // C - Write Command
     68: 'right', // D - Move Right
     69: 'cv_hand', // E
     70: 'cv_mp_face', // F
@@ -1190,6 +1190,7 @@ var ctrl_buttons = {
     t: 0,
     stay: 0,
     u: 0,
+    write_command: 0,
     // Movement controls
     forward: 0,
     backward: 0,
@@ -1362,7 +1363,79 @@ function cmdProcess() {
     if (ctrl_buttons.mp_off == 1){
         cmdSend(cv_none,0,0); // OFF
     }
+    
+    // Write Command
+    if (ctrl_buttons.write_command == 1){
+        toggleCommandInput();
+    }
 
+}
+
+// Command input functionality
+function toggleCommandInput() {
+    var container = document.getElementById('command_input_container');
+    var input = document.getElementById('command_input');
+    
+    if (container.style.display === 'none' || container.style.display === '') {
+        container.style.display = 'block';
+        input.focus();
+    } else {
+        container.style.display = 'none';
+        input.value = '';
+    }
+}
+
+// Command processing function
+function processCommand(command) {
+    command = command.toUpperCase().trim();
+    
+    switch(command) {
+        case 'LOCK':
+            cmdSend(mc_lock, 0, 0);
+            break;
+        case 'UNLOCK':
+            cmdSend(mc_unlo, 0, 0);
+            break;
+        case 'OBJ':
+            cmdSend(cv_objs, 0, 0);
+            break;
+        case 'COL':
+            cmdSend(cv_clor, 0, 0);
+            break;
+        case 'HAND':
+            cmdSend(mp_hand, 0, 0);
+            break;
+        case 'FACE':
+            cmdSend(mp_face, 0, 0);
+            break;
+        case 'POSE':
+            cmdSend(mp_pose, 0, 0);
+            break;
+        case 'COFF':
+            cmdSend(cv_none, 0, 0);
+            break;
+        case 'STEADYON':
+            funcsCtrl(4);
+            break;
+        case 'STEADYOFF':
+            funcsCtrl(5);
+            break;
+        case 'AHEAD':
+            lookAhead();
+            break;
+        case 'DETNON':
+            cmdSend(re_none, 0, 0);
+            break;
+        case 'DETCAP':
+            cmdSend(re_capt, 0, 0);
+            break;
+        case 'DETREC':
+            cmdSend(re_reco, 0, 0);
+            break;
+        default:
+            console.log('Unknown command: ' + command);
+            break;
+    }
 }
 
 document.onkeydown = function (event) {
@@ -1412,6 +1485,23 @@ document.onkeyup = function (event) {
         moveProcess();
     }
 }
+
+// Command input event listener
+document.addEventListener('DOMContentLoaded', function() {
+    var commandInput = document.getElementById('command_input');
+    if (commandInput) {
+        commandInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                var command = this.value;
+                if (command.trim() !== '') {
+                    processCommand(command);
+                    this.value = '';
+                    document.getElementById('command_input_container').style.display = 'none';
+                }
+            }
+        });
+    }
+});
 
 function lookAhead() {
     if (module_type == 1) {

@@ -15,96 +15,75 @@
         <div class="box1">
             <!-- Top Section: Side Panels and Video -->
             <div class="top_section">
-                <!-- Left Control Panel -->
-                <div class="control_panel control_panel_left">
-                    <h3 class="control_title">Movement Controls</h3>
-                    <div class="control_section">
-                        <div class="control_item">
-                            <span class="key">W</span>
-                            <span class="action">Forward</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">S</span>
-                            <span class="action">Backward</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">A</span>
-                            <span class="action">Left</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">D</span>
-                            <span class="action">Right</span>
-                        </div>
-                    </div>
-                    
-                    <h3 class="control_title">Head Controls</h3>
-                    <div class="control_section">
-                        <div class="control_item">
-                            <span class="key">↑</span>
-                            <span class="action">Head Up</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">↓</span>
-                            <span class="action">Head Down</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">←</span>
-                            <span class="action">Head Left</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">→</span>
-                            <span class="action">Head Right</span>
-                        </div>
-                    </div>
+                       <!-- Left Control Panel -->
+                       <div class="control_panel control_panel_left">
+                           <h3 class="control_title">Movement Controls</h3>
+                           <div class="control_section">
+                               <div class="control_item">
+                                   <span class="key">W</span>
+                                   <span class="action">Forward</span>
+                               </div>
+                               <div class="control_item">
+                                   <span class="key">S</span>
+                                   <span class="action">Backward</span>
+                               </div>
+                               <div class="control_item">
+                                   <span class="key">A</span>
+                                   <span class="action">Left</span>
+                               </div>
+                               <div class="control_item">
+                                   <span class="key">D</span>
+                                   <span class="action">Right</span>
+                               </div>
+                           </div>
+                           
+                           <h3 class="control_title">Head Controls</h3>
+                           <div class="control_section">
+                               <div class="control_item">
+                                   <span class="key">↑</span>
+                                   <span class="action">Head Up</span>
+                               </div>
+                               <div class="control_item">
+                                   <span class="key">↓</span>
+                                   <span class="action">Head Down</span>
+                               </div>
+                               <div class="control_item">
+                                   <span class="key">←</span>
+                                   <span class="action">Head Left</span>
+                               </div>
+                               <div class="control_item">
+                                   <span class="key">→</span>
+                                   <span class="action">Head Right</span>
+                               </div>
+                           </div>
 
-                    <h3 class="control_title">PT Steady/Ahead</h3>
-                    <div class="control_section">
-                        <div class="control_item">
-                            <span class="key">1</span>
-                            <span class="action">OFF</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">2</span>
-                            <span class="action">ON</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">3</span>
-                            <span class="action">Ahead</span>
-                        </div>
-                    </div>
+                           <h3 class="control_title">Functions</h3>
+                           <div class="control_section">
+                               <div class="control_item">
+                                   <span class="key">SPACE</span>
+                                   <span class="action">Jump</span>
+                               </div>
+                               <div class="control_item">
+                                   <span class="key">H</span>
+                                   <span class="action">Handshake</span>
+                               </div>
+                               <div class="control_item">
+                                   <span class="key">T</span>
+                                   <span class="action">Stay</span>
+                               </div>
+                           </div>
 
-                    <h3 class="control_title">Detection Type</h3>
-                    <div class="control_section">
-                        <div class="control_item">
-                            <span class="key">4</span>
-                            <span class="action">None</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">5</span>
-                            <span class="action">Motion</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">6</span>
-                            <span class="action">Faces</span>
-                        </div>
-                    </div>
-
-                    <h3 class="control_title">Detection Reaction</h3>
-                    <div class="control_section">
-                        <div class="control_item">
-                            <span class="key">7</span>
-                            <span class="action">None</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">8</span>
-                            <span class="action">Capture</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">9</span>
-                            <span class="action">Record</span>
-                        </div>
-                    </div>
-                </div>
+                           <h3 class="control_title">Write Command</h3>
+                           <div class="control_section">
+                               <div class="control_item">
+                                   <span class="key">C</span>
+                                   <span class="action">Open Command Box</span>
+                               </div>
+                               <div id="command_input_container" style="display: none; margin-top: 10px;">
+                                   <input type="text" id="command_input" placeholder="Enter command..." style="width: 100%; padding: 5px; background: #1a1a1a; color: #FFD700; border: 1px solid #FFD700; border-radius: 3px;">
+                               </div>
+                           </div>
+                       </div>
                 
                 <section class="section_video box_outline">
                 <div>
@@ -278,75 +257,77 @@
                 
                 <!-- Right Control Panel -->
                 <div class="control_panel control_panel_right">
-                    <h3 class="control_title">Function Controls</h3>
-                    <div class="control_section">
-                        <div class="control_item">
-                            <span class="key">SPACE</span>
-                            <span class="action">Jump</span>
+                    <h3 class="control_title">Available Commands</h3>
+                    
+                    <h4 class="command_section_title">CV Ctrl</h4>
+                    <div class="command_section">
+                        <div class="command_item">
+                            <span class="command">LOCK</span>
+                            <span class="description">CV Ctrl Lock</span>
                         </div>
-                        <div class="control_item">
-                            <span class="key">H</span>
-                            <span class="action">Handshake</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">T</span>
-                            <span class="action">Stay</span>
+                        <div class="command_item">
+                            <span class="command">UNLOCK</span>
+                            <span class="description">CV Ctrl Unlock</span>
                         </div>
                     </div>
 
-                    <h3 class="control_title">CV Ctrl</h3>
-                    <div class="control_section">
-                        <div class="control_item">
-                            <span class="key">INSERT</span>
-                            <span class="action">LOCK</span>
+                    <h4 class="command_section_title">CV Funcs</h4>
+                    <div class="command_section">
+                        <div class="command_item">
+                            <span class="command">OBJ</span>
+                            <span class="description">Objects Detection</span>
                         </div>
-                        <div class="control_item">
-                            <span class="key">DELETE</span>
-                            <span class="action">UNLOCK</span>
+                        <div class="command_item">
+                            <span class="command">COL</span>
+                            <span class="description">Color Detection</span>
                         </div>
-                    </div>
-
-                    <h3 class="control_title">CV Funcs</h3>
-                    <div class="control_section">
-                        <div class="control_item">
-                            <span class="key">Num7</span>
-                            <span class="action">OBJECTS</span>
+                        <div class="command_item">
+                            <span class="command">HAND</span>
+                            <span class="description">Hand Gesture</span>
                         </div>
-                        <div class="control_item">
-                            <span class="key">Num8</span>
-                            <span class="action">COLOR</span>
+                        <div class="command_item">
+                            <span class="command">FACE</span>
+                            <span class="description">MP Face</span>
                         </div>
-                        <div class="control_item">
-                            <span class="key">Num9</span>
-                            <span class="action">HAND GS</span>
+                        <div class="command_item">
+                            <span class="command">POSE</span>
+                            <span class="description">MP Pose</span>
                         </div>
-                        <div class="control_item">
-                            <span class="key">Num4</span>
-                            <span class="action">MP FACE</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">Num5</span>
-                            <span class="action">MP POSE</span>
-                        </div>
-                        <div class="control_item">
-                            <span class="key">Num6</span>
-                            <span class="action">OFF</span>
+                        <div class="command_item">
+                            <span class="command">COFF</span>
+                            <span class="description">CV Funcs Off</span>
                         </div>
                     </div>
 
-                    <h3 class="control_title">MediaPipe</h3>
-                    <div class="control_section">
-                        <div class="control_item">
-                            <span class="key">I</span>
-                            <span class="action">MP FACE</span>
+                    <h4 class="command_section_title">PT Steady/Ahead</h4>
+                    <div class="command_section">
+                        <div class="command_item">
+                            <span class="command">STEADYON</span>
+                            <span class="description">PT Steady On</span>
                         </div>
-                        <div class="control_item">
-                            <span class="key">J</span>
-                            <span class="action">MP POSE</span>
+                        <div class="command_item">
+                            <span class="command">STEADYOFF</span>
+                            <span class="description">PT Steady Off</span>
                         </div>
-                        <div class="control_item">
-                            <span class="key">K</span>
-                            <span class="action">OFF</span>
+                        <div class="command_item">
+                            <span class="command">AHEAD</span>
+                            <span class="description">Look Ahead</span>
+                        </div>
+                    </div>
+
+                    <h4 class="command_section_title">Detection Reaction</h4>
+                    <div class="command_section">
+                        <div class="command_item">
+                            <span class="command">DETNON</span>
+                            <span class="description">Detection None</span>
+                        </div>
+                        <div class="command_item">
+                            <span class="command">DETCAP</span>
+                            <span class="description">Detection Capture</span>
+                        </div>
+                        <div class="command_item">
+                            <span class="command">DETREC</span>
+                            <span class="description">Detection Record</span>
                         </div>
                     </div>
                 </div>
