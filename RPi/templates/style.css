@@ -1078,7 +1078,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
 }
 
 .control_title {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: bold;
     color: #FFD700;
     margin: 0 0 8px 0;
@@ -1103,17 +1103,17 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     background-color: rgba(255, 215, 0, 0.2);
     border: 1px solid rgba(255, 215, 0, 0.4);
     border-radius: 3px;
-    padding: 2px 6px;
+    padding: 4px 8px;
     font-family: 'Courier New', monospace;
     font-weight: bold;
-    font-size: 10px;
-    min-width: 20px;
+    font-size: 14px;
+    min-width: 30px;
     text-align: center;
     color: #FFD700;
 }
 
 .control_item .action {
-    font-size: 10px;
+    font-size: 14px;
     color: #D8D8D8;
     margin-left: 8px;
     flex: 1;
@@ -1121,7 +1121,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
 
 /* Command styles */
 .command_section_title {
-    font-size: 11px;
+    font-size: 15px;
     font-weight: bold;
     color: #FFD700;
     margin: 8px 0 4px 0;
@@ -1146,17 +1146,17 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     background-color: rgba(255, 215, 0, 0.2);
     border: 1px solid rgba(255, 215, 0, 0.4);
     border-radius: 3px;
-    padding: 2px 6px;
+    padding: 4px 8px;
     font-family: 'Courier New', monospace;
     font-weight: bold;
-    font-size: 9px;
-    min-width: 40px;
+    font-size: 13px;
+    min-width: 50px;
     text-align: center;
     color: #FFD700;
 }
 
 .command_item .description {
-    font-size: 9px;
+    font-size: 13px;
     color: #D8D8D8;
     margin-left: 8px;
     flex: 1;
