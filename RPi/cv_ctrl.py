@@ -10,76 +10,76 @@ import yaml, os, json, subprocess
 from collections import deque
 import textwrap
 
-# libraries for csi camera
+# Libraries for csi camera
 from picamera2 import Picamera2
 from picamera2.encoders import H264Encoder, Encoder
 from picamera2.outputs import FfmpegOutput
 
-# libraries for oak camera
+# Libraries for oak camera
 import depthai as dai
 
-# config file.
+# Config file
 curpath = os.path.realpath(__file__)
 thisPath = os.path.dirname(curpath)
 with open(thisPath + '/config.yaml', 'r') as yaml_file:
     f = yaml.safe_load(yaml_file)
 
-
+# Class for opencv functions
 class OpencvFuncs():
-    """docstring for OpencvFuncs"""
+    """Class for opencv functions"""
     def __init__(self, project_path, base_ctrl):
-        self.base_ctrl = base_ctrl
-        self.cv_event = threading.Event()
-        self.cv_event.clear()
-        self.cv_mode = f['code']['cv_none']
-        self.detection_reaction_mode = f['code']['re_none']
+        self.base_ctrl = base_ctrl # Define the base controller
+        self.cv_event = threading.Event() # Define the event
+        self.cv_event.clear() # Clear the event 
+        self.cv_mode = f['code']['cv_none'] # Define the cv mode
+        self.detection_reaction_mode = f['code']['re_none'] # Define the detection reaction mode
         
-        self.this_path = project_path
-        self.photo_path = self.this_path + '/templates/pictures/'
-        self.video_path = self.this_path + '/templates/videos/'
-        self.frame_scale = 1
-        self.picture_capture_flag = False
-        self.set_video_record_flag = False
-        self.video_record_status_flag = False
-        self.writer = None
-        self.overlay = None
-        self.scale_rate = 1
-        self.video_quality = f['video']['default_quality']
+        self.this_path = project_path # Define the project path
+        self.photo_path = self.this_path + '/templates/pictures/' # Define the photo path
+        self.video_path = self.this_path + '/templates/videos/' # Define the video path
+        self.frame_scale = 1 # Define the frame scale
+        self.picture_capture_flag = False # Define the picture capture flag
+        self.set_video_record_flag = False # Define the set video record flag
+        self.video_record_status_flag = False # Define the video record status flag
+        self.writer = None # Define the writer
+        self.overlay = None # Define the overlay
+        self.scale_rate = 1 # Define the scale rate
+        self.video_quality = f['video']['default_quality'] # Define the video quality from the config file
 
-        # cv ctrl info
-        self.cv_light_mode = 0
-        self.pan_angle = 0
-        self.tilt_angle = 0
-        self.video_fps = 0
-        self.fps_start_time = time.time()
-        self.fps_count = 0
-        self.cv_movtion_lock = True
-        self.aimed_error = f['cv']['aimed_error']
-        self.track_spd_rate = f['cv']['track_spd_rate']
-        self.track_acc_rate = f['cv']['track_acc_rate']
-        self.CMD_GIMBAL = f['cmd_config']['cmd_gimbal_ctrl']
-        self.sampling_rad = f['cv']['sampling_rad']
+        # Cv ctrl info
+        self.cv_light_mode = 0 # Define the cv light mode
+        self.pan_angle = 0 # Define the pan angle
+        self.tilt_angle = 0 # Define the tilt angle
+        self.video_fps = 0 # Define the video fps
+        self.fps_start_time = time.time() # Define the fps start time
+        self.fps_count = 0 # Define the fps count
+        self.cv_movtion_lock = True # Define the cv movtion lock
+        self.aimed_error = f['cv']['aimed_error'] # Define the aimed error from the config file
+        self.track_spd_rate = f['cv']['track_spd_rate'] # Define the track speed rate from the config file
+        self.track_acc_rate = f['cv']['track_acc_rate'] # Define the track accuracy rate from the config file
+        self.CMD_GIMBAL = f['cmd_config']['cmd_gimbal_ctrl'] # Define the cmd gimbal from the config file
+        self.sampling_rad = f['cv']['sampling_rad'] # Define the sampling rad from the config file
 
-        # reaction
+        # Reaction
         self.last_frame_capture_time = datetime.datetime.now()
         self.last_movtion_captured = datetime.datetime.now()
 
-        # movtion detection
+        # Motion detection
         self.avg = None
 
-        # face detection & tracking
+        # Face detection & tracking
         self.faceCascade = cv2.CascadeClassifier(thisPath + '/models/haarcascade_frontalface_default.xml')
         self.min_radius = f['cv']['min_radius']
         self.track_faces_iterate = f['cv']['track_faces_iterate']
 
-        # color detection
+        # Color detection
         self.points = deque(maxlen=32)
         self.color_list = {
                         'red':  [np.array([  0,200, 170]), np.array([ 10, 255, 255])],
                         'green':[np.array([ 50, 130, 130]), np.array([ 78, 255, 255])],
                         'blue': [np.array([ 90,160, 150]), np.array([105, 255, 255])]
                         }
-        if f['cv']['default_color'] in self.color_list:
+        if f['cv']['default_color'] in self.color_list: # Check if the default color is in the color list
             self.color_lower = self.color_list[f['cv']['default_color']][0]
             self.color_upper = self.color_list[f['cv']['default_color']][1]
         else:
@@ -87,24 +87,24 @@ class OpencvFuncs():
             self.color_upper = np.array(f['cv']['color_upper'])
         self.track_color_iterate = f['cv']['track_color_iterate']
 
-        # cv_dnn_objects
+        # Cv_dnn_objects
         self.net = cv2.dnn.readNetFromCaffe(thisPath + '/models/deploy.prototxt', thisPath + '/models/mobilenet_iter_73000.caffemodel')
         self.class_names = ["background", "aeroplane", "bicycle", "bird", "boat",
                             "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
                             "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
                             "sofa", "train", "tvmonitor"]
 
-        # mediapipe
+        # Mediapipe
         self.mpDraw = mp.solutions.drawing_utils
 
-        # mediapipe detect hand
-        self.mpHands = mp.solutions.hands
+        # Mediapipe detect hand
+        self.mpHands = mp.solutions.hands # Get the hands from the mediapipe
         self.hands = self.mpHands.Hands(max_num_hands=1)
-        self.max_distance = 1
-        self.gs_pic_interval = 6
-        self.gs_pic_last_time = time.time()
+        self.max_distance = 1 # Define the max distance in meters
+        self.gs_pic_interval = 6 # Define the gs pic interval in seconds
+        self.gs_pic_last_time = time.time() # Define the gs pic last time
 
-        # findline autodrive
+        # Findline autodrive
         self.sampling_line_1 = 0.6
         self.sampling_line_2 = 0.9
         self.slope_impact = 1.5
@@ -115,11 +115,11 @@ class OpencvFuncs():
         self.line_lower = np.array([25, 150, 70])
         self.line_upper = np.array([42, 255, 255])
 
-        # mediapipe detect faces
+        # Mediapipe detect faces
         self.mp_face_detection = mp.solutions.face_detection
         self.face_detection = self.mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5)
 
-        # mediapipe detect pose
+        # Mediapipe detect pose
         self.mp_pose = mp.solutions.pose
         self.pose = self.mp_pose.Pose(static_image_mode=False, 
                                     model_complexity=1, 
@@ -127,11 +127,11 @@ class OpencvFuncs():
                                     min_detection_confidence=0.5, 
                                     min_tracking_confidence=0.5)
 
-        # base data
+        # Base data
         self.show_base_info_flag = False
         self.recv_deque = deque(maxlen=20)
 
-        # info update
+        # Info update
         self.show_info_flag = True
         self.info_update_time = time.time()
         self.info_deque = deque(maxlen=10)
@@ -140,24 +140,24 @@ class OpencvFuncs():
         self.info_show_time = 10
         self.recv_line_max = 26
 
-        # mission funcs
+        # Mission funcs
         self.mission_flag = False
 
-        # osd settings
+        # Osd settings
         self.add_osd = f['base_config']['add_osd']
 
-        # camera type detection
+        # Camera type detection
         self.usb_camera_connected = self.usb_camera_detection()
         self.csi_camera_connected = False
         self.oak_camera_connected = False
 
-        # usb camera init
+        # Usb camera init
         if self.usb_camera_connected:
             self.camera = cv2.VideoCapture(0)
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, f['video']['default_res_w'])
             self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, f['video']['default_res_h'])
 
-        # csi camera init
+        # Csi camera init
         if not self.usb_camera_connected:
             print("init csi camera.")
             try:
@@ -169,7 +169,7 @@ class OpencvFuncs():
             except:
                 self.csi_camera_connected = False
 
-        #oak camera init 
+        # Oak camera init 
         if not self.usb_camera_connected and not self.csi_camera_connected:
             try:
                 self.pipeline = dai.Pipeline()
@@ -192,27 +192,28 @@ class OpencvFuncs():
                 print(f"[cv_ctrl.frame_process] error: {e}")
                 self.oak_camera_connected = False
 
-
+    # Frame processing function
     def frame_process(self):
         try:
-            if self.usb_camera_connected:
-                success, input_frame = self.camera.read()
+            if self.usb_camera_connected: # Check if the usb camera is connected
+                success, input_frame = self.camera.read() # Read the frame from the usb camera
                 if not success:
-                    self.camera.release()
+                    self.camera.release() # Release the usb camera
                     time.sleep(1)
-                    self.camera = cv2.VideoCapture(0)
+                    self.camera = cv2.VideoCapture(0) # Reconnect the usb camera
+            # Check if the csi camera is connected
             elif self.csi_camera_connected:
-                input_frame = self.picam2.capture_array()
+                input_frame = self.picam2.capture_array() # Read the frame from the csi camera
             elif self.oak_camera_connected:
-                input_frame = self.output_queue.get().getCvFrame()
-                input_frame = cv2.resize(input_frame, (640, 480))
+                input_frame = self.output_queue.get().getCvFrame() # Read the frame from the oak camera
+                input_frame = cv2.resize(input_frame, (640, 480)) # Resize the frame to 640x480
             else:
-                input_frame = 255 * np.ones((480, 640, 3), dtype=np.uint8)
+                input_frame = 255 * np.ones((480, 640, 3), dtype=np.uint8) # Create a frame with all white pixels
                 cv2.putText(input_frame, f"camera read failed... \nusb - csi - oak", 
                             (round(0.05*640), round(0.1*640 + 5 * 13)), 
                             cv2.FONT_HERSHEY_SIMPLEX, 0.369, (0, 0, 0), 1)
-                ret, buffer = cv2.imencode('.jpg', input_frame, [int(cv2.IMWRITE_JPEG_QUALITY), self.video_quality])
-                input_frame = buffer.tobytes()
+                ret, buffer = cv2.imencode('.jpg', input_frame, [int(cv2.IMWRITE_JPEG_QUALITY), self.video_quality]) # Encode the frame to jpg
+                input_frame = buffer.tobytes() # Convert the frame to bytes
                 time.sleep(1)
                 return input_frame
         except Exception as e:
@@ -222,16 +223,16 @@ class OpencvFuncs():
                         (round(0.05*640), round(0.1*640 + 5 * 13)), 
                         cv2.FONT_HERSHEY_SIMPLEX, 0.369, (0, 0, 0), 1)
             ret, buffer = cv2.imencode('.jpg', input_frame, [int(cv2.IMWRITE_JPEG_QUALITY), self.video_quality])
-            input_frame = buffer.tobytes()
+            input_frame = buffer.tobytes() # Convert the frame to bytes
             return input_frame
 
-        # opencv funcs
+        # Opencv funcs
         if self.cv_mode != f['code']['cv_none']:
             if not self.cv_event.is_set():
                 self.cv_event.set()
                 self.opencv_threading(input_frame)
             try:
-                mask = self.overlay.astype(bool)
+                mask = self.overlay.astype(bool) # Convert the overlay to a boolean mask
                 input_frame[mask] = self.overlay[mask]
                 cv2.addWeighted(self.overlay, 1, input_frame, 1, 0, input_frame)
             except Exception as e:

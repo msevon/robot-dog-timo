@@ -1009,7 +1009,7 @@ function moveProcess() {
         heartbeat_right = -slow_speed;
     }
 
-    // Head movement control with arrow keys
+    // Head movement control with arrow keys (continuous movement)
     var headLeftButton = move_buttons.head_left;
     var headRightButton = move_buttons.head_right;
     var headUpButton = move_buttons.head_up;
@@ -1029,6 +1029,7 @@ function moveProcess() {
         headSpeed = 2.0; // Fast head movement
     }
     
+    // Continuous movement - send command as long as key is pressed
     if (headLeftButton == 1) {
         headPan = -headSpeed; // Pan left
     } else if (headRightButton == 1) {
@@ -1041,11 +1042,11 @@ function moveProcess() {
         headTilt = -headSpeed; // Tilt down
     }
     
-    // Send head movement command if any arrow key is pressed
+    // Send head movement command if any arrow key is pressed (continuous)
     if (headPan != 0 || headTilt != 0) {
         cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":headPan,"Y":headTilt,"SPD":0,"ACC":32});
         
-        // Update UI display
+        // Update UI display with current movement values
         RotateAngle = document.getElementById("Pan").innerHTML = headPan.toFixed(2);
         var panScale = document.getElementById("pan_scale");
         panScale.style.transform = `rotate(${-RotateAngle}deg)`;
@@ -1061,6 +1062,9 @@ function moveProcess() {
         var tiltScaleDivBase = tiltScalediv.getBoundingClientRect();
         var pointerMoveY = tiltScaleBase.height/135;
         pointer.style.transform = `translate(${tiltScaleDivBase.width}px, ${pointerMoveY*(90 - tiltNumMove)-tiltNumPanel.height/2}px)`;
+    } else {
+        // Stop head movement when no arrow keys are pressed
+        cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":0,"Y":0,"SPD":0,"ACC":32});
     }
 
     cmdJsonCmd({'T':cmd_movition_ctrl,'L':heartbeat_left,'R':heartbeat_right});
