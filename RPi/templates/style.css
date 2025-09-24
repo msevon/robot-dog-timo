@@ -1078,44 +1078,44 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
 }
 
 .control_title {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
     color: #FFD700;
-    margin: 0 0 15px 0;
-    padding-bottom: 8px;
+    margin: 0 0 8px 0;
+    padding-bottom: 4px;
     border-bottom: 1px solid rgba(255, 215, 0, 0.3);
     text-align: center;
 }
 
 .control_section {
-    margin-bottom: 25px;
+    margin-bottom: 12px;
 }
 
 .control_item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
-    padding: 5px 0;
+    margin-bottom: 4px;
+    padding: 2px 0;
 }
 
 .control_item .key {
     background-color: rgba(255, 215, 0, 0.2);
     border: 1px solid rgba(255, 215, 0, 0.4);
-    border-radius: 4px;
-    padding: 4px 8px;
+    border-radius: 3px;
+    padding: 2px 6px;
     font-family: 'Courier New', monospace;
     font-weight: bold;
-    font-size: 12px;
-    min-width: 30px;
+    font-size: 10px;
+    min-width: 20px;
     text-align: center;
     color: #FFD700;
 }
 
 .control_item .action {
-    font-size: 12px;
+    font-size: 10px;
     color: #D8D8D8;
-    margin-left: 10px;
+    margin-left: 8px;
     flex: 1;
 }
 

@@ -971,9 +971,6 @@ var isInputFocused = false;
 
 var moveKeyMap = {
     16: 'shift', // acce
-    49: 'low',
-    50: 'middle',
-    51: 'fast',
     65: 'left',   // A
     87: 'forward', // W
     83: 'backward', // S
@@ -985,9 +982,6 @@ var moveKeyMap = {
 }
 var move_buttons = {
     shift: 0,
-    low: 0,
-    middle: 0,
-    fast: 0,
     forward: 0,
     backward: 0,
     left: 0,
@@ -1029,14 +1023,6 @@ function moveProcess() {
     var leftButton  = move_buttons.left;
     var rightButton = move_buttons.right;
 
-    // Speed Ctrl
-    if (move_buttons.low == 1){
-        speedCtrl(min_rate);
-    } else if (move_buttons.middle == 1){
-        speedCtrl(mid_rate);
-    } else if (move_buttons.fast == 1){
-        speedCtrl(max_rate);
-    }
 
     // if(move_buttons.shift == 1) {
     //     speed_rate = max_rate;
@@ -1144,20 +1130,41 @@ function updateMoveButton(key, value) {
 
 var keyMap = {
     32: 'jump', // Spacebar
-    67: "c",
-    82: 'r',
-    69: 'e',
-    70: 'f',
-    71: 'g',
-    72: 'handshake', // H
-    73: 'i',
-    75: 'k',
-    77: 'm',
-    74: 'j',
-    76: 'l',
+    49: 'pt_off', // 1
+    50: 'pt_on', // 2
+    51: 'pt_ahead', // 3
+    52: 'det_none', // 4
+    53: 'det_motion', // 5
+    54: 'det_faces', // 6
+    55: 'react_none', // 7
+    56: 'react_capture', // 8
+    57: 'react_record', // 9
+    65: 'cv_lock', // A
+    66: 'cv_unlock', // B
+    67: 'cv_objects', // C
+    68: 'cv_color', // D
+    69: 'cv_hand', // E
+    70: 'cv_mp_face', // F
+    71: 'cv_mp_pose', // G
+    72: 'cv_off', // H
+    73: 'mp_face', // I
+    74: 'mp_pose', // J
+    75: 'mp_off', // K
+    76: 'light_default', // L
+    77: 'light_red', // M
+    78: 'light_blue', // N
     79: 'o',
+    80: 'p',
+    81: 'q',
+    82: 'r',
+    83: 's',
     84: 'stay', // T
-    85: 'u'
+    85: 'u',
+    86: 'v',
+    87: 'w',
+    88: 'x',
+    89: 'y',
+    90: 'z'
 };
 
 var ctrl_buttons = {
@@ -1177,7 +1184,31 @@ var ctrl_buttons = {
     o: 0,
     t: 0,
     stay: 0,
-    u: 0
+    u: 0,
+    // New control buttons
+    pt_off: 0,
+    pt_on: 0,
+    pt_ahead: 0,
+    det_none: 0,
+    det_motion: 0,
+    det_faces: 0,
+    react_none: 0,
+    react_capture: 0,
+    react_record: 0,
+    cv_lock: 0,
+    cv_unlock: 0,
+    cv_objects: 0,
+    cv_color: 0,
+    cv_hand: 0,
+    cv_mp_face: 0,
+    cv_mp_pose: 0,
+    cv_off: 0,
+    mp_face: 0,
+    mp_pose: 0,
+    mp_off: 0,
+    light_default: 0,
+    light_red: 0,
+    light_blue: 0
 };
 
 function updateButton(key, value) {
@@ -1251,6 +1282,89 @@ function cmdProcess() {
     }
     if (ctrl_buttons.stay == 1){
         funcsCtrl(1); // Stay
+    }
+
+    // PT Steady/Ahead Controls
+    if (ctrl_buttons.pt_off == 1){
+        funcsCtrl(5); // PT OFF
+    }
+    if (ctrl_buttons.pt_on == 1){
+        funcsCtrl(4); // PT ON
+    }
+    if (ctrl_buttons.pt_ahead == 1){
+        lookAhead(); // Ahead
+    }
+
+    // Simple Detection Type Controls
+    if (ctrl_buttons.det_none == 1){
+        cmdSend(cv_none,0,0); // None
+    }
+    if (ctrl_buttons.det_motion == 1){
+        cmdSend(cv_moti,1,0); // Motion
+    }
+    if (ctrl_buttons.det_faces == 1){
+        cmdSend(cv_face,2,0); // Faces
+    }
+
+    // Simple Detection Reaction Controls
+    if (ctrl_buttons.react_none == 1){
+        cmdSend(re_none,0,0); // None
+    }
+    if (ctrl_buttons.react_capture == 1){
+        cmdSend(re_capt,0,0); // Capture
+    }
+    if (ctrl_buttons.react_record == 1){
+        cmdSend(re_reco,0,0); // Record
+    }
+
+    // Advance CV Ctrl Controls
+    if (ctrl_buttons.cv_lock == 1){
+        cmdSend(mc_lock,0,0); // LOCK
+    }
+    if (ctrl_buttons.cv_unlock == 1){
+        cmdSend(mc_unlo,0,0); // UNLOCK
+    }
+
+    // Advance CV Funcs Controls
+    if (ctrl_buttons.cv_objects == 1){
+        cmdSend(cv_objs,0,0); // OBJECTS
+    }
+    if (ctrl_buttons.cv_color == 1){
+        cmdSend(cv_clor,0,0); // COLOR
+    }
+    if (ctrl_buttons.cv_hand == 1){
+        cmdSend(mp_hand,0,0); // HAND GS
+    }
+    if (ctrl_buttons.cv_mp_face == 1){
+        cmdSend(mp_face,0,0); // MP FACE
+    }
+    if (ctrl_buttons.cv_mp_pose == 1){
+        cmdSend(mp_pose,0,0); // MP POSE
+    }
+    if (ctrl_buttons.cv_off == 1){
+        cmdSend(cv_none,0,0); // OFF
+    }
+
+    // MediaPipe Funcs Controls
+    if (ctrl_buttons.mp_face == 1){
+        cmdSend(mp_face,0,0); // MP FACE
+    }
+    if (ctrl_buttons.mp_pose == 1){
+        cmdSend(mp_pose,0,0); // MP POSE
+    }
+    if (ctrl_buttons.mp_off == 1){
+        cmdSend(cv_none,0,0); // OFF
+    }
+
+    // Head Light Ctrl Controls
+    if (ctrl_buttons.light_default == 1){
+        rgbCtrl(0); // Default
+    }
+    if (ctrl_buttons.light_red == 1){
+        rgbCtrl(1); // Red
+    }
+    if (ctrl_buttons.light_blue == 1){
+        rgbCtrl(2); // Blue
     }
 }
 
