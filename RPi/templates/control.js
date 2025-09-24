@@ -918,6 +918,49 @@ function heartbeat_send(){
 }
 setInterval(heartbeat_send, 2000);
 
+// Head movement continuous control
+var head_movement_active = false;
+var head_pan_speed = 0;
+var head_tilt_speed = 0;
+
+function head_movement_send(){
+    if (socketJson.connected && head_movement_active) {
+        // Update head position based on current speed
+        if (typeof window.headPanPosition === 'undefined') {
+            window.headPanPosition = 0;
+            window.headTiltPosition = 0;
+        }
+        
+        window.headPanPosition += head_pan_speed;
+        window.headTiltPosition += head_tilt_speed;
+        
+        // Clamp head position to reasonable limits
+        window.headPanPosition = Math.max(-180, Math.min(180, window.headPanPosition));
+        window.headTiltPosition = Math.max(-30, Math.min(30, window.headTiltPosition));
+        
+        // Send head position command
+        cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":window.headPanPosition,"Y":window.headTiltPosition,"SPD":0,"ACC":32});
+        
+        // Update UI display
+        RotateAngle = document.getElementById("Pan").innerHTML = window.headPanPosition.toFixed(2);
+        var panScale = document.getElementById("pan_scale");
+        panScale.style.transform = `rotate(${-RotateAngle}deg)`;
+
+        var tiltNum = document.getElementById("Tilt");
+        var tiltNumPanel = tiltNum.getBoundingClientRect();
+        var tiltNumMove = tiltNum.innerHTML = window.headTiltPosition.toFixed(2);
+
+        var pointer = document.getElementById('tilt_scale_pointer');
+        var tiltScaleOut = document.getElementById('tilt_scale');
+        var tiltScaleBase = tiltScaleOut.getBoundingClientRect();
+        var tiltScalediv = document.getElementById('tilt_scalediv');
+        var tiltScaleDivBase = tiltScalediv.getBoundingClientRect();
+        var pointerMoveY = tiltScaleBase.height/135;
+        pointer.style.transform = `translate(${tiltScaleDivBase.width}px, ${pointerMoveY*(90 - tiltNumMove)-tiltNumPanel.height/2}px)`;
+    }
+}
+setInterval(head_movement_send, 50); // Update every 50ms for smooth movement
+
 var isInputFocused = false;
 
 var moveKeyMap = {
@@ -1049,28 +1092,25 @@ function moveProcess() {
     window.headPanPosition = Math.max(-180, Math.min(180, window.headPanPosition));
     window.headTiltPosition = Math.max(-30, Math.min(30, window.headTiltPosition));
     
-    // Send head movement command if any arrow key is pressed (continuous)
-    if (headLeftButton == 1 || headRightButton == 1 || headUpButton == 1 || headDownButton == 1) {
-        // Send absolute position command
-        cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":window.headPanPosition,"Y":window.headTiltPosition,"SPD":0,"ACC":32});
-        
-        // Update UI display with current position values
-        RotateAngle = document.getElementById("Pan").innerHTML = window.headPanPosition.toFixed(2);
-        var panScale = document.getElementById("pan_scale");
-        panScale.style.transform = `rotate(${-RotateAngle}deg)`;
+    // Always send head position command (continuous updates)
+    cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":window.headPanPosition,"Y":window.headTiltPosition,"SPD":0,"ACC":32});
+    
+    // Update UI display with current position values
+    RotateAngle = document.getElementById("Pan").innerHTML = window.headPanPosition.toFixed(2);
+    var panScale = document.getElementById("pan_scale");
+    panScale.style.transform = `rotate(${-RotateAngle}deg)`;
 
-        var tiltNum = document.getElementById("Tilt");
-        var tiltNumPanel = tiltNum.getBoundingClientRect();
-        var tiltNumMove = tiltNum.innerHTML = window.headTiltPosition.toFixed(2);
+    var tiltNum = document.getElementById("Tilt");
+    var tiltNumPanel = tiltNum.getBoundingClientRect();
+    var tiltNumMove = tiltNum.innerHTML = window.headTiltPosition.toFixed(2);
 
-        var pointer = document.getElementById('tilt_scale_pointer');
-        var tiltScaleOut = document.getElementById('tilt_scale');
-        var tiltScaleBase = tiltScaleOut.getBoundingClientRect();
-        var tiltScalediv = document.getElementById('tilt_scalediv');
-        var tiltScaleDivBase = tiltScalediv.getBoundingClientRect();
-        var pointerMoveY = tiltScaleBase.height/135;
-        pointer.style.transform = `translate(${tiltScaleDivBase.width}px, ${pointerMoveY*(90 - tiltNumMove)-tiltNumPanel.height/2}px)`;
-    }
+    var pointer = document.getElementById('tilt_scale_pointer');
+    var tiltScaleOut = document.getElementById('tilt_scale');
+    var tiltScaleBase = tiltScaleOut.getBoundingClientRect();
+    var tiltScalediv = document.getElementById('tilt_scalediv');
+    var tiltScaleDivBase = tiltScalediv.getBoundingClientRect();
+    var pointerMoveY = tiltScaleBase.height/135;
+    pointer.style.transform = `translate(${tiltScaleDivBase.width}px, ${pointerMoveY*(90 - tiltNumMove)-tiltNumPanel.height/2}px)`;
 
     cmdJsonCmd({'T':cmd_movition_ctrl,'L':heartbeat_left,'R':heartbeat_right});
 }
