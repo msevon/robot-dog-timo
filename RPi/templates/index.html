@@ -11,6 +11,13 @@
     </style>
   </head>
 <body>
+    <!-- Command Input Box - Top of Screen -->
+    <div id="command_input_container" class="command_input_overlay" style="display: none;">
+        <div class="command_input_box">
+            <input type="text" id="command_input" placeholder="Enter command..." class="command_input_field">
+        </div>
+    </div>
+    
     <main>
         <div class="box1">
             <!-- Top Section: Side Panels and Video -->
@@ -78,9 +85,6 @@
                                <div class="control_item">
                                    <span class="key">C</span>
                                    <span class="action">Open Command Box</span>
-                               </div>
-                               <div id="command_input_container" style="display: none; margin-top: 10px;">
-                                   <input type="text" id="command_input" placeholder="Enter command..." style="width: 100%; padding: 5px; background: #1a1a1a; color: #FFD700; border: 1px solid #FFD700; border-radius: 3px;">
                                </div>
                            </div>
                        </div>
