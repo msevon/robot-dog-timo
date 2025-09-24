@@ -1143,6 +1143,7 @@ var keyMap = {
     57: 'react_record', // 9
     65: 'left', // A - Move Left
     67: 'write_command', // C - Write Command
+    27: 'close_command', // ESC - Close Command Box
     68: 'right', // D - Move Right
     69: 'cv_hand', // E
     70: 'cv_mp_face', // F
@@ -1191,6 +1192,7 @@ var ctrl_buttons = {
     stay: 0,
     u: 0,
     write_command: 0,
+    close_command: 0,
     // Movement controls
     forward: 0,
     backward: 0,
@@ -1368,6 +1370,11 @@ function cmdProcess() {
     if (ctrl_buttons.write_command == 1){
         toggleCommandInput();
     }
+    
+    // Close Command
+    if (ctrl_buttons.close_command == 1){
+        closeCommandInput();
+    }
 
 }
 
@@ -1379,10 +1386,21 @@ function toggleCommandInput() {
     if (container.style.display === 'none' || container.style.display === '') {
         container.style.display = 'block';
         input.focus();
+        isInputFocused = true; // Disable keyboard controls
     } else {
         container.style.display = 'none';
         input.value = '';
+        isInputFocused = false; // Re-enable keyboard controls
     }
+}
+
+function closeCommandInput() {
+    var container = document.getElementById('command_input_container');
+    var input = document.getElementById('command_input');
+    
+    container.style.display = 'none';
+    input.value = '';
+    isInputFocused = false; // Re-enable keyboard controls
 }
 
 // Command processing function
@@ -1497,7 +1515,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     processCommand(command);
                     this.value = '';
                     document.getElementById('command_input_container').style.display = 'none';
+                    isInputFocused = false; // Re-enable keyboard controls
                 }
+            }
+        });
+        
+        commandInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeCommandInput();
             }
         });
     }
