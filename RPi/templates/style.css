@@ -1238,7 +1238,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     background-color: rgba(0, 0, 0, 0.9);
     border: 2px solid;
     border-radius: 8px;
-    padding: 20px 30px;
+    padding: 10px 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
     animation: fadeInScale 0.3s ease-out;
 }
@@ -1265,7 +1265,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
 
 .indicator_text {
     color: #ffffff;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
     font-family: 'Courier New', monospace;
 }

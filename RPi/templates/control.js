@@ -1147,7 +1147,7 @@ var keyMap = {
     69: 'capture', // E - Camera Capture
     70: 'cv_mp_face', // F
     71: 'cv_mp_pose', // G
-    72: 'cv_off', // H
+    72: 'handshake', // H
     73: 'mp_face', // I
     74: 'mp_pose', // J
     75: 'mp_off', // K
