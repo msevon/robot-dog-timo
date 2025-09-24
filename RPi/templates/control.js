@@ -1315,14 +1315,26 @@ function showInvalidCommandMessage() {
     var indicator = document.getElementById('capture_indicator');
     if (indicator) {
         var textElement = indicator.querySelector('.indicator_text');
+        var iconElement = indicator.querySelector('.indicator_icon');
+        
         if (textElement) {
             textElement.textContent = "THAT'S NOT A COMMAND";
         }
+        
+        // Hide the camera icon for invalid command message
+        if (iconElement) {
+            iconElement.style.display = 'none';
+        }
+        
         indicator.style.display = 'block';
         
         // Hide the message after 2 seconds
         setTimeout(function() {
             indicator.style.display = 'none';
+            // Restore the icon for future use
+            if (iconElement) {
+                iconElement.style.display = 'block';
+            }
         }, 2000);
     }
 }
