@@ -41,8 +41,8 @@ main {
     margin: 0 20px;
 }
 .box1 .section_feed_ctrl{
-    width: 1400px;
-    margin-top: 20px;
+    width: 1000px;
+    margin: 20px auto 0 auto;
 }
 .box1 .section_video > div{
     width: 1200px;

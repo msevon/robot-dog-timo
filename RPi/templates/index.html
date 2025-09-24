@@ -241,6 +241,80 @@
                 </div>
             </section>
             
+            <!-- Control Buttons Section -->
+            <section class="section_feed_ctrl box_outline">
+                <div>
+                    <div class="feed_ctrl_btn">
+                        <div>  
+                            <h2 class="sc_title feed_ct_tt">Funcs Ctrl</h2>
+                            <div id="speed_ctrl_btn">
+                                <div><button onclick='funcsCtrl(1);' class="ctl_btn ctl_btn_active">Stay</button></div>
+                                <div><button onclick='funcsCtrl(2);' class="ctl_btn">Handshake</button></div>
+                                <div><button onclick='funcsCtrl(3);' class="ctl_btn">Jump</button></div>
+                            </div>
+                        </div>
+                        <div>  
+                            <h2 class="sc_title feed_ct_tt">PT Steady/Ahead</h2>
+                            <div id="steady_ctrl_btn">
+                                <div><button onclick='funcsCtrl(5);' class="ctl_btn ctl_btn_active">OFF</button></div>
+                                <div><button onclick='funcsCtrl(4);' class="ctl_btn">ON</button></div>
+                                <div><button onclick="lookAhead();" class="ctl_btn">Ahead</button></div>
+                            </div>
+                        </div>
+                        <div>  
+                            <h2 class="sc_title feed_ct_tt">Simple Detection Type</h2>
+                            <div id="d_type_btn">
+                                <div><button onclick="cmdSend(cv_none,0,0);" class="ctl_btn ctl_btn_active">None</button></div>
+                                <div><button onclick="cmdSend(cv_moti,1,0);" class="ctl_btn ctl_btn_mov btn_ico">Movtion</button></div>
+                                <div><button onclick="cmdSend(cv_face,2,0);" class="ctl_btn ctl_btn_faces btn_ico">Faces</button></div>
+                            </div>
+                        </div>
+                        <div>  
+                            <h2 class="sc_title feed_ct_tt">Simple Detection Reaction</h2>
+                            <div id="d_reaction_btn">
+                                <div><button onclick="cmdSend(re_none,0,0);" class="ctl_btn ctl_btn_active">None</button></div>
+                                <div><button onclick="cmdSend(re_capt,0,0);" class="ctl_btn ctl_btn_caputure btn_ico">Capture</button></div>
+                                <div><button onclick="cmdSend(re_reco,0,0);" class="ctl_btn ctl_btn_record btn_ico">Record</button></div>
+                            </div>
+                        </div>
+                        <div>  
+                            <h2 class="sc_title feed_ct_tt">Advance CV Ctrl</h2>
+                            <div id="adv_cv_ctrl_btn">
+                                <div><button onclick="cmdSend(mc_lock,0,0);" class="ctl_btn">LOCK</button></div>
+                                <div><button onclick="cmdSend(mc_unlo,0,0);" class="ctl_btn">UNLOCK</button></div>
+                            </div>
+                        </div>
+                        <div>  
+                            <h2 class="sc_title feed_ct_tt">Advance CV Funcs</h2>
+                            <div id="adv_cv_funcs_btn">
+                                <div><button onclick="cmdSend(cv_objs,0,0);" class="ctl_btn">OBJECTS</button></div>
+                                <div><button onclick="cmdSend(cv_clor,0,0);" class="ctl_btn">COLOR</button></div>
+                                <div><button onclick="cmdSend(mp_hand,0,0);" class="ctl_btn">HAND GS</button></div>
+                                <div><button onclick="cmdSend(mp_face,0,0);" class="ctl_btn">MP FACE</button></div>
+                                <div><button onclick="cmdSend(mp_pose,0,0);" class="ctl_btn">MP POSE</button></div>
+                                <div><button onclick="cmdSend(cv_none,0,0);" class="ctl_btn">OFF</button></div>
+                            </div>
+                        </div>
+                        <div>  
+                            <h2 class="sc_title feed_ct_tt">MediaPipe Funcs</h2>
+                            <div id="mp_funcs_btn">
+                                <div><button onclick="cmdSend(mp_face,0,0);" class="ctl_btn">MP FACE</button></div>
+                                <div><button onclick="cmdSend(mp_pose,0,0);" class="ctl_btn">MP POSE</button></div>
+                                <div><button onclick="cmdSend(cv_none,0,0);" class="ctl_btn">OFF</button></div>
+                            </div>
+                        </div>
+                        <div>  
+                            <h2 class="sc_title feed_ct_tt">Head Light Ctrl</h2>
+                            <div id="light_ctrl_btn">
+                                <div><button onclick="rgbCtrl(0);" class="ctl_btn ctl_btn_active">Default</button></div>
+                                <div><button onclick="rgbCtrl(1);" class="ctl_btn">Red</button></div>
+                                <div><button onclick="rgbCtrl(2);" class="ctl_btn">Blue</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
             <!-- Right Control Panel -->
             <div class="control_panel control_panel_right">
                 <h3 class="control_title">Function Controls</h3>
@@ -311,90 +385,6 @@
                     </div>
                 </div>
             </div>
-            
-            <section class="section_feed_ctrl box_outline">
-                <div>
-                    <div class="feed_ctrl_btn">
-                        <div>  
-                            <h2 class="sc_title feed_ct_tt">Funcs Ctrl</h2>
-                            <div id="speed_ctrl_btn">
-                                <div><button onclick='funcsCtrl(1);' class="ctl_btn ctl_btn_active">Stay</button></div>
-                                <div><button onclick='funcsCtrl(2);' class="ctl_btn">Handshake</button></div>
-                                <div><button onclick='funcsCtrl(3);' class="ctl_btn">Jump</button></div>
-                            </div>
-                        </div>
-                        <div>  
-                            <h2 class="sc_title feed_ct_tt">PT Steady/Ahead</h2>
-                            <div id="steady_ctrl_btn">
-                                <div><button onclick='funcsCtrl(5);' class="ctl_btn ctl_btn_active">OFF</button></div>
-                                <div><button onclick='funcsCtrl(4);' class="ctl_btn">ON</button></div>
-                                <div><button onclick="lookAhead();" class="ctl_btn">Ahead</button></div>
-                            </div>
-                        </div>
-                        <div>  
-                            <h2 class="sc_title feed_ct_tt">Simple Detection Type</h2>
-                            <div id="d_type_btn">
-                                <div><button onclick="cmdSend(cv_none,0,0);" class="ctl_btn ctl_btn_active">None</button></div>
-                                <div><button onclick="cmdSend(cv_moti,1,0);" class="ctl_btn ctl_btn_mov btn_ico">Movtion</button></div>
-                                <div><button onclick="cmdSend(cv_face,2,0);" class="ctl_btn ctl_btn_faces btn_ico">Faces</button></div>
-                            </div>
-                        </div>
-                        <div>  
-                            <h2 class="sc_title feed_ct_tt">Simple Detection Reaction</h2>
-                            <div id="d_reaction_btn">
-                                <div><button onclick="cmdSend(re_none,0,0);" class="ctl_btn ctl_btn_active">None</button></div>
-                                <div><button onclick="cmdSend(re_capt,0,0);" class="ctl_btn ctl_btn_caputure btn_ico">Capture</button></div>
-                                <div><button onclick="cmdSend(re_reco,0,0);" class="ctl_btn ctl_btn_record btn_ico">Record</button></div>
-                            </div>
-                        </div>
-                        <div>  
-                            <h2 class="sc_title feed_ct_tt">Advance CV Ctrl</h2>
-                            <div id="adv_cv_ctrl_btn">
-                                <div><button onclick="cmdSend(mc_lock,0,0);" class="ctl_btn">LOCK</button></div>
-                                <div><button onclick="cmdSend(mc_unlo,0,0);" class="ctl_btn">UNLOCK</button></div>
-                                <!-- <div><button onclick="cmdSend(cv_auto,0,0);" class="ctl_btn">AUTODRIVE</button></div> -->
-                            </div>
-                        </div>
-                        <div>  
-                            <h2 class="sc_title feed_ct_tt">Advance CV Funcs</h2>
-                            <div id="adv_cv_funcs_btn">
-                                <div><button onclick="cmdSend(cv_objs,0,0);" class="ctl_btn">OBJECTS</button></div>
-                                <div><button onclick="cmdSend(cv_clor,0,0);" class="ctl_btn">COLOR</button></div>
-                                <div><button onclick="cmdSend(mp_hand,0,0);" class="ctl_btn">HAND GS</button></div>
-                                <div><button onclick="cmdSend(mp_face,0,0);" class="ctl_btn">MP FACE</button></div>
-                                <div><button onclick="cmdSend(mp_pose,0,0);" class="ctl_btn">MP POSE</button></div>
-                                <div><button onclick="cmdSend(cv_none,0,0);" class="ctl_btn">OFF</button></div>
-                            </div>
-                        </div>
-                        <div>  
-                            <h2 class="sc_title feed_ct_tt">MediaPipe Funcs</h2>
-                            <div id="mp_funcs_btn">
-                                <div><button onclick="cmdSend(mp_face,0,0);" class="ctl_btn">MP FACE</button></div>
-                                <div><button onclick="cmdSend(mp_pose,0,0);" class="ctl_btn">MP POSE</button></div>
-                                <div><button onclick="cmdSend(cv_none,0,0);" class="ctl_btn">OFF</button></div>
-                            </div>
-                        </div>
-                        <div>  
-                            <h2 class="sc_title feed_ct_tt">Head Light Ctrl</h2>
-                            <div id="light_ctrl_btn">
-                                <div><button onclick="rgbCtrl(0);" class="ctl_btn ctl_btn_active">Default</button></div>
-                                <div><button onclick="rgbCtrl(1);" class="ctl_btn">Red</button></div>
-                                <div><button onclick="rgbCtrl(2);" class="ctl_btn">Blue</button></div>
-                            </div>
-                        </div>
-                        <!-- <div>  
-                            <h2 class="sc_title feed_ct_tt">Base Light Ctrl</h2>
-                            <div id="base_led_ctrl_btn">
-                                <div><button onclick="cmdSend(base_of,0,0);" class="ctl_btn">BASE OFF</button></div>
-                                <div><button onclick="cmdSend(base_on,0,0);" class="ctl_btn">BASE ON</button></div>
-                            </div>
-                        </div>
-                        <div class="long_btn new_page" id="open_jupyter">
-                            <a target="_blank" style="color: #f5bd5f;" href="/"><span>JupyterLab</span>&nbsp;<span>&gt;</span></a>
-                        </div> -->
-                    </div>
-                </div>
-            </section>
         </div>
         <div class="box2">
             <section>
