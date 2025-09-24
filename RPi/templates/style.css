@@ -1231,15 +1231,16 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
 /* Status Indicators */
 .status_indicator {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 10000;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     border: 2px solid;
     border-radius: 8px;
-    padding: 15px 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    animation: slideIn 0.3s ease-out;
+    padding: 20px 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    animation: fadeInScale 0.3s ease-out;
 }
 
 .capture_indicator {
@@ -1269,13 +1270,13 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     font-family: 'Courier New', monospace;
 }
 
-@keyframes slideIn {
+@keyframes fadeInScale {
     from {
-        transform: translateX(100%);
+        transform: translate(-50%, -50%) scale(0.8);
         opacity: 0;
     }
     to {
-        transform: translateX(0);
+        transform: translate(-50%, -50%) scale(1);
         opacity: 1;
     }
 }

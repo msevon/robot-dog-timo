@@ -1162,7 +1162,7 @@ var keyMap = {
     87: 'forward', // W - Move Forward
     88: 'x',
     89: 'y',
-    90: 'z',
+    90: 'zoom', // Z - Camera Zoom
     // Numpad keys
     103: 'cv_objects', // Numpad 7
     104: 'cv_color', // Numpad 8
@@ -1193,6 +1193,7 @@ var ctrl_buttons = {
     write_command: 0,
     capture: 0,
     record_toggle: 0,
+    zoom: 0,
     // Movement controls
     forward: 0,
     backward: 0,
@@ -1380,6 +1381,11 @@ function cmdProcess() {
     // Record Toggle
     if (ctrl_buttons.record_toggle == 1){
         toggleRecord();
+    }
+    
+    // Camera Zoom
+    if (ctrl_buttons.zoom == 1){
+        toggleZoom();
     }
 
 }
@@ -1588,6 +1594,11 @@ function showCaptureIndicator() {
 function showRecordingIndicator() {
     var indicator = document.getElementById('recording_indicator');
     if (indicator) {
+        // Update the text to show recording is underway
+        var textElement = indicator.querySelector('.indicator_text');
+        if (textElement) {
+            textElement.textContent = 'RECORDING UNDERWAY';
+        }
         indicator.style.display = 'block';
         indicator.classList.add('pulse');
     }
@@ -1616,6 +1627,14 @@ function showRecordingSavedMessage() {
         setTimeout(function() {
             indicator.style.display = 'none';
         }, 3000);
+    }
+}
+
+// Zoom toggle function
+function toggleZoom() {
+    var zoomBtn = document.getElementById('zoom_btn');
+    if (zoomBtn) {
+        zoomBtn.click();
     }
 }
 
