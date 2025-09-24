@@ -1015,45 +1015,53 @@ function moveProcess() {
     var headUpButton = move_buttons.head_up;
     var headDownButton = move_buttons.head_down;
     
-    var headPan = 0;
-    var headTilt = 0;
-    
-    // Use speed control for head movement (same as body movement)
-    var headSpeed = 1.0; // Base speed for head movement
-    
-    if (move_buttons.low == 1) {
-        headSpeed = 0.5; // Slow head movement
-    } else if (move_buttons.middle == 1) {
-        headSpeed = 1.0; // Medium head movement
-    } else if (move_buttons.fast == 1) {
-        headSpeed = 2.0; // Fast head movement
+    // Initialize head position tracking if not exists
+    if (typeof window.headPanPosition === 'undefined') {
+        window.headPanPosition = 0;
+        window.headTiltPosition = 0;
     }
     
-    // Continuous movement - send command as long as key is pressed
+    // Use speed control for head movement (same as body movement)
+    var headSpeed = 0.5; // Base speed for head movement (degrees per update)
+    
+    if (move_buttons.low == 1) {
+        headSpeed = 0.2; // Slow head movement
+    } else if (move_buttons.middle == 1) {
+        headSpeed = 0.5; // Medium head movement
+    } else if (move_buttons.fast == 1) {
+        headSpeed = 1.0; // Fast head movement
+    }
+    
+    // Continuous movement - accumulate position as long as key is pressed
     if (headLeftButton == 1) {
-        headPan = -headSpeed; // Pan left
+        window.headPanPosition -= headSpeed; // Pan left
     } else if (headRightButton == 1) {
-        headPan = headSpeed; // Pan right
+        window.headPanPosition += headSpeed; // Pan right
     }
     
     if (headUpButton == 1) {
-        headTilt = headSpeed; // Tilt up
+        window.headTiltPosition += headSpeed; // Tilt up
     } else if (headDownButton == 1) {
-        headTilt = -headSpeed; // Tilt down
+        window.headTiltPosition -= headSpeed; // Tilt down
     }
     
+    // Clamp head position to reasonable limits
+    window.headPanPosition = Math.max(-180, Math.min(180, window.headPanPosition));
+    window.headTiltPosition = Math.max(-30, Math.min(30, window.headTiltPosition));
+    
     // Send head movement command if any arrow key is pressed (continuous)
-    if (headPan != 0 || headTilt != 0) {
-        cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":headPan,"Y":headTilt,"SPD":0,"ACC":32});
+    if (headLeftButton == 1 || headRightButton == 1 || headUpButton == 1 || headDownButton == 1) {
+        // Send absolute position command
+        cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":window.headPanPosition,"Y":window.headTiltPosition,"SPD":0,"ACC":32});
         
-        // Update UI display with current movement values
-        RotateAngle = document.getElementById("Pan").innerHTML = headPan.toFixed(2);
+        // Update UI display with current position values
+        RotateAngle = document.getElementById("Pan").innerHTML = window.headPanPosition.toFixed(2);
         var panScale = document.getElementById("pan_scale");
         panScale.style.transform = `rotate(${-RotateAngle}deg)`;
 
         var tiltNum = document.getElementById("Tilt");
         var tiltNumPanel = tiltNum.getBoundingClientRect();
-        var tiltNumMove = tiltNum.innerHTML = headTilt.toFixed(2);
+        var tiltNumMove = tiltNum.innerHTML = window.headTiltPosition.toFixed(2);
 
         var pointer = document.getElementById('tilt_scale_pointer');
         var tiltScaleOut = document.getElementById('tilt_scale');
@@ -1062,9 +1070,6 @@ function moveProcess() {
         var tiltScaleDivBase = tiltScalediv.getBoundingClientRect();
         var pointerMoveY = tiltScaleBase.height/135;
         pointer.style.transform = `translate(${tiltScaleDivBase.width}px, ${pointerMoveY*(90 - tiltNumMove)-tiltNumPanel.height/2}px)`;
-    } else {
-        // Stop head movement when no arrow keys are pressed
-        cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":0,"Y":0,"SPD":0,"ACC":32});
     }
 
     cmdJsonCmd({'T':cmd_movition_ctrl,'L':heartbeat_left,'R':heartbeat_right});
