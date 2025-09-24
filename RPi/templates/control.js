@@ -1141,7 +1141,9 @@ var keyMap = {
     55: 'react_none', // 7
     56: 'react_capture', // 8
     57: 'react_record', // 9
+    65: 'left', // A - Move Left
     67: 'cv_objects', // C
+    68: 'right', // D - Move Right
     69: 'cv_hand', // E
     70: 'cv_mp_face', // F
     71: 'cv_mp_pose', // G
@@ -1153,9 +1155,11 @@ var keyMap = {
     80: 'p',
     81: 'q',
     82: 'r',
+    83: 'backward', // S - Move Backward
     84: 'stay', // T
     85: 'u',
     86: 'v',
+    87: 'forward', // W - Move Forward
     88: 'x',
     89: 'y',
     90: 'z',
@@ -1186,6 +1190,11 @@ var ctrl_buttons = {
     t: 0,
     stay: 0,
     u: 0,
+    // Movement controls
+    forward: 0,
+    backward: 0,
+    left: 0,
+    right: 0,
     // New control buttons
     pt_off: 0,
     pt_on: 0,
