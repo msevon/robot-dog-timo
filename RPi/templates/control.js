@@ -1135,9 +1135,11 @@ var keyMap = {
     68: 'right', // D - Move Right
     69: 'capture', // E - Camera Capture
     72: 'handshake', // H - Handshake
+    80: 'photo_gallery', // P - Photo Gallery
     82: 'record_toggle', // R - Record Toggle
     83: 'backward', // S - Move Backward
     84: 'stay', // T - Stay
+    86: 'video_gallery', // V - Video Gallery
     87: 'forward', // W - Move Forward
     90: 'zoom' // Z - Camera Zoom
 };
@@ -1156,6 +1158,9 @@ var ctrl_buttons = {
     capture: 0,
     record_toggle: 0,
     zoom: 0,
+    // Gallery controls
+    photo_gallery: 0,
+    video_gallery: 0,
     // Command control
     write_command: 0
 };
@@ -1195,6 +1200,15 @@ function cmdProcess() {
     // Camera Zoom
     if (ctrl_buttons.zoom == 1){
         toggleZoom();
+    }
+    
+    // Gallery Navigation
+    if (ctrl_buttons.photo_gallery == 1){
+        window.location.href = './photo.html';
+    }
+    
+    if (ctrl_buttons.video_gallery == 1){
+        window.location.href = './video.html';
     }
 }
 
