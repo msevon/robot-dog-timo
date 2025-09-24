@@ -1144,7 +1144,7 @@ var keyMap = {
     65: 'left', // A - Move Left
     67: 'write_command', // C - Write Command
     68: 'right', // D - Move Right
-    69: 'cv_hand', // E
+    69: 'capture', // E - Camera Capture
     70: 'cv_mp_face', // F
     71: 'cv_mp_pose', // G
     72: 'cv_off', // H
@@ -1154,7 +1154,7 @@ var keyMap = {
     79: 'o',
     80: 'p',
     81: 'q',
-    82: 'r',
+    82: 'record_toggle', // R - Record Toggle
     83: 'backward', // S - Move Backward
     84: 'stay', // T
     85: 'u',
@@ -1191,6 +1191,8 @@ var ctrl_buttons = {
     stay: 0,
     u: 0,
     write_command: 0,
+    capture: 0,
+    record_toggle: 0,
     // Movement controls
     forward: 0,
     backward: 0,
@@ -1368,6 +1370,16 @@ function cmdProcess() {
     if (ctrl_buttons.write_command == 1){
         toggleCommandInput();
     }
+    
+    // Camera Capture
+    if (ctrl_buttons.capture == 1){
+        cmdSend(pic_cap, 0, 0);
+    }
+    
+    // Record Toggle
+    if (ctrl_buttons.record_toggle == 1){
+        toggleRecord();
+    }
 
 }
 
@@ -1461,7 +1473,7 @@ function processCommand(command) {
             setStatusDot('status_steadyon', false);
             setStatusDot('status_steadyoff', false);
             break;
-        case 'DNONE':
+        case 'DNON':
             cmdSend(re_none, 0, 0);
             setStatusDot('status_detnon', true);
             resetDetectionReactionStatus('status_detnon');
@@ -1534,6 +1546,23 @@ function setDefaultStatus() {
     setStatusDot('status_lock', true);
     setStatusDot('status_coff', true);
     setStatusDot('status_detnon', true);
+}
+
+// Record toggle function
+var isRecording = false;
+function toggleRecord() {
+    var recordBtn = document.getElementById('record-btn');
+    if (recordBtn) {
+        if (isRecording) {
+            // Stop recording
+            recordBtn.click();
+            isRecording = false;
+        } else {
+            // Start recording
+            recordBtn.click();
+            isRecording = true;
+        }
+    }
 }
 
 document.onkeydown = function (event) {
