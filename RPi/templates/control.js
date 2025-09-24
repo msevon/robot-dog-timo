@@ -1374,6 +1374,7 @@ function cmdProcess() {
     // Camera Capture
     if (ctrl_buttons.capture == 1){
         cmdSend(pic_cap, 0, 0);
+        showCaptureIndicator();
     }
     
     // Record Toggle
@@ -1557,11 +1558,64 @@ function toggleRecord() {
             // Stop recording
             recordBtn.click();
             isRecording = false;
+            hideRecordingIndicator();
         } else {
             // Start recording
             recordBtn.click();
             isRecording = true;
+            showRecordingIndicator();
         }
+    }
+}
+
+// Indicator functions
+function showCaptureIndicator() {
+    var indicator = document.getElementById('capture_indicator');
+    if (indicator) {
+        // Update the text to show it was saved to gallery
+        var textElement = indicator.querySelector('.indicator_text');
+        if (textElement) {
+            textElement.textContent = 'CAPTURE SAVED TO PHOTO GALLERY';
+        }
+        indicator.style.display = 'block';
+        // Hide after 3 seconds
+        setTimeout(function() {
+            indicator.style.display = 'none';
+        }, 3000);
+    }
+}
+
+function showRecordingIndicator() {
+    var indicator = document.getElementById('recording_indicator');
+    if (indicator) {
+        indicator.style.display = 'block';
+        indicator.classList.add('pulse');
+    }
+}
+
+function hideRecordingIndicator() {
+    var indicator = document.getElementById('recording_indicator');
+    if (indicator) {
+        indicator.style.display = 'none';
+        indicator.classList.remove('pulse');
+        // Show saved message
+        showRecordingSavedMessage();
+    }
+}
+
+function showRecordingSavedMessage() {
+    var indicator = document.getElementById('capture_indicator');
+    if (indicator) {
+        // Update the text to show recording was saved
+        var textElement = indicator.querySelector('.indicator_text');
+        if (textElement) {
+            textElement.textContent = 'RECORDING SAVED TO VIDEO GALLERY';
+        }
+        indicator.style.display = 'block';
+        // Hide after 3 seconds
+        setTimeout(function() {
+            indicator.style.display = 'none';
+        }, 3000);
     }
 }
 
