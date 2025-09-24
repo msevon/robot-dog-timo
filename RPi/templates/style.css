@@ -27,7 +27,7 @@ body {
     font-weight: normal;
 }
 main {
-    width: 1800px;
+    width: 1400px;
     margin: auto;
 }
 .box1{
@@ -46,11 +46,11 @@ main {
     margin-bottom: 20px;
 }
 .box1 .section_video{
-    width: 1000px;
+    width: 800px;
     margin: 20px 0;
 }
 .box1 .section_feed_ctrl{
-    width: 1000px;
+    width: 800px;
     margin: 20px auto 0 auto;
 }
 .box1 .section_video > div{
@@ -67,7 +67,7 @@ main {
 }
 .video{
     width: 100%;
-    height: 600px;
+    height: 450px;
     overflow: hidden;
 }
 .video img{
@@ -1069,54 +1069,54 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
 
 /* Control Panels */
 .control_panel {
-    width: 200px;
+    width: 160px;
     background-color: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 215, 0, 0.2);
     border-radius: 8px;
-    padding: 20px;
+    padding: 15px;
     color: #FFD700;
     flex-shrink: 0;
 }
 
 .control_title {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     color: #FFD700;
-    margin: 0 0 15px 0;
-    padding-bottom: 8px;
+    margin: 0 0 12px 0;
+    padding-bottom: 6px;
     border-bottom: 1px solid rgba(255, 215, 0, 0.3);
     text-align: center;
 }
 
 .control_section {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .control_item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
-    padding: 5px 0;
+    margin-bottom: 6px;
+    padding: 3px 0;
 }
 
 .control_item .key {
     background-color: rgba(255, 215, 0, 0.2);
     border: 1px solid rgba(255, 215, 0, 0.4);
-    border-radius: 4px;
-    padding: 4px 8px;
+    border-radius: 3px;
+    padding: 3px 6px;
     font-family: 'Courier New', monospace;
     font-weight: bold;
-    font-size: 12px;
-    min-width: 30px;
+    font-size: 10px;
+    min-width: 25px;
     text-align: center;
     color: #FFD700;
 }
 
 .control_item .action {
-    font-size: 12px;
+    font-size: 10px;
     color: #D8D8D8;
-    margin-left: 10px;
+    margin-left: 8px;
     flex: 1;
 }
 
