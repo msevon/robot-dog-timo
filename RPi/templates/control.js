@@ -1408,7 +1408,7 @@ function processCommand(command) {
             setStatusDot('status_lock', true);
             setStatusDot('status_unlock', false);
             break;
-        case 'UNLOCK':
+        case 'UNL':
             cmdSend(mc_unlo, 0, 0);
             setStatusDot('status_unlock', true);
             setStatusDot('status_lock', false);
@@ -1443,35 +1443,35 @@ function processCommand(command) {
             setStatusDot('status_coff', true);
             resetCVFuncsStatus('status_coff');
             break;
-        case 'STEADYON':
+        case 'STON':
             funcsCtrl(4);
             setStatusDot('status_steadyon', true);
             setStatusDot('status_steadyoff', false);
             setStatusDot('status_ahead', false);
             break;
-        case 'STEADYOFF':
+        case 'STOFF':
             funcsCtrl(5);
             setStatusDot('status_steadyoff', true);
             setStatusDot('status_steadyon', false);
             setStatusDot('status_ahead', false);
             break;
-        case 'AHEAD':
+        case 'AHD':
             lookAhead();
             setStatusDot('status_ahead', true);
             setStatusDot('status_steadyon', false);
             setStatusDot('status_steadyoff', false);
             break;
-        case 'DETNON':
+        case 'DNONE':
             cmdSend(re_none, 0, 0);
             setStatusDot('status_detnon', true);
             resetDetectionReactionStatus('status_detnon');
             break;
-        case 'DETCAP':
+        case 'DCAP':
             cmdSend(re_capt, 0, 0);
             setStatusDot('status_detcap', true);
             resetDetectionReactionStatus('status_detcap');
             break;
-        case 'DETREC':
+        case 'DREC':
             cmdSend(re_reco, 0, 0);
             setStatusDot('status_detrec', true);
             resetDetectionReactionStatus('status_detrec');
