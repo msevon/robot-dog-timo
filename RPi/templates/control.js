@@ -997,6 +997,32 @@ var move_buttons = {
     head_right: 0,
     head_down: 0,
 }
+function resetGimbalToCenter() {
+    // Reset head position to center
+    window.headPanPosition = 0;
+    window.headTiltPosition = 0;
+    
+    // Send gimbal center command
+    cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":0,"Y":0,"SPD":0,"ACC":32});
+    
+    // Update UI display
+    RotateAngle = document.getElementById("Pan").innerHTML = "0.00";
+    var panScale = document.getElementById("pan_scale");
+    panScale.style.transform = `rotate(0deg)`;
+
+    var tiltNum = document.getElementById("Tilt");
+    var tiltNumPanel = tiltNum.getBoundingClientRect();
+    var tiltNumMove = tiltNum.innerHTML = "0.00";
+
+    var pointer = document.getElementById('tilt_scale_pointer');
+    var tiltScaleOut = document.getElementById('tilt_scale');
+    var tiltScaleBase = tiltScaleOut.getBoundingClientRect();
+    var tiltScalediv = document.getElementById('tilt_scalediv');
+    var tiltScaleDivBase = tiltScalediv.getBoundingClientRect();
+    var pointerMoveY = tiltScaleBase.height/135;
+    pointer.style.transform = `translate(${tiltScaleDivBase.width}px, ${pointerMoveY*(90 - 0)-tiltNumPanel.height/2}px)`;
+}
+
 function moveProcess() {
     var forwardButton  = move_buttons.forward;
     var backwardButton = move_buttons.backward;
@@ -1035,27 +1061,43 @@ function moveProcess() {
     }else if (forwardButton == 1 && backwardButton == 0 && leftButton == 0 && rightButton == 0){
         heartbeat_left  =  max_speed;
         heartbeat_right =  max_speed;
+        // Reset gimbal to center when moving
+        resetGimbalToCenter();
     }else if (forwardButton == 0 && backwardButton == 1 && leftButton == 0 && rightButton == 0){
         heartbeat_left  = -max_speed;
         heartbeat_right = -max_speed;
+        // Reset gimbal to center when moving
+        resetGimbalToCenter();
     }else if (forwardButton == 0 && backwardButton == 0 && leftButton == 1 && rightButton == 0){
         heartbeat_left  = -max_speed;
         heartbeat_right =  max_speed;
+        // Reset gimbal to center when moving
+        resetGimbalToCenter();
     }else if (forwardButton == 0 && backwardButton == 0 && leftButton == 0 && rightButton == 1){
         heartbeat_left  =  max_speed;
         heartbeat_right = -max_speed;
+        // Reset gimbal to center when moving
+        resetGimbalToCenter();
     }else if (forwardButton == 1 && backwardButton == 0 && leftButton == 1 && rightButton == 0){
         heartbeat_left  =  slow_speed;
         heartbeat_right =  max_speed;
+        // Reset gimbal to center when moving
+        resetGimbalToCenter();
     }else if (forwardButton == 1 && backwardButton == 0 && leftButton == 0 && rightButton == 1){
         heartbeat_left  =  max_speed;
         heartbeat_right =  slow_speed;
+        // Reset gimbal to center when moving
+        resetGimbalToCenter();
     }else if (forwardButton == 0 && backwardButton == 1 && leftButton == 1 && rightButton == 0){
         heartbeat_left  = -slow_speed;
         heartbeat_right = -max_speed;
+        // Reset gimbal to center when moving
+        resetGimbalToCenter();
     }else if (forwardButton == 0 && backwardButton == 1 && leftButton == 0 && rightButton == 1){
         heartbeat_left  = -max_speed;
         heartbeat_right = -slow_speed;
+        // Reset gimbal to center when moving
+        resetGimbalToCenter();
     }
 
     // Head movement control with arrow keys (continuous movement)
