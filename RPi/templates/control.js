@@ -1402,53 +1402,95 @@ function closeCommandInput() {
 function processCommand(command) {
     command = command.toUpperCase().trim();
     
+    // Reset all status dots first
+    resetAllStatusDots();
+    
     switch(command) {
         case 'LOCK':
             cmdSend(mc_lock, 0, 0);
+            setStatusDot('status_lock', true);
             break;
         case 'UNLOCK':
             cmdSend(mc_unlo, 0, 0);
+            setStatusDot('status_unlock', true);
             break;
         case 'OBJ':
             cmdSend(cv_objs, 0, 0);
+            setStatusDot('status_obj', true);
             break;
         case 'COL':
             cmdSend(cv_clor, 0, 0);
+            setStatusDot('status_col', true);
             break;
         case 'HAND':
             cmdSend(mp_hand, 0, 0);
+            setStatusDot('status_hand', true);
             break;
         case 'FACE':
             cmdSend(mp_face, 0, 0);
+            setStatusDot('status_face', true);
             break;
         case 'POSE':
             cmdSend(mp_pose, 0, 0);
+            setStatusDot('status_pose', true);
             break;
         case 'COFF':
             cmdSend(cv_none, 0, 0);
+            setStatusDot('status_coff', true);
             break;
         case 'STEADYON':
             funcsCtrl(4);
+            setStatusDot('status_steadyon', true);
             break;
         case 'STEADYOFF':
             funcsCtrl(5);
+            setStatusDot('status_steadyoff', true);
             break;
         case 'AHEAD':
             lookAhead();
+            setStatusDot('status_ahead', true);
             break;
         case 'DETNON':
             cmdSend(re_none, 0, 0);
+            setStatusDot('status_detnon', true);
             break;
         case 'DETCAP':
             cmdSend(re_capt, 0, 0);
+            setStatusDot('status_detcap', true);
             break;
         case 'DETREC':
             cmdSend(re_reco, 0, 0);
+            setStatusDot('status_detrec', true);
             break;
         default:
             console.log('Unknown command: ' + command);
             break;
     }
+}
+
+// Status dot control functions
+function setStatusDot(elementId, active) {
+    var dot = document.getElementById(elementId);
+    if (dot) {
+        if (active) {
+            dot.classList.add('active');
+        } else {
+            dot.classList.remove('active');
+        }
+    }
+}
+
+function resetAllStatusDots() {
+    var statusDots = [
+        'status_lock', 'status_unlock',
+        'status_obj', 'status_col', 'status_hand', 'status_face', 'status_pose', 'status_coff',
+        'status_steadyon', 'status_steadyoff', 'status_ahead',
+        'status_detnon', 'status_detcap', 'status_detrec'
+    ];
+    
+    statusDots.forEach(function(dotId) {
+        setStatusDot(dotId, false);
+    });
 }
 
 document.onkeydown = function (event) {

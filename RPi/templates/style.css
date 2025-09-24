@@ -1162,6 +1162,23 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     flex: 1;
 }
 
+.status_dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #333;
+    border: 2px solid #555;
+    margin-left: 8px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.status_dot.active {
+    background-color: #00ff00;
+    border-color: #00ff00;
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+}
+
 /* Command Input Overlay */
 .command_input_overlay {
     position: fixed;
