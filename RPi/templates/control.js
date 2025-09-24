@@ -1143,7 +1143,6 @@ var keyMap = {
     57: 'react_record', // 9
     65: 'left', // A - Move Left
     67: 'write_command', // C - Write Command
-    27: 'close_command', // ESC - Close Command Box
     68: 'right', // D - Move Right
     69: 'cv_hand', // E
     70: 'cv_mp_face', // F
@@ -1192,7 +1191,6 @@ var ctrl_buttons = {
     stay: 0,
     u: 0,
     write_command: 0,
-    close_command: 0,
     // Movement controls
     forward: 0,
     backward: 0,
@@ -1370,11 +1368,6 @@ function cmdProcess() {
     if (ctrl_buttons.write_command == 1){
         toggleCommandInput();
     }
-    
-    // Close Command
-    if (ctrl_buttons.close_command == 1){
-        closeCommandInput();
-    }
 
 }
 
@@ -1458,6 +1451,11 @@ function processCommand(command) {
 
 document.onkeydown = function (event) {
     if (isInputFocused) {
+        // Only allow ESC to close command input when focused
+        if (event.keyCode === 27) {
+            event.preventDefault();
+            closeCommandInput();
+        }
         return;
     }
     
@@ -1522,6 +1520,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         commandInput.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
+                event.preventDefault();
+                event.stopPropagation();
                 closeCommandInput();
             }
         });
