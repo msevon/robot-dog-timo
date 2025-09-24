@@ -1378,8 +1378,10 @@ function toggleCommandInput() {
     
     if (container.style.display === 'none' || container.style.display === '') {
         container.style.display = 'block';
-        input.focus();
-        isInputFocused = true; // Disable keyboard controls
+        // Don't set isInputFocused here - let the focus event handle it
+        setTimeout(function() {
+            input.focus();
+        }, 10);
     } else {
         container.style.display = 'none';
         input.value = '';
@@ -1472,6 +1474,10 @@ document.onkeydown = function (event) {
     if (key && ctrl_buttons[key] === 0) {
         updateButton(key, 1);
         cmdProcess();
+        // Reset the button state immediately for write_command to prevent key consumption
+        if (key === 'write_command') {
+            updateButton(key, 0);
+        }
     } else if (moveKey && move_buttons[moveKey] === 0) {
         updateMoveButton(moveKey, 1);
         moveProcess();
@@ -1506,6 +1512,16 @@ document.onkeyup = function (event) {
 document.addEventListener('DOMContentLoaded', function() {
     var commandInput = document.getElementById('command_input');
     if (commandInput) {
+        // Focus event - disable keyboard controls
+        commandInput.addEventListener('focus', function() {
+            isInputFocused = true;
+        });
+        
+        // Blur event - re-enable keyboard controls
+        commandInput.addEventListener('blur', function() {
+            isInputFocused = false;
+        });
+        
         commandInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 var command = this.value;
