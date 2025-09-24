@@ -1071,16 +1071,8 @@ function moveProcess() {
         window.headTiltPosition = 0;
     }
     
-    // Use speed control for head movement (same as body movement)
-    var headSpeed = 1.5; // Base speed for head movement (degrees per update) - 3x faster
-    
-    if (move_buttons.low == 1) {
-        headSpeed = 0.6; // Slow head movement - 3x faster
-    } else if (move_buttons.middle == 1) {
-        headSpeed = 1.5; // Medium head movement - 3x faster
-    } else if (move_buttons.fast == 1) {
-        headSpeed = 3.0; // Fast head movement - 3x faster
-    }
+    // Fixed speed for head movement
+    var headSpeed = 3.0; // Fixed speed for head movement (degrees per update)
     
     // Set head movement speeds based on pressed keys
     head_pan_speed = 0;
