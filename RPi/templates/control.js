@@ -1101,19 +1101,20 @@ function updateMoveButton(key, value) {
 }
 
 var keyMap = {
+    32: 'jump', // Spacebar
     67: "c",
     82: 'r',
     69: 'e',
     70: 'f',
     71: 'g',
-    72: 'h',
+    72: 'handshake', // H
     73: 'i',
     75: 'k',
     77: 'm',
     74: 'j',
     76: 'l',
     79: 'o',
-    84: 't',
+    84: 'stay', // T
     85: 'u'
 };
 
@@ -1124,13 +1125,16 @@ var ctrl_buttons = {
     f: 0,
     g: 0,
     h: 0,
+    handshake: 0,
     i: 0,
+    jump: 0,
     k: 0,
     m: 0,
     j: 0,
     l: 0,
     o: 0,
     t: 0,
+    stay: 0,
     u: 0
 };
 
@@ -1195,6 +1199,17 @@ function cmdProcess() {
     } else if (ctrl_buttons.t == 1){
         cmdJsonCmd({"T":106,"cmd":1.57,"spd":0,"acc":0});
     }
+
+    // Function Controls
+    if (ctrl_buttons.jump == 1){
+        funcsCtrl(3); // Jump
+    }
+    if (ctrl_buttons.handshake == 1){
+        funcsCtrl(2); // Handshake
+    }
+    if (ctrl_buttons.stay == 1){
+        funcsCtrl(1); // Stay
+    }
 }
 
 document.onkeydown = function (event) {
@@ -1202,8 +1217,8 @@ document.onkeydown = function (event) {
         return;
     }
     
-    // Prevent default behavior for arrow keys to stop page scrolling
-    if (event.keyCode >= 37 && event.keyCode <= 40) {
+    // Prevent default behavior for arrow keys and spacebar to stop page scrolling
+    if (event.keyCode >= 37 && event.keyCode <= 40 || event.keyCode === 32) {
         event.preventDefault();
     }
     
@@ -1226,8 +1241,8 @@ document.onkeyup = function (event) {
         return;
     }
     
-    // Prevent default behavior for arrow keys to stop page scrolling
-    if (event.keyCode >= 37 && event.keyCode <= 40) {
+    // Prevent default behavior for arrow keys and spacebar to stop page scrolling
+    if (event.keyCode >= 37 && event.keyCode <= 40 || event.keyCode === 32) {
         event.preventDefault();
     }
     
