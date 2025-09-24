@@ -1173,8 +1173,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     z-index: 9999;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    padding-top: 50px;
+    align-items: center;
 }
 
 .command_input_box {
@@ -1199,6 +1198,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     font-weight: bold;
     outline: none;
     text-align: center;
+    text-transform: uppercase;
 }
 
 .command_input_field::placeholder {

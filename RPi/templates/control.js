@@ -1541,6 +1541,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeCommandInput();
             }
         });
+        
+        // Convert input to uppercase as user types
+        commandInput.addEventListener('input', function(event) {
+            this.value = this.value.toUpperCase();
+        });
     }
 });
 
