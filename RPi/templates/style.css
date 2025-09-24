@@ -1304,6 +1304,49 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     justify-content: center;
 }
 
+/* Key Shortcuts */
+.key_shortcuts {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px 0;
+    max-width: 400px;
+}
+
+.key_shortcuts h3 {
+    color: #FFD700;
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.shortcut_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+    padding: 5px 0;
+}
+
+.shortcut_item .key {
+    background-color: #333;
+    color: #FFD700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 12px;
+    min-width: 30px;
+    text-align: center;
+}
+
+.shortcut_item .description {
+    color: #ccc;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
 .gallery_link {
     display: flex;
     flex-direction: column;

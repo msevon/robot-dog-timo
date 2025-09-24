@@ -1491,12 +1491,22 @@ function toggleZoom() {
 }
 
 document.onkeydown = function (event) {
-    if (isInputFocused) {
-        // Only allow ESC to close command input when focused
-        if (event.keyCode === 27) {
-            event.preventDefault();
+    // ESC key handling for gallery navigation
+    if (event.keyCode === 27) {
+        event.preventDefault();
+        if (isInputFocused) {
+            // Only allow ESC to close command input when focused
             closeCommandInput();
+        } else {
+            // Navigate back to index from gallery pages
+            if (window.location.pathname.includes('photo.html') || window.location.pathname.includes('video.html')) {
+                window.location.href = './index.html';
+            }
         }
+        return;
+    }
+    
+    if (isInputFocused) {
         return;
     }
     
