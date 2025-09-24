@@ -1071,23 +1071,24 @@ function moveProcess() {
         window.headTiltPosition = 0;
     }
     
-    // Fixed speed for head movement
-    var headSpeed = 3.0; // Fixed speed for head movement (degrees per update)
+    // Different speeds for horizontal and vertical movement
+    var headPanSpeed = 9.0; // Horizontal speed (pan) - 3x faster
+    var headTiltSpeed = 3.0; // Vertical speed (tilt) - original speed
     
     // Set head movement speeds based on pressed keys
     head_pan_speed = 0;
     head_tilt_speed = 0;
     
     if (headLeftPressed) {
-        head_pan_speed = -headSpeed; // Pan left
+        head_pan_speed = -headPanSpeed; // Pan left
     } else if (headRightPressed) {
-        head_pan_speed = headSpeed; // Pan right
+        head_pan_speed = headPanSpeed; // Pan right
     }
     
     if (headUpPressed) {
-        head_tilt_speed = headSpeed; // Tilt up
+        head_tilt_speed = headTiltSpeed; // Tilt up
     } else if (headDownPressed) {
-        head_tilt_speed = -headSpeed; // Tilt down
+        head_tilt_speed = -headTiltSpeed; // Tilt down
     }
     
     // Activate/deactivate head movement
