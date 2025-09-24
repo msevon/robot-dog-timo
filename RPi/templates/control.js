@@ -923,6 +923,9 @@ var head_movement_active = false;
 var head_pan_speed = 0;
 var head_tilt_speed = 0;
 
+// Key state tracking for continuous detection
+var keyStates = {};
+
 function head_movement_send(){
     if (socketJson.connected && head_movement_active) {
         // Update head position based on current speed
@@ -960,6 +963,9 @@ function head_movement_send(){
     }
 }
 setInterval(head_movement_send, 50); // Update every 50ms for smooth movement
+
+// Continuous movement processing
+setInterval(moveProcess, 50); // Update every 50ms for smooth movement
 
 var isInputFocused = false;
 
@@ -1053,10 +1059,11 @@ function moveProcess() {
     }
 
     // Head movement control with arrow keys (continuous movement)
-    var headLeftButton = move_buttons.head_left;
-    var headRightButton = move_buttons.head_right;
-    var headUpButton = move_buttons.head_up;
-    var headDownButton = move_buttons.head_down;
+    // Check key states directly for continuous detection
+    var headLeftPressed = keyStates[37] || false;  // Left arrow
+    var headUpPressed = keyStates[38] || false;    // Up arrow
+    var headRightPressed = keyStates[39] || false; // Right arrow
+    var headDownPressed = keyStates[40] || false;  // Down arrow
     
     // Initialize head position tracking if not exists
     if (typeof window.headPanPosition === 'undefined') {
@@ -1075,42 +1082,24 @@ function moveProcess() {
         headSpeed = 1.0; // Fast head movement
     }
     
-    // Continuous movement - accumulate position as long as key is pressed
-    if (headLeftButton == 1) {
-        window.headPanPosition -= headSpeed; // Pan left
-    } else if (headRightButton == 1) {
-        window.headPanPosition += headSpeed; // Pan right
+    // Set head movement speeds based on pressed keys
+    head_pan_speed = 0;
+    head_tilt_speed = 0;
+    
+    if (headLeftPressed) {
+        head_pan_speed = -headSpeed; // Pan left
+    } else if (headRightPressed) {
+        head_pan_speed = headSpeed; // Pan right
     }
     
-    if (headUpButton == 1) {
-        window.headTiltPosition += headSpeed; // Tilt up
-    } else if (headDownButton == 1) {
-        window.headTiltPosition -= headSpeed; // Tilt down
+    if (headUpPressed) {
+        head_tilt_speed = headSpeed; // Tilt up
+    } else if (headDownPressed) {
+        head_tilt_speed = -headSpeed; // Tilt down
     }
     
-    // Clamp head position to reasonable limits
-    window.headPanPosition = Math.max(-180, Math.min(180, window.headPanPosition));
-    window.headTiltPosition = Math.max(-30, Math.min(30, window.headTiltPosition));
-    
-    // Always send head position command (continuous updates)
-    cmdJsonCmd({"T":cmd_gimbal_ctrl,"X":window.headPanPosition,"Y":window.headTiltPosition,"SPD":0,"ACC":32});
-    
-    // Update UI display with current position values
-    RotateAngle = document.getElementById("Pan").innerHTML = window.headPanPosition.toFixed(2);
-    var panScale = document.getElementById("pan_scale");
-    panScale.style.transform = `rotate(${-RotateAngle}deg)`;
-
-    var tiltNum = document.getElementById("Tilt");
-    var tiltNumPanel = tiltNum.getBoundingClientRect();
-    var tiltNumMove = tiltNum.innerHTML = window.headTiltPosition.toFixed(2);
-
-    var pointer = document.getElementById('tilt_scale_pointer');
-    var tiltScaleOut = document.getElementById('tilt_scale');
-    var tiltScaleBase = tiltScaleOut.getBoundingClientRect();
-    var tiltScalediv = document.getElementById('tilt_scalediv');
-    var tiltScaleDivBase = tiltScalediv.getBoundingClientRect();
-    var pointerMoveY = tiltScaleBase.height/135;
-    pointer.style.transform = `translate(${tiltScaleDivBase.width}px, ${pointerMoveY*(90 - tiltNumMove)-tiltNumPanel.height/2}px)`;
+    // Activate/deactivate head movement
+    head_movement_active = (headLeftPressed || headRightPressed || headUpPressed || headDownPressed);
 
     cmdJsonCmd({'T':cmd_movition_ctrl,'L':heartbeat_left,'R':heartbeat_right});
 }
@@ -1219,6 +1208,15 @@ document.onkeydown = function (event) {
     if (isInputFocused) {
         return;
     }
+    
+    // Prevent default behavior for arrow keys to stop page scrolling
+    if (event.keyCode >= 37 && event.keyCode <= 40) {
+        event.preventDefault();
+    }
+    
+    // Track key state for continuous detection
+    keyStates[event.keyCode] = true;
+    
     var key = keyMap[event.keyCode];
     var moveKey = moveKeyMap[event.keyCode];
     if (key && ctrl_buttons[key] === 0) {
@@ -1234,6 +1232,15 @@ document.onkeyup = function (event) {
     if (isInputFocused) {
         return;
     }
+    
+    // Prevent default behavior for arrow keys to stop page scrolling
+    if (event.keyCode >= 37 && event.keyCode <= 40) {
+        event.preventDefault();
+    }
+    
+    // Track key state for continuous detection
+    keyStates[event.keyCode] = false;
+    
     var key = keyMap[event.keyCode];
     var moveKey = moveKeyMap[event.keyCode];
     if (key && ctrl_buttons[key] === 1) {
