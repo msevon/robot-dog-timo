@@ -1072,7 +1072,7 @@ function moveProcess() {
     }
     
     // Different speeds for horizontal and vertical movement
-    var headPanSpeed = 9.0; // Horizontal speed (pan) - 3x faster
+    var headPanSpeed = 15.0; // Horizontal speed (pan) - 5x faster
     var headTiltSpeed = 3.0; // Vertical speed (tilt) - original speed
     
     // Set head movement speeds based on pressed keys
