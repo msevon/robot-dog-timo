@@ -1130,6 +1130,8 @@ function updateMoveButton(key, value) {
 
 var keyMap = {
     32: 'jump', // Spacebar
+    45: 'cv_lock', // INSERT
+    46: 'cv_unlock', // DELETE
     49: 'pt_off', // 1
     50: 'pt_on', // 2
     51: 'pt_ahead', // 3
@@ -1139,10 +1141,9 @@ var keyMap = {
     55: 'react_none', // 7
     56: 'react_capture', // 8
     57: 'react_record', // 9
-    65: 'cv_lock', // A
-    66: 'cv_unlock', // B
+    65: 'left', // A - Move Left
     67: 'cv_objects', // C
-    68: 'cv_color', // D
+    68: 'right', // D - Move Right
     69: 'cv_hand', // E
     70: 'cv_mp_face', // F
     71: 'cv_mp_pose', // G
@@ -1150,21 +1151,25 @@ var keyMap = {
     73: 'mp_face', // I
     74: 'mp_pose', // J
     75: 'mp_off', // K
-    76: 'light_default', // L
-    77: 'light_red', // M
-    78: 'light_blue', // N
     79: 'o',
     80: 'p',
     81: 'q',
     82: 'r',
-    83: 's',
+    83: 'backward', // S - Move Backward
     84: 'stay', // T
     85: 'u',
     86: 'v',
-    87: 'w',
+    87: 'forward', // W - Move Forward
     88: 'x',
     89: 'y',
-    90: 'z'
+    90: 'z',
+    // Numpad keys
+    103: 'cv_objects', // Numpad 7
+    104: 'cv_color', // Numpad 8
+    105: 'cv_hand', // Numpad 9
+    100: 'cv_mp_face', // Numpad 4
+    101: 'cv_mp_pose', // Numpad 5
+    102: 'cv_off' // Numpad 6
 };
 
 var ctrl_buttons = {
@@ -1185,6 +1190,11 @@ var ctrl_buttons = {
     t: 0,
     stay: 0,
     u: 0,
+    // Movement controls
+    forward: 0,
+    backward: 0,
+    left: 0,
+    right: 0,
     // New control buttons
     pt_off: 0,
     pt_on: 0,
@@ -1205,10 +1215,7 @@ var ctrl_buttons = {
     cv_off: 0,
     mp_face: 0,
     mp_pose: 0,
-    mp_off: 0,
-    light_default: 0,
-    light_red: 0,
-    light_blue: 0
+    mp_off: 0
 };
 
 function updateButton(key, value) {
@@ -1356,16 +1363,6 @@ function cmdProcess() {
         cmdSend(cv_none,0,0); // OFF
     }
 
-    // Head Light Ctrl Controls
-    if (ctrl_buttons.light_default == 1){
-        rgbCtrl(0); // Default
-    }
-    if (ctrl_buttons.light_red == 1){
-        rgbCtrl(1); // Red
-    }
-    if (ctrl_buttons.light_blue == 1){
-        rgbCtrl(2); // Blue
-    }
 }
 
 document.onkeydown = function (event) {
