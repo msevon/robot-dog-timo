@@ -1402,65 +1402,79 @@ function closeCommandInput() {
 function processCommand(command) {
     command = command.toUpperCase().trim();
     
-    // Reset all status dots first
-    resetAllStatusDots();
-    
     switch(command) {
         case 'LOCK':
             cmdSend(mc_lock, 0, 0);
             setStatusDot('status_lock', true);
+            setStatusDot('status_unlock', false);
             break;
         case 'UNLOCK':
             cmdSend(mc_unlo, 0, 0);
             setStatusDot('status_unlock', true);
+            setStatusDot('status_lock', false);
             break;
         case 'OBJ':
             cmdSend(cv_objs, 0, 0);
             setStatusDot('status_obj', true);
+            resetCVFuncsStatus('status_obj');
             break;
         case 'COL':
             cmdSend(cv_clor, 0, 0);
             setStatusDot('status_col', true);
+            resetCVFuncsStatus('status_col');
             break;
         case 'HAND':
             cmdSend(mp_hand, 0, 0);
             setStatusDot('status_hand', true);
+            resetCVFuncsStatus('status_hand');
             break;
         case 'FACE':
             cmdSend(mp_face, 0, 0);
             setStatusDot('status_face', true);
+            resetCVFuncsStatus('status_face');
             break;
         case 'POSE':
             cmdSend(mp_pose, 0, 0);
             setStatusDot('status_pose', true);
+            resetCVFuncsStatus('status_pose');
             break;
         case 'COFF':
             cmdSend(cv_none, 0, 0);
             setStatusDot('status_coff', true);
+            resetCVFuncsStatus('status_coff');
             break;
         case 'STEADYON':
             funcsCtrl(4);
             setStatusDot('status_steadyon', true);
+            setStatusDot('status_steadyoff', false);
+            setStatusDot('status_ahead', false);
             break;
         case 'STEADYOFF':
             funcsCtrl(5);
             setStatusDot('status_steadyoff', true);
+            setStatusDot('status_steadyon', false);
+            setStatusDot('status_ahead', false);
             break;
         case 'AHEAD':
             lookAhead();
             setStatusDot('status_ahead', true);
+            setStatusDot('status_steadyon', false);
+            setStatusDot('status_steadyoff', false);
             break;
         case 'DETNON':
             cmdSend(re_none, 0, 0);
             setStatusDot('status_detnon', true);
+            resetDetectionReactionStatus('status_detnon');
             break;
         case 'DETCAP':
             cmdSend(re_capt, 0, 0);
             setStatusDot('status_detcap', true);
+            resetDetectionReactionStatus('status_detcap');
             break;
         case 'DETREC':
             cmdSend(re_reco, 0, 0);
             setStatusDot('status_detrec', true);
+            resetDetectionReactionStatus('status_detrec');
             break;
         default:
             console.log('Unknown command: ' + command);
@@ -1491,6 +1505,35 @@ function resetAllStatusDots() {
     statusDots.forEach(function(dotId) {
         setStatusDot(dotId, false);
     });
+}
+
+// Reset CV Funcs status (only one can be active at a time)
+function resetCVFuncsStatus(exceptId) {
+    var cvFuncsDots = ['status_obj', 'status_col', 'status_hand', 'status_face', 'status_pose', 'status_coff'];
+    cvFuncsDots.forEach(function(dotId) {
+        if (dotId !== exceptId) {
+            setStatusDot(dotId, false);
+        }
+    });
+}
+
+// Reset Detection Reaction status (only one can be active at a time)
+function resetDetectionReactionStatus(exceptId) {
+    var detectionDots = ['status_detnon', 'status_detcap', 'status_detrec'];
+    detectionDots.forEach(function(dotId) {
+        if (dotId !== exceptId) {
+            setStatusDot(dotId, false);
+        }
+    });
+}
+
+// Set default status when app starts
+function setDefaultStatus() {
+    // Default states: STEADYOFF, LOCK, COFF, DETNON
+    setStatusDot('status_steadyoff', true);
+    setStatusDot('status_lock', true);
+    setStatusDot('status_coff', true);
+    setStatusDot('status_detnon', true);
 }
 
 document.onkeydown = function (event) {
@@ -1552,6 +1595,9 @@ document.onkeyup = function (event) {
 
 // Command input event listener
 document.addEventListener('DOMContentLoaded', function() {
+    // Set default status when page loads
+    setDefaultStatus();
+    
     var commandInput = document.getElementById('command_input');
     if (commandInput) {
         // Focus event - disable keyboard controls
