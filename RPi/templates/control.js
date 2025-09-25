@@ -1465,12 +1465,12 @@ function setDefaultStatus() {
         setStatusDot(dotId, false);
     });
     
-    // Set default active commands (green) by default
-    setStatusDot('status_detnon', true);  // Detection None
-    setStatusDot('status_reactnone', true);  // React None
-    setStatusDot('status_lock', true);  // CV Ctrl - Lock (first command)
-    setStatusDot('status_obj', true);  // CV Funcs - Objects (first command)
-    setStatusDot('status_steadyon', true);  // PT Steady/Ahead - Steady On (first command)
+    // Set default active commands (green) by default - these are the "off/none" commands
+    setStatusDot('status_lock', true);     // CV Ctrl - Lock
+    setStatusDot('status_coff', true);     // CV Funcs - CV Funcs Off
+    setStatusDot('status_steadyoff', true); // PT Steady/Ahead - Steady Off
+    setStatusDot('status_detnon', true);   // Detection - Detection None
+    setStatusDot('status_reactnone', true); // Reaction - React None
 }
 
 // Record toggle function
@@ -1961,10 +1961,6 @@ function readGamepad() {
 }
 
 window.requestAnimationFrame(readGamepad);
-
-
-
-
 
 document.getElementById('open_jupyter').addEventListener('click', function() {
     var currentUrl = window.location.href;
