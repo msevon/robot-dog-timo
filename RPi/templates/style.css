@@ -27,7 +27,7 @@ body {
     font-weight: normal;
 }
 main {
-    width: 1800px;
+    width: 1200px;
     margin: auto;
 }
 .box1{
@@ -46,7 +46,7 @@ main {
     margin-bottom: 20px;
 }
 .box1 .section_video{
-    width: 1000px;
+    width: 700px;
     margin: 20px 0;
 }
 .box1 .section_feed_ctrl{
@@ -54,7 +54,7 @@ main {
     margin: 20px auto 0 auto;
 }
 .box1 .section_video > div{
-    width: 1000px;
+    width: 700px;
     margin:40px auto;
 }
 .box1 .section_feed_ctrl > div{margin:40px auto;}
@@ -66,13 +66,13 @@ main {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 .video{
-    width: 1000px;
-    height: 750px;
+    width: 700px;
+    height: 525px;
     overflow: hidden;
 }
 .video img{
-    width: 1000px;
-    height: 750px;
+    width: 700px;
+    height: 525px;
     border-radius: 4px;
 }
 .feed{
@@ -85,14 +85,14 @@ main {
 .video_feed{position: relative;}
 .video_feed > div{
     position: absolute;
-    width: 640px;
-    height: 480px;
-    left: 20px;
-    top: 20px;
+    width: 448px;
+    height: 336px;
+    left: 14px;
+    top: 14px;
 }
 .feed_section{position: absolute;}
 .feed_section > div{
-    width: 640px;
+    width: 448px;
     display: flex;
     justify-content: space-between;
 }
