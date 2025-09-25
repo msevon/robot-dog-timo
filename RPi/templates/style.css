@@ -1383,26 +1383,29 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     align-items: center;
     text-decoration: none;
     color: #FFD700;
-    padding: 10px;
-    border: 1px solid #FFD700;
-    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 6px;
+    background-color: rgba(255, 215, 0, 0.1);
     transition: all 0.3s ease;
-    min-width: 80px;
+    min-width: 60px;
 }
 
 .settings_link_item:hover {
-    background-color: rgba(255, 215, 0, 0.1);
+    background-color: rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 215, 0, 0.6);
     transform: translateY(-2px);
 }
 
 .settings_icon {
-    font-size: 24px;
-    margin-bottom: 5px;
+    font-size: 20px;
+    margin-bottom: 4px;
 }
 
 .settings_text {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
+    text-align: center;
 }
 
 /* Key Shortcuts */
