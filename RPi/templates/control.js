@@ -1425,11 +1425,12 @@ function resetDetectionReactionStatus(exceptId) {
 
 // Set default status when app starts
 function setDefaultStatus() {
-    // Default states: STEADYOFF, LOCK, COFF, DETNON
+    // Default states: STEADYOFF, LOCK, COFF, DETNON, RNON
     setStatusDot('status_steadyoff', true);
     setStatusDot('status_lock', true);
     setStatusDot('status_coff', true);
     setStatusDot('status_detnon', true);
+    setStatusDot('status_reactnone', true);
 }
 
 // Record toggle function
