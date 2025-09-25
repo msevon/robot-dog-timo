@@ -1166,13 +1166,12 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background-color: #ff6b6b;
-    border: 2px solid #ff8e8e;
+    background-color: #555;
+    border: 2px solid #777;
     margin-left: 8px;
     flex-shrink: 0;
     transition: all 0.3s ease;
     display: inline-block;
-    box-shadow: 0 0 4px rgba(255, 107, 107, 0.5);
 }
 
 .status_dot.active {

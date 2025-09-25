@@ -1225,12 +1225,12 @@ function processCommand(command) {
         case 'LOCK':
             cmdSend(mc_lock, 0, 0);
             setStatusDot('status_lock', true);
-            setStatusDot('status_unlock', false);
+            resetCVCtrlStatus('status_lock');
             break;
         case 'UNL':
             cmdSend(mc_unlo, 0, 0);
             setStatusDot('status_unlock', true);
-            setStatusDot('status_lock', false);
+            resetCVCtrlStatus('status_unlock');
             break;
         case 'OBJ':
             cmdSend(cv_objs, 0, 0);
@@ -1265,35 +1265,22 @@ function processCommand(command) {
         case 'STON':
             funcsCtrl(4);
             setStatusDot('status_steadyon', true);
-            setStatusDot('status_steadyoff', false);
-            setStatusDot('status_ahead', false);
+            resetPTSteadyAheadStatus('status_steadyon');
             break;
         case 'STOFF':
             funcsCtrl(5);
             setStatusDot('status_steadyoff', true);
-            setStatusDot('status_steadyon', false);
-            setStatusDot('status_ahead', false);
+            resetPTSteadyAheadStatus('status_steadyoff');
             break;
         case 'AHD':
             lookAhead();
             setStatusDot('status_ahead', true);
-            setStatusDot('status_steadyon', false);
-            setStatusDot('status_steadyoff', false);
+            resetPTSteadyAheadStatus('status_ahead');
             break;
         case 'DNON':
-            cmdSend(re_none, 0, 0);
+            cmdSend(cv_off, 0, 0);
             setStatusDot('status_detnon', true);
-            resetDetectionReactionStatus('status_detnon');
-            break;
-        case 'DCAP':
-            cmdSend(re_capt, 0, 0);
-            setStatusDot('status_detcap', true);
-            resetDetectionReactionStatus('status_detcap');
-            break;
-        case 'DREC':
-            cmdSend(re_reco, 0, 0);
-            setStatusDot('status_detrec', true);
-            resetDetectionReactionStatus('status_detrec');
+            resetDetectionTypeStatus('status_detnon');
             break;
         case 'RNON':
             cmdSend(re_none, 0, 0);
@@ -1425,8 +1412,38 @@ function resetDetectionTypeStatus(exceptId) {
 
 // Reset Detection Reaction status (only one can be active at a time)
 function resetDetectionReactionStatus(exceptId) {
-    var detectionDots = ['status_detnon', 'status_detcap', 'status_detrec'];
+    var detectionDots = ['status_reactnone', 'status_reactcap', 'status_reactrec'];
     detectionDots.forEach(function(dotId) {
+        if (dotId !== exceptId) {
+            setStatusDot(dotId, false);
+        }
+    });
+}
+
+// Reset CV Ctrl status (only one can be active at a time)
+function resetCVCtrlStatus(exceptId) {
+    var cvCtrlDots = ['status_lock', 'status_unlock'];
+    cvCtrlDots.forEach(function(dotId) {
+        if (dotId !== exceptId) {
+            setStatusDot(dotId, false);
+        }
+    });
+}
+
+// Reset CV Funcs status (only one can be active at a time)
+function resetCVFuncsStatus(exceptId) {
+    var cvFuncsDots = ['status_obj', 'status_col', 'status_hand', 'status_face', 'status_pose', 'status_coff'];
+    cvFuncsDots.forEach(function(dotId) {
+        if (dotId !== exceptId) {
+            setStatusDot(dotId, false);
+        }
+    });
+}
+
+// Reset PT Steady/Ahead status (only one can be active at a time)
+function resetPTSteadyAheadStatus(exceptId) {
+    var ptDots = ['status_steadyon', 'status_steadyoff', 'status_ahead'];
+    ptDots.forEach(function(dotId) {
         if (dotId !== exceptId) {
             setStatusDot(dotId, false);
         }
@@ -1435,7 +1452,7 @@ function resetDetectionReactionStatus(exceptId) {
 
 // Set default status when app starts
 function setDefaultStatus() {
-    // Reset all status indicators to false (none state)
+    // Reset all status indicators to false (inactive state)
     var allStatusDots = [
         'status_lock', 'status_unlock',
         'status_obj', 'status_col', 'status_hand', 'status_face', 'status_pose', 'status_coff',
@@ -1447,6 +1464,13 @@ function setDefaultStatus() {
     allStatusDots.forEach(function(dotId) {
         setStatusDot(dotId, false);
     });
+    
+    // Set default active commands (green) by default
+    setStatusDot('status_detnon', true);  // Detection None
+    setStatusDot('status_reactnone', true);  // React None
+    setStatusDot('status_lock', true);  // CV Ctrl - Lock (first command)
+    setStatusDot('status_obj', true);  // CV Funcs - Objects (first command)
+    setStatusDot('status_steadyon', true);  // PT Steady/Ahead - Steady On (first command)
 }
 
 // Record toggle function
