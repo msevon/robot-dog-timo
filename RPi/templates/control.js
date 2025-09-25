@@ -1278,7 +1278,7 @@ function processCommand(command) {
             resetPTSteadyAheadStatus('status_ahead');
             break;
         case 'DNON':
-            cmdSend(cv_off, 0, 0);
+            cmdSend(cv_none, 0, 0);
             setStatusDot('status_detnon', true);
             resetDetectionTypeStatus('status_detnon');
             break;
