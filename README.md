@@ -19,6 +19,9 @@ This section documents the custom modifications and additions implemented for Ti
 - [x] Implemented MediaPipe OFF button for disabling computer vision functions
 - [x] Enhanced camera screen size and centered layout
 - [x] Fixed layout overlapping issues with proper spacing
+- [x] Repositioned gallery and settings containers directly under camera screen
+- [x] Unified button styling for Settings, Photos, and Videos containers
+- [x] Fixed DNON command execution issue in command input box
 
 ### Planned features
 - [ ] Custom behavior implementations
