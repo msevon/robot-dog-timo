@@ -1319,31 +1319,8 @@ function processCommand(command) {
 
 // Show invalid command message
 function showInvalidCommandMessage() {
-    var indicator = document.getElementById('capture_indicator');
-    if (indicator) {
-        var textElement = indicator.querySelector('.indicator_text');
-        var iconElement = indicator.querySelector('.indicator_icon');
-        
-        if (textElement) {
-            textElement.textContent = "THAT'S NOT A COMMAND";
-        }
-        
-        // Hide the camera icon for invalid command message
-        if (iconElement) {
-            iconElement.style.display = 'none';
-        }
-        
-        indicator.style.display = 'block';
-        
-        // Hide the message after 2 seconds
-        setTimeout(function() {
-            indicator.style.display = 'none';
-            // Restore the icon for future use
-            if (iconElement) {
-                iconElement.style.display = 'block';
-            }
-        }, 1000);
-    }
+    // Indicators removed - no visual feedback for invalid commands
+    console.log("Invalid command entered");
 }
 
 // Status dot control functions
@@ -1433,60 +1410,21 @@ function toggleRecord() {
     }
 }
 
-// Indicator functions
+// Indicator functions - removed indicators
 function showCaptureIndicator() {
-    var indicator = document.getElementById('capture_indicator');
-    if (indicator) {
-        // Update the text to show it was saved to gallery
-        var textElement = indicator.querySelector('.indicator_text');
-        if (textElement) {
-            textElement.textContent = 'CAPTURE SAVED TO PHOTO GALLERY';
-        }
-        indicator.style.display = 'block';
-        // Hide after 3 seconds
-        setTimeout(function() {
-            indicator.style.display = 'none';
-        }, 3000);
-    }
+    // Indicators removed - no visual feedback
 }
 
 function showRecordingIndicator() {
-    var indicator = document.getElementById('recording_indicator');
-    if (indicator) {
-        // Update the text to show recording is underway
-        var textElement = indicator.querySelector('.indicator_text');
-        if (textElement) {
-            textElement.textContent = 'RECORDING UNDERWAY';
-        }
-        indicator.style.display = 'block';
-        indicator.classList.add('pulse');
-    }
+    // Indicators removed - no visual feedback
 }
 
 function hideRecordingIndicator() {
-    var indicator = document.getElementById('recording_indicator');
-    if (indicator) {
-        indicator.style.display = 'none';
-        indicator.classList.remove('pulse');
-        // Show saved message
-        showRecordingSavedMessage();
-    }
+    // Indicators removed - no visual feedback
 }
 
 function showRecordingSavedMessage() {
-    var indicator = document.getElementById('capture_indicator');
-    if (indicator) {
-        // Update the text to show recording was saved
-        var textElement = indicator.querySelector('.indicator_text');
-        if (textElement) {
-            textElement.textContent = 'RECORDING SAVED TO VIDEO GALLERY';
-        }
-        indicator.style.display = 'block';
-        // Hide after 3 seconds
-        setTimeout(function() {
-            indicator.style.display = 'none';
-        }, 3000);
-    }
+    // Indicators removed - no visual feedback
 }
 
 // Zoom toggle function
