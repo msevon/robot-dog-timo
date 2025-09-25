@@ -194,23 +194,6 @@
                     <div class="video"><img src="{{ url_for('video_feed') }}" /></div>
                     <!-- <div class="video"><video id="remoteVideo" autoplay></video></div> -->
                 </div>
-                <div class="video_ctrl">
-                    <div>
-                        <div class="record"><div><button id="record-btn" class="normal_btn video_btn_record btn_ico">Record</button></div></div>
-                        <div class="capture"><div><button class="normal_btn video_btn_capture" onclick="captureAndUpdate()"></button></div></div>
-                        <div class="views">
-                            <div><button class="normal_btn normal_btn_size video_btn_zoom btn_ico" id="zoom_btn"></button></div>
-                            <div class="video_btn_px_select">
-                                <button id="video_pixel_btn" class="normal_btn normal_btn_size video_btn_px">WebRTC</button>
-                                <ul id="video_pixel_btn_list">
-                                    <!-- <li class="normal_btn" onclick="cmdSend(max_res,2,0);">960P</li>
-                                    <li class="normal_btn" onclick="cmdSend(mid_res,1,0);">480P</li>
-                                    <li class="normal_btn" onclick="cmdSend(min_res,0,0);">240P</li> -->
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div>
                     <div class="controller">
                         <div class="ctl9_middle">
@@ -282,12 +265,6 @@
                     </div>
                 </div>
                 <div>
-                    <div class="code_input">
-                        <div>
-                            <textarea type="text" id="commandInput" placeholder="Enter Command"></textarea>
-                            <div><button id="sendButton" class="normal_btn normal_btn_size normal_btn_w">Send</button></div>
-                        </div>
-                    </div>
                 </div>
                 </section>
                 
