@@ -204,8 +204,8 @@ main {
     align-items: center;
 }
 .tilt .tilt_scale > div{
-    width: 60px;
-    height: 190px;
+    width: 100px;
+    height: 400px;
     background-image: url('./img/white/tilt_scale.svg');
     background-repeat:no-repeat;
     background-size: contain;
