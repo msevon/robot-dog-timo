@@ -79,16 +79,19 @@ main {
     color: #FFD700;
 }
 .feed p{
-    line-height: 1.4em;
+    line-height: 1.2em;
     margin: 0;
+    font-size: 12px;
 }
 .video_feed{position: relative;}
 .video_feed > div{
     position: absolute;
     width: 512px;
     height: 384px;
-    left: 20px;
-    top: 20px;
+    left: 16px;
+    top: 16px;
+    transform: scale(0.8);
+    transform-origin: top left;
 }
 .feed_section{position: absolute;}
 .feed_section > div{
@@ -123,7 +126,7 @@ main {
     text-align: left;
     flex: 1;
 }
-.video_feed .feed_b{width: 144px;}
+.video_feed .feed_b{width: 115px;}
 .video_feed .feed_r_b{flex: 1;}
 .video_ctrl > div{
     display: flex;
@@ -196,13 +199,13 @@ main {
 .pan p{margin-bottom: 4px;}
 .tilt .tilt_pointer + p{margin-left: 4px;}
 .tilt .tilt_scale{
-    height: 159px;
+    height: 127px;
     display: flex;
     align-items: center;
 }
 .tilt .tilt_scale > div{
-    width: 48px;
-    height: 180px;
+    width: 38px;
+    height: 144px;
     background-image: url('./img/white/tilt_scale.svg');
     background-repeat:no-repeat;
     background-size: contain;
@@ -213,21 +216,21 @@ main {
     bottom: -20px;
 }
 .pan .pan_scale_box{
-    width: 144px;
-    height: 110px;
+    width: 115px;
+    height: 88px;
     overflow: hidden;
 }
 .pan .pan_pointer{
     position: absolute;
-    width: 144px;
-    height: 144px;
+    width: 115px;
+    height: 115px;
     background-image: url('./img/white/pan_pointer.svg');
     background-repeat:no-repeat;
     background-size: contain;
 }
 .pan .pan_scale{
-    width: 144px;
-    height: 144px;
+    width: 115px;
+    height: 115px;
     background-image: url('./img/white/pan_scale.svg');
     background-repeat:no-repeat;
     background-size: contain;
@@ -358,16 +361,16 @@ main {
     user-select:none;
 }
 .ctrl_base_s{
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
     transition: all 0.1s ease-out;
     opacity: 0.5;
     /* border: 2px solid rgba(119, 119, 119, 0.7); */
     border: 2px solid rgba(79, 245, 192, 1);
 }
 .ctrl_stick_s{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     transition: all 0.1s ease-out;
     opacity: 0.5;
     /* background-color: rgba(119, 119, 119, 0.7); */
