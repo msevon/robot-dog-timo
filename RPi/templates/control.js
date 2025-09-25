@@ -1317,6 +1317,36 @@ function processCommand(command) {
             setStatusDot('status_detrec', true);
             resetDetectionReactionStatus('status_detrec');
             break;
+        case 'DENONE':
+            cmdSend(cv_none, 0, 0);
+            setStatusDot('status_detnon', true);
+            resetDetectionTypeStatus('status_detnon');
+            break;
+        case 'DEMOT':
+            cmdSend(cv_moti, 1, 0);
+            setStatusDot('status_detmotion', true);
+            resetDetectionTypeStatus('status_detmotion');
+            break;
+        case 'DEFAC':
+            cmdSend(cv_face, 2, 0);
+            setStatusDot('status_detfaces', true);
+            resetDetectionTypeStatus('status_detfaces');
+            break;
+        case 'RNON':
+            cmdSend(re_none, 0, 0);
+            setStatusDot('status_reactnone', true);
+            resetDetectionReactionStatus('status_reactnone');
+            break;
+        case 'RCAP':
+            cmdSend(re_capt, 0, 0);
+            setStatusDot('status_reactcap', true);
+            resetDetectionReactionStatus('status_reactcap');
+            break;
+        case 'RREC':
+            cmdSend(re_reco, 0, 0);
+            setStatusDot('status_reactrec', true);
+            resetDetectionReactionStatus('status_reactrec');
+            break;
         default:
             console.log('Unknown command: ' + command);
             showInvalidCommandMessage();
@@ -1349,7 +1379,7 @@ function showInvalidCommandMessage() {
             if (iconElement) {
                 iconElement.style.display = 'block';
             }
-        }, 2000);
+        }, 1000);
     }
 }
 
@@ -1382,6 +1412,16 @@ function resetAllStatusDots() {
 function resetCVFuncsStatus(exceptId) {
     var cvFuncsDots = ['status_obj', 'status_col', 'status_hand', 'status_face', 'status_pose', 'status_coff'];
     cvFuncsDots.forEach(function(dotId) {
+        if (dotId !== exceptId) {
+            setStatusDot(dotId, false);
+        }
+    });
+}
+
+// Reset Detection Type status (only one can be active at a time)
+function resetDetectionTypeStatus(exceptId) {
+    var detectionTypeDots = ['status_detnon', 'status_detmotion', 'status_detfaces'];
+    detectionTypeDots.forEach(function(dotId) {
         if (dotId !== exceptId) {
             setStatusDot(dotId, false);
         }
