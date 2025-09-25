@@ -79,9 +79,9 @@ main {
     color: #FFD700;
 }
 .feed p{
-    line-height: 1.3em;
+    line-height: 1.4em;
     margin: 0;
-    font-size: 13px;
+    font-size: 14px;
 }
 .video_feed{position: relative;}
 .video_feed > div{
@@ -90,7 +90,7 @@ main {
     height: 384px;
     left: 16px;
     top: 16px;
-    transform: scale(0.9);
+    transform: scale(0.95);
     transform-origin: top left;
 }
 .feed_section{position: absolute;}
@@ -126,7 +126,7 @@ main {
     text-align: left;
     flex: 1;
 }
-.video_feed .feed_b{width: 130px;}
+.video_feed .feed_b{width: 144px;}
 .video_feed .feed_r_b{flex: 1;}
 .video_ctrl > div{
     display: flex;
@@ -199,13 +199,13 @@ main {
 .pan p{margin-bottom: 4px;}
 .tilt .tilt_pointer + p{margin-left: 4px;}
 .tilt .tilt_scale{
-    height: 143px;
+    height: 180px;
     display: flex;
     align-items: center;
 }
 .tilt .tilt_scale > div{
-    width: 43px;
-    height: 162px;
+    width: 60px;
+    height: 190px;
     background-image: url('./img/white/tilt_scale.svg');
     background-repeat:no-repeat;
     background-size: contain;
@@ -216,21 +216,21 @@ main {
     bottom: -20px;
 }
 .pan .pan_scale_box{
-    width: 130px;
-    height: 99px;
+    width: 144px;
+    height: 110px;
     overflow: hidden;
 }
 .pan .pan_pointer{
     position: absolute;
-    width: 130px;
-    height: 130px;
+    width: 144px;
+    height: 144px;
     background-image: url('./img/white/pan_pointer.svg');
     background-repeat:no-repeat;
     background-size: contain;
 }
 .pan .pan_scale{
-    width: 130px;
-    height: 130px;
+    width: 144px;
+    height: 144px;
     background-image: url('./img/white/pan_scale.svg');
     background-repeat:no-repeat;
     background-size: contain;
@@ -361,16 +361,16 @@ main {
     user-select:none;
 }
 .ctrl_base_s{
-    width: 72px;
-    height: 72px;
+    width: 80px;
+    height: 80px;
     transition: all 0.1s ease-out;
     opacity: 0.5;
     /* border: 2px solid rgba(119, 119, 119, 0.7); */
     border: 2px solid rgba(79, 245, 192, 1);
 }
 .ctrl_stick_s{
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
     transition: all 0.1s ease-out;
     opacity: 0.5;
     /* background-color: rgba(119, 119, 119, 0.7); */
