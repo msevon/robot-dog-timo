@@ -310,9 +310,8 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
                           bodyCtrl.standUp(95);
                         }
                         break;
-  case CMD_HH:
-                        bodyCtrl.functionHH();
-                        break;
+
+
 
   case CMD_SINGLE_LEG_CTRL:
                         bodyCtrl.singleLegCtrl(jsonCmdInput["leg"], 

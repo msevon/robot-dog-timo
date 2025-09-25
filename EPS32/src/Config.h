@@ -85,10 +85,6 @@ static int timeOffset = 50;
 // {"T":112,"func":2}
 #define CMD_BASIC_FUNC 112
 
-// HH command - raise right front foot to 45 degrees and hold for 3 seconds
-// {"T":117}
-#define CMD_HH 117
-
 // test
 // single leg ctrl
 // {"T":113,"leg":1,"x":16,"y":90,"z":25}
