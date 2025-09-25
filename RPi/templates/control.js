@@ -1491,8 +1491,23 @@ function showRecordingSavedMessage() {
 
 // Zoom toggle function
 function toggleZoom() {
-    // Toggle zoom directly without HTML button interaction
-    cmdSend(zoom_ct, 0, 0);
+    // Toggle zoom through levels: 1x -> 2x -> 4x -> 1x
+    var zoomNum = document.getElementById("zoom-num");
+    switch(zoomx){
+        case 0: 
+            cmdSend(zoom_x1, 0, 0);
+            if (zoomNum) zoomNum.innerHTML = "1x";
+            break;
+        case 1: 
+            cmdSend(zoom_x2, 0, 0);
+            if (zoomNum) zoomNum.innerHTML = "2x";
+            break;
+        case 2: 
+            cmdSend(zoom_x4, 0, 0);
+            if (zoomNum) zoomNum.innerHTML = "4x";
+            break;
+    }
+    zoomx = (zoomx + 1) % 3;
 }
 
 document.onkeydown = function (event) {
