@@ -947,6 +947,30 @@ void BodyCtrl::functionJump(){
   }
 }
 
+void BodyCtrl::functionHH(){
+  // Raise right front foot to 45 degrees and hold for 3 seconds
+  // Right front leg joints: 6 (RF_A), 7 (RF_B), 8 (RF_H)
+  // Joint 6 (RF_A) controls the hip movement for up/down
+  
+  // First, stand up to ensure stable position
+  stand();
+  delay(500);
+  
+  // Raise the right front foot by adjusting joint 6 (RF_A) to 45 degrees
+  // The current stand position has joint 6 at 45 degrees, so we need to increase it
+  jointAngle(6, 90);  // Raise hip joint to 90 degrees (45 degrees from stand position)
+  moveTrigger();
+  delay(1000);  // Wait for movement to complete
+  
+  // Hold the position for 3 seconds
+  delay(3000);
+  
+  // Return to stand position
+  stand();
+  delay(500);
+}
+
+
 void BodyCtrl::ugvCtrl(float leftSpd, float rightSpd){
   if (leftSpd == rightSpd) {
     if (leftSpd == 0) {

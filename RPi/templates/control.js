@@ -1272,6 +1272,10 @@ function processCommand(command) {
             setStatusDot('status_steadyoff', true);
             resetPTSteadyAheadStatus('status_steadyoff');
             break;
+        case 'HH':
+            cmdJsonCmd({"T":117});
+            setStatusDot('status_hh', true);
+            break;
         case 'AHD':
             lookAhead();
             setStatusDot('status_ahead', true);
