@@ -766,8 +766,8 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
         height: auto;
     }
     .video_feed > div{
-        width: 96vw;
-        height: 71vw;
+        width: 60vw;
+        height: 45vw;
         top: 2vw;
         left: 2vw;
     }
@@ -910,8 +910,8 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
         height: auto;
     }
     .video_feed > div{
-        width: 96vw;
-        height: 71vw;
+        width: 60vw;
+        height: 45vw;
         top: 2vw;
         left: 2vw;
     }
