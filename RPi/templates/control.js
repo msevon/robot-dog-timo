@@ -1320,6 +1320,11 @@ function processCommand(command) {
             setStatusDot('status_detfaces', true);
             resetDetectionTypeStatus('status_detfaces');
             break;
+        case 'DNON':
+            cmdSend(cv_off, 0, 0);
+            setStatusDot('status_detnon', true);
+            resetDetectionTypeStatus('status_detnon');
+            break;
         default:
             console.log('Unknown command: ' + command);
             showInvalidCommandMessage();
@@ -1410,7 +1415,7 @@ function resetCVFuncsStatus(exceptId) {
 
 // Reset Detection Type status (only one can be active at a time)
 function resetDetectionTypeStatus(exceptId) {
-    var detectionTypeDots = ['status_detmotion', 'status_detfaces'];
+    var detectionTypeDots = ['status_detnon', 'status_detmotion', 'status_detfaces'];
     detectionTypeDots.forEach(function(dotId) {
         if (dotId !== exceptId) {
             setStatusDot(dotId, false);
@@ -1435,7 +1440,7 @@ function setDefaultStatus() {
         'status_lock', 'status_unlock',
         'status_obj', 'status_col', 'status_hand', 'status_face', 'status_pose', 'status_coff',
         'status_steadyon', 'status_steadyoff', 'status_ahead',
-        'status_detmotion', 'status_detfaces',
+        'status_detnon', 'status_detmotion', 'status_detfaces',
         'status_reactnone', 'status_reactcap', 'status_reactrec'
     ];
     
