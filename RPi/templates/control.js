@@ -1307,11 +1307,6 @@ function processCommand(command) {
             setStatusDot('status_detfaces', true);
             resetDetectionTypeStatus('status_detfaces');
             break;
-        case 'DNON':
-            cmdSend(cv_off, 0, 0);
-            setStatusDot('status_detnon', true);
-            resetDetectionTypeStatus('status_detnon');
-            break;
         default:
             console.log('Unknown command: ' + command);
             showInvalidCommandMessage();
