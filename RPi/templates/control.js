@@ -848,30 +848,8 @@ function speedCtrl(inputSpd){
 }
 
 function funcsCtrl(index){
-    var spdCtrlBtn = document.getElementById("speed_ctrl_btn");
-    var spdbuttons = spdCtrlBtn.getElementsByTagName("button");
-    removeButtonsClass(spdbuttons);
-    if (index == 1) {
-        spdbuttons[0].classList.add("ctl_btn_active");
-        cmdJsonCmd({"T":112,"func":1});
-    } else if (index == 2) {
-        spdbuttons[1].classList.add("ctl_btn_active");
-        cmdJsonCmd({"T":112,"func":2});
-    } else if (index == 3) {
-        spdbuttons[2].classList.add("ctl_btn_active");
-        cmdJsonCmd({"T":112,"func":3});
-    } else {
-        var steadyCtrlBtn = document.getElementById("steady_ctrl_btn");
-        var steadybuttons = steadyCtrlBtn.getElementsByTagName("button");
-        removeButtonsClass(steadybuttons);
-        if (index == 4) {
-            steadybuttons[1].classList.add("ctl_btn_active");
-            cmdJsonCmd({"T":112,"func":4});
-        } else if (index == 5) {
-            steadybuttons[0].classList.add("ctl_btn_active");
-            cmdJsonCmd({"T":112,"func":5});
-        }
-    }
+    // Send function control command directly without HTML button interaction
+    cmdJsonCmd({"T":112,"func":index});
 }
 
 var steady_mode = false;
@@ -1425,30 +1403,33 @@ function resetDetectionReactionStatus(exceptId) {
 
 // Set default status when app starts
 function setDefaultStatus() {
-    // Default states: STEADYOFF, LOCK, COFF, DETNON, RNON
-    setStatusDot('status_steadyoff', true);
-    setStatusDot('status_lock', true);
-    setStatusDot('status_coff', true);
-    setStatusDot('status_detnon', true);
-    setStatusDot('status_reactnone', true);
+    // Reset all status indicators to false (none state)
+    var allStatusDots = [
+        'status_lock', 'status_unlock',
+        'status_obj', 'status_col', 'status_hand', 'status_face', 'status_pose', 'status_coff',
+        'status_steadyon', 'status_steadyoff', 'status_ahead',
+        'status_detnon', 'status_detcap', 'status_detrec',
+        'status_reactnone', 'status_reactcap', 'status_reactrec'
+    ];
+    
+    allStatusDots.forEach(function(dotId) {
+        setStatusDot(dotId, false);
+    });
 }
 
 // Record toggle function
 var isRecording = false;
 function toggleRecord() {
-    var recordBtn = document.getElementById('record-btn');
-    if (recordBtn) {
-        if (isRecording) {
-            // Stop recording
-            recordBtn.click();
-            isRecording = false;
-            hideRecordingIndicator();
-        } else {
-            // Start recording
-            recordBtn.click();
-            isRecording = true;
-            showRecordingIndicator();
-        }
+    if (isRecording) {
+        // Stop recording
+        cmdSend(vid_end, 0, 0);
+        isRecording = false;
+        hideRecordingIndicator();
+    } else {
+        // Start recording
+        cmdSend(vid_sta, 0, 0);
+        isRecording = true;
+        showRecordingIndicator();
     }
 }
 
@@ -1510,10 +1491,8 @@ function showRecordingSavedMessage() {
 
 // Zoom toggle function
 function toggleZoom() {
-    var zoomBtn = document.getElementById('zoom_btn');
-    if (zoomBtn) {
-        zoomBtn.click();
-    }
+    // Toggle zoom directly without HTML button interaction
+    cmdSend(zoom_ct, 0, 0);
 }
 
 document.onkeydown = function (event) {
