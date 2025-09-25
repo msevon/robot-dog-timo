@@ -85,14 +85,14 @@ main {
 .video_feed{position: relative;}
 .video_feed > div{
     position: absolute;
-    width: 800px;
-    height: 600px;
+    width: 640px;
+    height: 480px;
     left: 20px;
     top: 20px;
 }
 .feed_section{position: absolute;}
 .feed_section > div{
-    width: 800px;
+    width: 640px;
     display: flex;
     justify-content: space-between;
 }
