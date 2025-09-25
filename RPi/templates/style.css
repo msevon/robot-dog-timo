@@ -47,7 +47,7 @@ main {
 }
 .box1 .section_video{
     width: 700px;
-    margin: 20px 0 5px 0;
+    margin: 20px 0 0 0;
 }
 .box1 .section_feed_ctrl{
     width: 1000px;
@@ -1310,7 +1310,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     display: flex;
     justify-content: center;
     gap: 20px;
-    margin-top: 0;
+    margin-top: 10px;
     margin-bottom: 0;
     width: 700px;
     margin-left: auto;
