@@ -1317,21 +1317,6 @@ function processCommand(command) {
             setStatusDot('status_detrec', true);
             resetDetectionReactionStatus('status_detrec');
             break;
-        case 'DENONE':
-            cmdSend(cv_none, 0, 0);
-            setStatusDot('status_detnon', true);
-            resetDetectionTypeStatus('status_detnon');
-            break;
-        case 'DEMOT':
-            cmdSend(cv_moti, 1, 0);
-            setStatusDot('status_detmotion', true);
-            resetDetectionTypeStatus('status_detmotion');
-            break;
-        case 'DEFAC':
-            cmdSend(cv_face, 2, 0);
-            setStatusDot('status_detfaces', true);
-            resetDetectionTypeStatus('status_detfaces');
-            break;
         case 'RNON':
             cmdSend(re_none, 0, 0);
             setStatusDot('status_reactnone', true);
