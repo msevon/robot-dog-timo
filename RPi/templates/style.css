@@ -98,13 +98,13 @@ main {
 }
 .feed_top{
     position: absolute;
-    top: 30%;
+    top: 90%;
     left: 0;
     width: 100%;
 }
 .feed_middle{
     position: absolute;
-    top: 50%;
+    top: 90%;
     left: 0;
     width: 100%;
     height: auto;
