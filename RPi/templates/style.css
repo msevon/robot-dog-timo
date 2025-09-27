@@ -156,7 +156,6 @@ main {
     width: 24px;
     height: 12px;
     display: inline-block;
-    background-image: url('./img/white/baterry.svg');
     margin-right: 8px;
 }
 .feed_ico_light{
@@ -171,7 +170,6 @@ main {
     display: inline-block;
     width: 40px;
     height: 20px;
-    background-image: url('./img/white/linght.svg');
 }
 .feed_u > div{
     display: flex;
@@ -181,7 +179,6 @@ main {
 .feed_img_focus{
     width: 130px;
     height: 25px;
-    background-image: url('./img/white/focus.svg');
 }
 .tilt{position: relative;}
 .tilt .tilt_pointer_out{
