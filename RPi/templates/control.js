@@ -849,6 +849,7 @@ function speedCtrl(inputSpd){
 
 function funcsCtrl(index){
     // Send function control command directly without HTML button interaction
+    console.log("funcsCtrl called with index:", index); // Debug log
     cmdJsonCmd({"T":112,"func":index});
 }
 
@@ -1158,6 +1159,7 @@ function cmdProcess() {
         funcsCtrl(2); // Handshake
     }
     if (ctrl_buttons.u_movement == 1){
+        console.log("U Movement triggered!"); // Debug log
         funcsCtrl(6); // U Movement (separate function in ESP32)
     }
     if (ctrl_buttons.stay == 1){
@@ -1623,6 +1625,7 @@ document.onkeydown = function (event) {
     var key = keyMap[event.keyCode];
     var moveKey = moveKeyMap[event.keyCode];
     if (key && ctrl_buttons[key] === 0) {
+        console.log("Key pressed:", key, "keyCode:", event.keyCode); // Debug log
         updateButton(key, 1);
         cmdProcess();
         // Reset the button state immediately for write_command to prevent key consumption
