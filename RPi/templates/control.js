@@ -1164,6 +1164,8 @@ function cmdProcess() {
         alert("U Movement detected!"); // Simple test
         // Send debug info to ESP32 command line
         cmdJsonCmd({"T":999,"debug":"U Movement triggered!"});
+        // Test WebSocket connection
+        cmdJsonCmd({"T":999,"debug":"Testing WebSocket connection"});
         funcsCtrl(6); // U Movement (separate function in ESP32)
     }
     if (ctrl_buttons.stay == 1){
