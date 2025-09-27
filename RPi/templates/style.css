@@ -1,3 +1,59 @@
+/* 
+ * HUD Position Configuration Variables
+ * ===================================
+ * 
+ * To easily adjust HUD element positions, modify the values below.
+ * All positions are relative to the video feed container.
+ * 
+ * POSITIONING GUIDE:
+ * - Use percentages (0% to 100%) for responsive positioning
+ * - Use pixels (px) for fixed sizes
+ * - Use calc() for complex calculations
+ * 
+ * EXAMPLES:
+ * - Move top elements down: change --hud-top-center-y from 2% to 5%
+ * - Make joystick larger: change --hud-joystick-size from 110px to 140px
+ * - Increase spacing: change --hud-element-margin from 10px to 15px
+ * - Move tilt scale left: change --hud-middle-left-x from 2% to 5%
+ */
+
+:root {
+    /* Top section positioning (CPU, RAM, Battery, etc.) */
+    --hud-top-left-x: 2%;        /* Left edge margin */
+    --hud-top-left-y: 2%;        /* Top edge margin */
+    --hud-top-center-x: 50%;      /* Center horizontally */
+    --hud-top-center-y: 2%;       /* Top edge margin */
+    --hud-top-right-x: 98%;       /* Right edge margin */
+    --hud-top-right-y: 2%;        /* Top edge margin */
+    
+    /* Middle section positioning (Tilt scale, Focus, etc.) */
+    --hud-middle-left-x: 2%;      /* Left edge margin */
+    --hud-middle-left-y: 50%;     /* Center vertically */
+    --hud-middle-center-x: 50%;   /* Center horizontally */
+    --hud-middle-center-y: 50%;   /* Center vertically */
+    --hud-middle-right-x: 98%;    /* Right edge margin */
+    --hud-middle-right-y: 50%;    /* Center vertically */
+    
+    /* Bottom section positioning (Zoom info, Pan scale, Joystick) */
+    --hud-bottom-left-x: 2%;      /* Left edge margin */
+    --hud-bottom-left-y: 98%;     /* Bottom edge margin */
+    --hud-bottom-center-x: 50%;   /* Center horizontally */
+    --hud-bottom-center-y: 98%;   /* Bottom edge margin */
+    --hud-bottom-right-x: 98%;    /* Right edge margin */
+    --hud-bottom-right-y: 98%;    /* Bottom edge margin */
+    
+    /* Element spacing and margins */
+    --hud-element-margin: 10px;   /* Padding around elements */
+    --hud-text-spacing: 1em;      /* Space between text elements */
+    
+    /* Scale and control sizes */
+    --hud-tilt-scale-width: 65px;     /* Width of tilt scale */
+    --hud-tilt-scale-height: 240px;  /* Height of tilt scale */
+    --hud-pan-scale-width: 190px;    /* Width of pan scale */
+    --hud-pan-scale-height: 190px;   /* Height of pan scale */
+    --hud-joystick-size: 110px;      /* Base joystick size */
+}
+
 /* pc */
 @font-face {
     font-family: 'SourceCodePro-Regular';
@@ -96,35 +152,82 @@ main {
     display: flex;
     justify-content: space-between;
 }
-/* .feed_top{} */
+
+/* Top section positioning */
+.feed_top {
+    top: var(--hud-top-center-y);
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+/* Middle section positioning */
 .feed_middle{
-    width: inherit;
-    height: inherit;
+    top: var(--hud-middle-center-y);
+    left: 0;
+    width: 100%;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: translateY(-50%);
 }
-.feed_bottom{bottom: 0;}
+
+/* Bottom section positioning */
+.feed_bottom{
+    bottom: var(--hud-bottom-center-y);
+    left: 0;
+    width: 100%;
+    transform: translateY(50%);
+}
 .feed_middle > div {align-items: center;}
 .feed_bottom > div {
     align-items: flex-end;
     /* align-content: flex-end; */
 }
-.video_feed .feed_l_t{flex:1}
-.video_feed .feed_u{flex:1.6}
-.video_feed .feed_r_t{
-    flex:1;
-    text-align: right;
+/* Top section elements */
+.video_feed .feed_l_t{
+    flex: 1;
+    padding-left: var(--hud-element-margin);
 }
-.video_feed .feed_l{flex: 1;}
-.video_feed .feed_m{width: 97px;}
-.video_feed .feed_r{flex: 1;}
+.video_feed .feed_u{
+    flex: 1.6;
+    text-align: center;
+}
+.video_feed .feed_r_t{
+    flex: 1;
+    text-align: right;
+    padding-right: var(--hud-element-margin);
+}
+
+/* Middle section elements */
+.video_feed .feed_l{
+    flex: 1;
+    padding-left: var(--hud-element-margin);
+}
+.video_feed .feed_m{
+    width: var(--hud-tilt-scale-width);
+    text-align: center;
+}
+.video_feed .feed_r{
+    flex: 1;
+    padding-right: var(--hud-element-margin);
+}
+
+/* Bottom section elements */
 .video_feed .feed_l_b{
     text-align: left;
     flex: 1;
+    padding-left: var(--hud-element-margin);
 }
-.video_feed .feed_b{width: 144px;}
-.video_feed .feed_r_b{flex: 1;}
+.video_feed .feed_b{
+    width: var(--hud-pan-scale-width);
+    text-align: center;
+}
+.video_feed .feed_r_b{
+    flex: 1;
+    padding-right: var(--hud-element-margin);
+}
 .video_ctrl > div{
     display: flex;
     justify-content: center;
@@ -196,13 +299,13 @@ main {
 .pan p{margin-bottom: 4px;}
 .tilt .tilt_pointer + p{margin-left: 4px;}
 .tilt .tilt_scale{
-    height: 220px;
+    height: calc(var(--hud-tilt-scale-height) * 0.9);
     display: flex;
     align-items: center;
 }
 .tilt .tilt_scale > div{
-    width: 65px;
-    height: 240px;
+    width: var(--hud-tilt-scale-width);
+    height: var(--hud-tilt-scale-height);
     background-image: url('./img/white/tilt_scale.svg');
     background-repeat:no-repeat;
     background-size: contain;
@@ -213,21 +316,21 @@ main {
     bottom: -20px;
 }
 .pan .pan_scale_box{
-    width: 190px;
-    height: 145px;
+    width: var(--hud-pan-scale-width);
+    height: calc(var(--hud-pan-scale-height) * 0.75);
     overflow: hidden;
 }
 .pan .pan_pointer{
     position: absolute;
-    width: 190px;
-    height: 190px;
+    width: var(--hud-pan-scale-width);
+    height: var(--hud-pan-scale-height);
     background-image: url('./img/white/pan_pointer.svg');
     background-repeat:no-repeat;
     background-size: contain;
 }
 .pan .pan_scale{
-    width: 190px;
-    height: 190px;
+    width: var(--hud-pan-scale-width);
+    height: var(--hud-pan-scale-height);
     background-image: url('./img/white/pan_scale.svg');
     background-repeat:no-repeat;
     background-size: contain;
@@ -358,32 +461,32 @@ main {
     user-select:none;
 }
 .ctrl_base_s{
-    width: 110px;
-    height: 110px;
+    width: var(--hud-joystick-size);
+    height: var(--hud-joystick-size);
     transition: all 0.1s ease-out;
     opacity: 0.5;
     /* border: 2px solid rgba(119, 119, 119, 0.7); */
     border: 2px solid rgba(79, 245, 192, 1);
 }
 .ctrl_stick_s{
-    width: 70px;
-    height: 70px;
+    width: calc(var(--hud-joystick-size) * 0.64);
+    height: calc(var(--hud-joystick-size) * 0.64);
     transition: all 0.1s ease-out;
     opacity: 0.5;
     /* background-color: rgba(119, 119, 119, 0.7); */
     background-color: rgba(79, 245, 192, 0.7);
 }
 .ctrl_base_l{
-    width: 160px;
-    height: 160px;
+    width: calc(var(--hud-joystick-size) * 1.45);
+    height: calc(var(--hud-joystick-size) * 1.45);
     transition: all 0.1s ease-out;
     margin: 0 10% 10% 0;
     border: 2px solid rgba(172, 172, 172, 0.8);
     z-index: 9;
 }
 .ctrl_stick_l{
-    width: 95px;
-    height: 95px;
+    width: calc(var(--hud-joystick-size) * 0.86);
+    height: calc(var(--hud-joystick-size) * 0.86);
     transition: all 0.1s ease-out;
     background-color: rgba(172, 172, 172, 0.8);
     z-index: 9;
