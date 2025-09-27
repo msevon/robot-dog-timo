@@ -849,8 +849,6 @@ function speedCtrl(inputSpd){
 
 function funcsCtrl(index){
     // Send function control command directly without HTML button interaction
-    // Send debug info to ESP32 command line
-    cmdJsonCmd({"T":999,"debug":"funcsCtrl called with index: " + index});
     cmdJsonCmd({"T":112,"func":index});
 }
 
@@ -1119,7 +1117,6 @@ var keyMap = {
     82: 'record_toggle', // R - Record Toggle
     83: 'backward', // S - Move Backward
     84: 'stay', // T - Stay
-    85: 'u_movement', // U - U Movement (handshake-like)
     86: 'video_gallery', // V - Video Gallery
     87: 'forward', // W - Move Forward
     90: 'zoom' // Z - Camera Zoom
@@ -1135,7 +1132,6 @@ var ctrl_buttons = {
     jump: 0,
     handshake: 0,
     stay: 0,
-    u_movement: 0,
     // Camera controls
     capture: 0,
     record_toggle: 0,
@@ -1157,16 +1153,7 @@ function cmdProcess() {
         funcsCtrl(3); // Jump
     }
     if (ctrl_buttons.handshake == 1){
-        alert("Handshake detected!"); // Simple test
         funcsCtrl(2); // Handshake
-    }
-    if (ctrl_buttons.u_movement == 1){
-        alert("U Movement detected!"); // Simple test
-        // Send debug info to ESP32 command line
-        cmdJsonCmd({"T":999,"debug":"U Movement triggered!"});
-        // Test WebSocket connection
-        cmdJsonCmd({"T":999,"debug":"Testing WebSocket connection"});
-        funcsCtrl(7); // U Movement (separate function in ESP32)
     }
     if (ctrl_buttons.stay == 1){
         funcsCtrl(1); // Stay
@@ -1631,7 +1618,6 @@ document.onkeydown = function (event) {
     var key = keyMap[event.keyCode];
     var moveKey = moveKeyMap[event.keyCode];
     if (key && ctrl_buttons[key] === 0) {
-        alert("Key detected: " + key + " (keyCode: " + event.keyCode + ")"); // Debug
         updateButton(key, 1);
         cmdProcess();
         // Reset the button state immediately for write_command to prevent key consumption
