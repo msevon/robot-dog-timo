@@ -98,7 +98,7 @@ main {
 }
 .feed_top{
     position: absolute;
-    top: 2%;
+    top: 30%;
     left: 0;
     width: 100%;
 }
@@ -115,7 +115,7 @@ main {
 }
 .feed_bottom{
     position: absolute;
-    bottom: 2%;
+    bottom: 30%;
     left: 0;
     width: 100%;
 }
