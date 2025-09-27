@@ -102,8 +102,6 @@ main {
     left: 0 !important;
     width: 100% !important;
     height: 200px !important;
-    background-color: red !important;
-    border: 5px solid yellow !important;
     z-index: 1000 !important;
 }
 .feed_middle{
@@ -115,8 +113,6 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: green !important;
-    border: 5px solid orange !important;
     z-index: 1000 !important;
 }
 .feed_bottom{
@@ -125,8 +121,6 @@ main {
     left: 0 !important;
     width: 100% !important;
     height: 200px !important;
-    background-color: blue !important;
-    border: 5px solid purple !important;
     z-index: 1000 !important;
 }
 .feed_middle > div {align-items: center;}
