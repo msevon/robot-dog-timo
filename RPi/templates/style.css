@@ -97,11 +97,15 @@ main {
     justify-content: space-between;
 }
 .feed_top{
+    position: absolute;
     top: 5%;
     left: 0;
     width: 100%;
+    background-color: rgba(255, 0, 0, 0.3);
+    z-index: 10;
 }
 .feed_middle{
+    position: absolute;
     top: 50%;
     left: 0;
     width: 100%;
@@ -110,11 +114,16 @@ main {
     justify-content: center;
     align-items: center;
     transform: translateY(-50%);
+    background-color: rgba(0, 255, 0, 0.3);
+    z-index: 10;
 }
 .feed_bottom{
+    position: absolute;
     bottom: 5%;
     left: 0;
     width: 100%;
+    background-color: rgba(0, 0, 255, 0.3);
+    z-index: 10;
 }
 .feed_middle > div {align-items: center;}
 .feed_bottom > div {
