@@ -1158,7 +1158,7 @@ function cmdProcess() {
         funcsCtrl(2); // Handshake
     }
     if (ctrl_buttons.u_movement == 1){
-        funcsCtrl(2); // U Movement (currently same as handshake, will be modified separately)
+        funcsCtrl(6); // U Movement (separate function in ESP32)
     }
     if (ctrl_buttons.stay == 1){
         funcsCtrl(1); // Stay

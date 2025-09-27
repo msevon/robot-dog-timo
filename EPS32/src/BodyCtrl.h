@@ -91,6 +91,7 @@ public:
     float besselCtrl(float numStart, float numEnd, float rateInput);
     void functionStayLow();
     void functionHandshake();
+    void functionUMovement();
     void functionJump();
     
     void pitchYawRoll(float pitchInput, float yawInput, float rollInput);
