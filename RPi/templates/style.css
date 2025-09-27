@@ -789,6 +789,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     }
     .feed_section{
         width: 100%;
+        position: absolute;
     }
     .feed_section > div{
         width: 100%;
@@ -936,6 +937,7 @@ ul.video-list li a:hover div .normal_btn_play::before{background-image: url('./i
     }
     .feed_section{
         width: 100%;
+        position: absolute;
     }
     .feed_section > div{
         width: 100%;
