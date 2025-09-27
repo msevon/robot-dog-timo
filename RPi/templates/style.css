@@ -117,10 +117,10 @@ main {
 }
 .feed_bottom{
     position: absolute !important;
-    top: 500px !important;
+    top: 300px !important;
     left: 0 !important;
     width: 100% !important;
-    height: 100px !important;
+    height: 200px !important;
     z-index: 1000 !important;
 }
 .feed_middle > div {align-items: center;}
