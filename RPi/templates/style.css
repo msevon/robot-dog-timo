@@ -118,8 +118,8 @@ main {
 .feed_bottom{
     position: absolute !important;
     top: 300px !important;
-    left: 0 !important;
-    width: 90% !important;
+    left: 5px !important;
+    width: 150px !important;
     height: 200px !important;
     z-index: 1000 !important;
 }
