@@ -1117,6 +1117,7 @@ var keyMap = {
     82: 'record_toggle', // R - Record Toggle
     83: 'backward', // S - Move Backward
     84: 'stay', // T - Stay
+    85: 'u_movement', // U - U Movement (handshake-like)
     86: 'video_gallery', // V - Video Gallery
     87: 'forward', // W - Move Forward
     90: 'zoom' // Z - Camera Zoom
@@ -1132,6 +1133,7 @@ var ctrl_buttons = {
     jump: 0,
     handshake: 0,
     stay: 0,
+    u_movement: 0,
     // Camera controls
     capture: 0,
     record_toggle: 0,
@@ -1154,6 +1156,9 @@ function cmdProcess() {
     }
     if (ctrl_buttons.handshake == 1){
         funcsCtrl(2); // Handshake
+    }
+    if (ctrl_buttons.u_movement == 1){
+        funcsCtrl(2); // U Movement (currently same as handshake, will be modified separately)
     }
     if (ctrl_buttons.stay == 1){
         funcsCtrl(1); // Stay
