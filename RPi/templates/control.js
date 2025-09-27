@@ -1157,9 +1157,11 @@ function cmdProcess() {
         funcsCtrl(3); // Jump
     }
     if (ctrl_buttons.handshake == 1){
+        alert("Handshake detected!"); // Simple test
         funcsCtrl(2); // Handshake
     }
     if (ctrl_buttons.u_movement == 1){
+        alert("U Movement detected!"); // Simple test
         // Send debug info to ESP32 command line
         cmdJsonCmd({"T":999,"debug":"U Movement triggered!"});
         funcsCtrl(6); // U Movement (separate function in ESP32)
