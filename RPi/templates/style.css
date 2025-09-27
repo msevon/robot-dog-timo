@@ -101,27 +101,33 @@ main {
     top: 0px !important;
     left: 0 !important;
     width: 100% !important;
-    height: 30% !important;
-    z-index: 10;
+    height: 200px !important;
+    background-color: red !important;
+    border: 5px solid yellow !important;
+    z-index: 1000 !important;
 }
 .feed_middle{
     position: absolute !important;
-    top: 30% !important;
+    top: 200px !important;
     left: 0 !important;
     width: 100% !important;
-    height: 40% !important;
+    height: 300px !important;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    background-color: green !important;
+    border: 5px solid orange !important;
+    z-index: 1000 !important;
 }
 .feed_bottom{
     position: absolute !important;
-    top: 70% !important;
+    top: 500px !important;
     left: 0 !important;
     width: 100% !important;
-    height: 30% !important;
-    z-index: 10;
+    height: 200px !important;
+    background-color: blue !important;
+    border: 5px solid purple !important;
+    z-index: 1000 !important;
 }
 .feed_middle > div {align-items: center;}
 .feed_bottom > div {
