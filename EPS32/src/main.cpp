@@ -308,9 +308,9 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
                         } else if (jsonCmdInput["func"] == 5) {
                           steadyMode = 0;
                           bodyCtrl.standUp(95);
-                        } else if (jsonCmdInput["func"] == 6) {
-                          // Temporarily call handshake to test if the issue is with functionUMovement
-                          bodyCtrl.functionHandshake();
+                        } else if (jsonCmdInput["func"] == 7) {
+                          // Use function ID 7 for U movement
+                          bodyCtrl.functionUMovement();
                         }
                         break;
   case 999: // Debug command

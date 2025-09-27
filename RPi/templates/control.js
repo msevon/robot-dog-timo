@@ -1166,7 +1166,7 @@ function cmdProcess() {
         cmdJsonCmd({"T":999,"debug":"U Movement triggered!"});
         // Test WebSocket connection
         cmdJsonCmd({"T":999,"debug":"Testing WebSocket connection"});
-        funcsCtrl(6); // U Movement (separate function in ESP32)
+        funcsCtrl(7); // U Movement (separate function in ESP32)
     }
     if (ctrl_buttons.stay == 1){
         funcsCtrl(1); // Stay
