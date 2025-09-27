@@ -97,11 +97,13 @@ main {
     justify-content: space-between;
 }
 .feed_top{
+    position: absolute;
     top: 2%;
     left: 0;
     width: 100%;
 }
 .feed_middle{
+    position: absolute;
     top: 50%;
     left: 0;
     width: 100%;
@@ -112,6 +114,7 @@ main {
     transform: translateY(-50%);
 }
 .feed_bottom{
+    position: absolute;
     bottom: 2%;
     left: 0;
     width: 100%;
