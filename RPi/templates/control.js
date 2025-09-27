@@ -1631,6 +1631,7 @@ document.onkeydown = function (event) {
     var key = keyMap[event.keyCode];
     var moveKey = moveKeyMap[event.keyCode];
     if (key && ctrl_buttons[key] === 0) {
+        alert("Key detected: " + key + " (keyCode: " + event.keyCode + ")"); // Debug
         updateButton(key, 1);
         cmdProcess();
         // Reset the button state immediately for write_command to prevent key consumption
