@@ -309,7 +309,8 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
                           steadyMode = 0;
                           bodyCtrl.standUp(95);
                         } else if (jsonCmdInput["func"] == 6) {
-                          bodyCtrl.functionUMovement();
+                          // Temporarily call handshake to test if the issue is with functionUMovement
+                          bodyCtrl.functionHandshake();
                         }
                         break;
   case 999: // Debug command
