@@ -312,6 +312,9 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
                           bodyCtrl.functionUMovement();
                         }
                         break;
+  case 999: // Debug command
+                        Serial.println(jsonCmdInput["debug"].as<String>());
+                        break;
 
 
 
